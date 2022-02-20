@@ -1,7 +1,8 @@
 ---
 title: C++基础
 date: 2022-02-11 20:08:34
-tags:
+tags: C++
+categories: C++
 ---
 
 <h1>C/C++基础</h1>

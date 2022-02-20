@@ -1,7 +1,8 @@
 ---
 title: IO复用
 date: 2022-02-20 09:34:28
-tags:
+tags: Linux
+categories: Linux网络编程
 ---
 # Select
 
@@ -88,3 +89,14 @@ int epoll_pwait(int epfd, struct epoll_event *events, int maxevents, int timeout
 - `maxevents`：数组元素的总个数，`events`的长度。
 
 返回满足监听的总个数，可以用作循环上限。`events`一定都是满足监听的事件，可以直接循环处理。
+
+适合使用场景：大量并发连接，但是只有少量活跃连接。
+
+## 事件模型
+
+epoll有两种事件模型
+
+### 边缘触发（Edge Triggered，ET）
+
+### 水平触发（Level Triggered，LT）
+

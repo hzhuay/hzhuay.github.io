@@ -1,7 +1,8 @@
 ---
 title: C++面向对象
 date: 2022-02-11 22:00:46
-tags:
+tags: C++
+categories: C++
 ---
 <h1>面向对象</h1>
 
