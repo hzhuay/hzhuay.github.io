@@ -24,7 +24,7 @@
 <meta property="og:description" content="Select1int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);  优点：跨平台 缺点：监听上限受文件描述符限制，最大1024 需要检测满足条件的fd，只能通过轮询和检查来判断事件，而且只能支持三种事件 poll123456int poll(stru">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-20T01:34:28.000Z">
-<meta property="article:modified_time" content="2022-02-20T01:54:02.510Z">
+<meta property="article:modified_time" content="2022-02-20T10:37:08.525Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -197,7 +197,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.7k 字
+      2k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      15 分钟
+      17 分钟
     </span>
   
 
@@ -271,8 +271,8 @@
 <li><code>op</code>：操作，增改删，<code>EPOLL_CTL_ADD</code>、<code>EPOLL_CTL_MOD</code>、<code>EPOLL_CTL_DEL</code></li>
 <li><code>fd</code>：待监听的fd</li>
 <li><code>event</code>：<code>struct epoll_event</code>的指针，<strong>传出参数</strong>。如果fd有事件，这个参数就会被设置。<ul>
-<li><code>event</code>：<code>EPOLLIN</code>、<code>EPOLLOUT</code>、<code>EPOLLERR</code></li>
-<li><code>data</code>：<code>union</code>类型，<code>ptr</code>是回调函数的指针，<code>fd</code>是对应监听事件。</li>
+<li><code>events</code>：<code>EPOLLIN</code>、<code>EPOLLOUT</code>、<code>EPOLLERR</code></li>
+<li><code>data</code>：<code>union</code>类型，<code>ptr</code>是泛型指针，可以是自定义的结构体（里面包含回调函数），<code>fd</code>是对应监听事件。</li>
 </ul>
 </li>
 </ul>
@@ -284,8 +284,19 @@
 </ul>
 <p>返回满足监听的总个数，可以用作循环上限。<code>events</code>一定都是满足监听的事件，可以直接循环处理。</p>
 <p>适合使用场景：大量并发连接，但是只有少量活跃连接。</p>
-<h2 id="事件模型"><a href="#事件模型" class="headerlink" title="事件模型"></a>事件模型</h2><p>epoll有两种事件模型</p>
-<h3 id="边缘触发（Edge-Triggered，ET）"><a href="#边缘触发（Edge-Triggered，ET）" class="headerlink" title="边缘触发（Edge Triggered，ET）"></a>边缘触发（Edge Triggered，ET）</h3><h3 id="水平触发（Level-Triggered，LT）"><a href="#水平触发（Level-Triggered，LT）" class="headerlink" title="水平触发（Level Triggered，LT）"></a>水平触发（Level Triggered，LT）</h3>
+<h2 id="事件模型"><a href="#事件模型" class="headerlink" title="事件模型"></a>事件模型</h2><p>epoll有两种事件模型，<strong>默认是水平触发</strong>。修改为边缘触发则在<code>epoll_ctl</code>的参数<code>event.events</code>中用或运算加上<code>EPOLLET</code>。</p>
+<ol>
+<li><p>边缘触发（Edge Triggered，ET）</p>
+</li>
+<li><p>水平触发（Level Triggered，LT）</p>
+</li>
+</ol>
+<p>用通信的知识来理解，假如只有电压发生变化才会产生触发，那么就是边缘触发。如果电压维持高水平，但是依然会触发，那么就是水平触发。</p>
+<p>epoll在处理事件时，如果没有将缓冲区读取完，或者在处理过程中产生了新的触发，在ET模式下是不会触发的，只有下一次触发时再继续处理。</p>
+<p>LT模式可应用与阻塞和非阻塞的文件描述符。ET是<strong>高速模式</strong>，只能用于非阻塞（给fd设置<code>O_NONBLOCK</code>）。</p>
+<p>缺点：不能跨平台，只支持Linux（Unix也不行）</p>
+<h2 id="epoll反应堆模型"><a href="#epoll反应堆模型" class="headerlink" title="epoll反应堆模型"></a>epoll反应堆模型</h2><p>ET模式+非阻塞模式+回调函数<code>void* ptr</code></p>
+
             </div>
             <hr>
             <div>
@@ -318,6 +329,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/02/20/leetcode/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LeetCode算法复健</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
