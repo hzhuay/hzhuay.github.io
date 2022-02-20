@@ -1,5 +1,5 @@
 ---
-title: IO复用
+ title: IO复用
 date: 2022-02-20 09:34:28
 tags: Linux
 categories: Linux网络编程
@@ -77,8 +77,8 @@ struct epoll_event {
 - `op`：操作，增改删，`EPOLL_CTL_ADD`、`EPOLL_CTL_MOD`、`EPOLL_CTL_DEL`
 - `fd`：待监听的fd
 - `event`：`struct epoll_event`的指针，**传出参数**。如果fd有事件，这个参数就会被设置。
-  - `event`：`EPOLLIN`、`EPOLLOUT`、`EPOLLERR`
-  - `data`：`union`类型，`ptr`是回调函数的指针，`fd`是对应监听事件。
+  - `events`：`EPOLLIN`、`EPOLLOUT`、`EPOLLERR`
+  - `data`：`union`类型，`ptr`是泛型指针，可以是自定义的结构体（里面包含回调函数），`fd`是对应监听事件。
 
 ```C++
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
@@ -94,9 +94,21 @@ int epoll_pwait(int epfd, struct epoll_event *events, int maxevents, int timeout
 
 ## 事件模型
 
-epoll有两种事件模型
+epoll有两种事件模型，**默认是水平触发**。修改为边缘触发则在`epoll_ctl`的参数`event.events`中用或运算加上`EPOLLET`。
 
-### 边缘触发（Edge Triggered，ET）
+1. 边缘触发（Edge Triggered，ET）
 
-### 水平触发（Level Triggered，LT）
+2. 水平触发（Level Triggered，LT）
+
+用通信的知识来理解，假如只有电压发生变化才会产生触发，那么就是边缘触发。如果电压维持高水平，但是依然会触发，那么就是水平触发。
+
+epoll在处理事件时，如果没有将缓冲区读取完，或者在处理过程中产生了新的触发，在ET模式下是不会触发的，只有下一次触发时再继续处理。
+
+LT模式可应用与阻塞和非阻塞的文件描述符。ET是**高速模式**，只能用于非阻塞（给fd设置`O_NONBLOCK`）。
+
+缺点：不能跨平台，只支持Linux（Unix也不行）
+
+## epoll反应堆模型
+
+ET模式+非阻塞模式+回调函数`void* ptr`
 
