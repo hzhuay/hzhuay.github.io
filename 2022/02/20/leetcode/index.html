@@ -24,7 +24,7 @@
 <meta property="og:description" content="临近求职，面试手撕算法避无可避，不得不将搁置很久的算法题重新捡起来练习。这里算开个新坑，将LeetCode前几页的热门题目重新写一遍，最好能记录每次的用时。 1. 两数之和进阶要求是时间复杂度小于 O(n^2^)，那么应该需要借助排序和二分查找，但是直接排序会打乱下标，因此借助map结构（unordered_map基于哈希表则更快）。 坑点：遍历的时候一定要先查找nums[i]对应的搭档在不在，然">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-20T10:36:15.000Z">
-<meta property="article:modified_time" content="2022-02-21T13:22:24.024Z">
+<meta property="article:modified_time" content="2022-02-21T14:41:12.093Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary_large_image">
@@ -197,7 +197,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.3k 字
+      2.4k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12 分钟
+      21 分钟
     </span>
   
 
@@ -259,6 +259,10 @@
 <h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3. 无重复字符的最长子串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></h1><p>用map的数据结构可以很容易地统计词频，用上了之后这就是一道很简单的滑动窗口问题。</p>
 <p>遍历时每次都强制把刚遇到的字符<code>s[i]</code>加入到字串中，然后如果该字符出现了2次，则持续右移<code>l</code>，直到遇到一个和<code>s[i]</code>相同的字符，将<code>s[i]</code>的频率减到1。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLongestSubstring</span><span class="hljs-params">(string s)</span> </span>&#123;<br>    unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; cnt;<br>    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, len = <span class="hljs-number">0</span>, ans = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        cnt[s[i]]++;<br>        len++;<br>        <span class="hljs-keyword">while</span>(cnt[s[i]] &gt; <span class="hljs-number">1</span>)&#123;<br>            cnt[s[l++]]--;<br>            len--;<br>        &#125;<br>        ans = <span class="hljs-built_in">max</span>(ans, len);<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="4-寻找两个正序数组的中位数"><a href="#4-寻找两个正序数组的中位数" class="headerlink" title="4. 寻找两个正序数组的中位数"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/">4. 寻找两个正序数组的中位数</a></h1><p>比较难的二分查找，边界处理很繁琐。数组元素数量是固定的，可以把两个有序的数组看做一个整体，由一个折现分别将X和Y分为两部分，左半部分和右半部分数量相等（或者左半边多一个，多出的那个即为中位数），规定左半边的所有数小于右半边的所有数。我们定义i分隔了X，j分隔了Y，由于左半边数量等于右半边，则只要i确定那么j也确定，因此对i进行二分查找。</p>
+<p>如代码中注释所画，比较<code>X[i-1]</code>和<code>Y[j]</code>的大小关系即可，并不在乎<code>X[i-1]</code>和<code>Y[j-1]</code>的大小关系，只要i和j数量关系维持住即可，因为<code>Y[j-1]</code>一定比<code>Y[j]</code>小。由于X长度小于Y，所以只移动i是安全的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">findMedianSortedArrays</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; X, vector&lt;<span class="hljs-type">int</span>&gt;&amp; Y)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(X.<span class="hljs-built_in">size</span>() &gt; Y.<span class="hljs-built_in">size</span>())<span class="hljs-built_in">swap</span>(X, Y);  <span class="hljs-comment">//保证X长度小于Y</span><br>    <span class="hljs-type">int</span> sizeX = X.<span class="hljs-built_in">size</span>(), sizeY = Y.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">int</span> leftSize = (sizeX + sizeY + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; <span class="hljs-comment">//中位数一定在左边</span><br>    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = sizeX, i, j;<br>    <span class="hljs-keyword">while</span>(l &lt; r) &#123;<br>        <span class="hljs-comment">/*  X[i-1] | X[i]</span><br><span class="hljs-comment">        *           --</span><br><span class="hljs-comment">        *      Y[j-1] | Y[j]</span><br><span class="hljs-comment">        */</span><br>        i = (l + r + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>, j = leftSize - i;<br>        <span class="hljs-keyword">if</span>(X[i<span class="hljs-number">-1</span>] &gt; Y[j]) r = i - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> l = i;<br>    &#125;<br>    i = l, j = leftSize - i;<br>    <span class="hljs-comment">//如果i和j取到了边界，那么说明这两个数组没有交叉，要用int的极值排除边界的干扰</span><br>    <span class="hljs-type">int</span> XLeftMax = i == <span class="hljs-number">0</span> ? INT_MIN : X[i<span class="hljs-number">-1</span>];<br>    <span class="hljs-type">int</span> XRightMin = i == sizeX ? INT_MAX : X[i];<br>    <span class="hljs-type">int</span> YLeftMax = j == <span class="hljs-number">0</span> ? INT_MIN : Y[j<span class="hljs-number">-1</span>];<br>    <span class="hljs-type">int</span> YRightMin = j == sizeY ? INT_MAX : Y[j];<br>    <span class="hljs-keyword">if</span>((sizeX + sizeY) % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">max</span>(XLeftMax, YLeftMax); <span class="hljs-comment">//如果是奇数个，那么中位数只有一个，一定是这两者中较大的</span><br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-comment">// 如果是偶数个，那么中位数由两个数算出：左区间最大值和右区间最小值</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">double</span>((<span class="hljs-built_in">max</span>(XLeftMax, YLeftMax) + <span class="hljs-built_in">min</span>(XRightMin, YRightMin))) / <span class="hljs-number">2</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 
             </div>
