@@ -56,3 +56,63 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 }
 ```
 
+# [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
+用map的数据结构可以很容易地统计词频，用上了之后这就是一道很简单的滑动窗口问题。
+
+遍历时每次都强制把刚遇到的字符`s[i]`加入到字串中，然后如果该字符出现了2次，则持续右移`l`，直到遇到一个和`s[i]`相同的字符，将`s[i]`的频率减到1。
+
+```C++
+int lengthOfLongestSubstring(string s) {
+    unordered_map<char, int> cnt;
+    int l = 0, len = 0, ans = 0;
+    for(int i = 0; i < s.size(); i++){
+        cnt[s[i]]++;
+        len++;
+        while(cnt[s[i]] > 1){
+            cnt[s[l++]]--;
+            len--;
+        }
+        ans = max(ans, len);
+    }
+    return ans;
+}
+```
+
+# [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+比较难的二分查找，边界处理很繁琐。数组元素数量是固定的，可以把两个有序的数组看做一个整体，由一个折现分别将X和Y分为两部分，左半部分和右半部分数量相等（或者左半边多一个，多出的那个即为中位数），规定左半边的所有数小于右半边的所有数。我们定义i分隔了X，j分隔了Y，由于左半边数量等于右半边，则只要i确定那么j也确定，因此对i进行二分查找。
+
+如代码中注释所画，比较`X[i-1]`和`Y[j]`的大小关系即可，并不在乎`X[i-1]`和`Y[j-1]`的大小关系，只要i和j数量关系维持住即可，因为`Y[j-1]`一定比`Y[j]`小。由于X长度小于Y，所以只移动i是安全的。
+
+```c++
+double findMedianSortedArrays(vector<int>& X, vector<int>& Y) {
+    if(X.size() > Y.size())swap(X, Y);  //保证X长度小于Y
+    int sizeX = X.size(), sizeY = Y.size();
+    int leftSize = (sizeX + sizeY + 1) / 2; //中位数一定在左边
+    int l = 0, r = sizeX, i, j;
+    while(l < r) {
+        /*  X[i-1] | X[i]
+        *           --
+        *      Y[j-1] | Y[j]
+        */
+        i = (l + r + 1) / 2, j = leftSize - i;
+        if(X[i-1] > Y[j]) r = i - 1;
+        else l = i;
+    }
+    i = l, j = leftSize - i;
+    //如果i和j取到了边界，那么说明这两个数组没有交叉，要用int的极值排除边界的干扰
+    int XLeftMax = i == 0 ? INT_MIN : X[i-1];
+    int XRightMin = i == sizeX ? INT_MAX : X[i];
+    int YLeftMax = j == 0 ? INT_MIN : Y[j-1];
+    int YRightMin = j == sizeY ? INT_MAX : Y[j];
+    if((sizeX + sizeY) % 2 == 1){
+        return max(XLeftMax, YLeftMax); //如果是奇数个，那么中位数只有一个，一定是这两者中较大的
+    }else{
+        // 如果是偶数个，那么中位数由两个数算出：左区间最大值和右区间最小值
+        return double((max(XLeftMax, YLeftMax) + min(XRightMin, YRightMin))) / 2;
+    }
+}
+
+```
+
