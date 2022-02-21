@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>进行复杂的初始化时为什么要用do-while</title>
+    <link href="/2022/02/21/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/"/>
+    <url>/2022/02/21/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/</url>
+    
+    <content type="html"><![CDATA[<p><code>do-while(0)</code>这样的语句为什么存在？</p><p>在初始化线程池这样复杂的对象时，需要大量的内存分配工作以及其成员的初始化。如果是在C语言中，没有C++的析构函数，那么就应该在某一步出错时停止初始化，并进入销毁阶段。</p><p>为了避免写goto，我们可以将初始化代码放在<code>do-while(0)</code>中，这样可以使用<code>break</code>在任意出错位置跳出循环，进入销毁程序。</p><p><code>do-while(0)</code>应该在宏定义中还有一种使用技巧，以前看到过，待补充，等找到了补上。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>小技巧</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode算法复健</title>
     <link href="/2022/02/20/leetcode/"/>
     <url>/2022/02/20/leetcode/</url>
