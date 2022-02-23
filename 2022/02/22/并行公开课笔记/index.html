@@ -24,7 +24,7 @@
 <meta property="og:description" content="3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，有什么区别呢？ 区别在于模板参数传入的N是一个编译期常量，对于每一个不同的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-22T01:18:22.000Z">
-<meta property="article:modified_time" content="2022-02-22T03:25:56.484Z">
+<meta property="article:modified_time" content="2022-02-23T01:06:08.767Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="C++, CUDA, 并行计算">
 <meta name="twitter:card" content="summary_large_image">
@@ -197,7 +197,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      3.7k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12 分钟
+      31 分钟
     </span>
   
 
@@ -247,7 +247,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月22日 上午
+                  本文最后更新于：2022年2月23日 上午
                 
               </p>
             
@@ -284,6 +284,43 @@
 
 <p>这种模板可以lambda表达式一起使用，如果有捕获局部变量的话（使用了<strong>闭包</strong>），那么最好模板参数的Func使用常引用，避免不必要的拷贝，不然会把局部变量也拷贝。</p>
 <h3 id="lambda作为返回值"><a href="#lambda作为返回值" class="headerlink" title="lambda作为返回值"></a>lambda作为返回值</h3><p>lambda表达式既可以作为参数，也可以作为返回值。由于lambda永远是<strong>匿名类型</strong>，所以必须将返回值类型声明为<code>auto</code>。</p>
+<h3 id="lambda作为参数，切避免使用模板参数"><a href="#lambda作为参数，切避免使用模板参数" class="headerlink" title="lambda作为参数，切避免使用模板参数"></a>lambda作为参数，切避免使用模板参数</h3><p>lambda作为函数参数必须得使用模板，因为其匿名的特性。但是使用模板就不能分离声明和定义了。</p>
+<p>如果有分离声明和定义的需求，可以使用<code>&lt;functional&gt;</code>中的<code>std::function&lt;ret_type(args)&gt;</code>。这是<strong>类型擦除技术</strong>，使用后把所有通过括号调用的函数变成虚函数。</p>
+<p>性能不如模板，因为调用了虚函数。</p>
+<p>如果是无捕获的lambda，可以传入为函数指针。</p>
+<h3 id="lambda应用"><a href="#lambda应用" class="headerlink" title="lambda应用"></a>lambda应用</h3><p>有时我们要遍历数组查找某个特定值，如果找到了就赋值给变量，然后break。用lambda可以同时实现 break和赋值的功能。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">int</span> index = [&amp;] &#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;arr.<span class="hljs-built_in">size</span>(); i++)<br>		<span class="hljs-keyword">if</span>(arr[i] == tofind)<br>			<span class="hljs-keyword">return</span> i;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;();<br></code></pre></td></tr></table></figure>
+
+<p>类似于上述的局部函数功能，还可以写出匿名递归。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">auto</span> dfs = [&amp;] (<span class="hljs-keyword">auto</span> <span class="hljs-type">const</span> &amp;dfs, <span class="hljs-type">int</span> index) -&gt; <span class="hljs-type">void</span> &#123;<br>	<span class="hljs-built_in">dfs</span>(dfs, next);<br>&#125;;<br><span class="hljs-built_in">dfs</span>(dfs, <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+
+<p>注意，返回值类型必须指定。</p>
+<h1 id="5-C-11多线程编程"><a href="#5-C-11多线程编程" class="headerlink" title="5. C++11多线程编程"></a>5. C++11多线程编程</h1><h2 id="时间处理"><a href="#时间处理" class="headerlink" title="时间处理"></a>时间处理</h2><p>C语言处理时间依赖<code>&lt;time.h&gt;</code>库，有诸多问题：</p>
+<ol>
+<li>很不灵活。用<code>long</code>时间戳来表示从1970年开始过了多少秒，可以对这个值进行无意义的运算。<code>sleep</code>只能以秒为单位，想要睡眠毫秒级只能用Linux特有的API<code>usleep</code>。</li>
+<li>C语言原始API没有类型区分，导致很容易弄错单位，混淆<strong>时间点</strong>和<strong>时间段</strong>。</li>
+</ol>
+<p>C++11引入时间标准库<code>std::chrono</code>。</p>
+<p>利用C++强类型的特点，明确区分时间点和时间段，区分不同时间单位。<br>比如两个时间点类型相减，得到的就是时间段类型。</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>C语言使用pthread库进行多线程编程，但是pthread的函数式编程不符合面向对象思想，C++11开始提供了<code>std::thread</code>，封装了pthread，从语言级别提供了多线程的支持。</p>
+<p><code>std::thread</code>的构造函数的参数可以是<strong>任意</strong>lambda表达式。构造完成后即开始运行。</p>
+<p>线程作为对象，遵循RAII原则，有自己的析构函数，删除了拷贝构造和拷贝赋值函数，提供了移动构造&#x2F;赋值函数。当thread需要被析构时，对应的pthread线程也会被销毁。</p>
+<p><code>detach</code>函数会分离thread对象与pthread线程，使线程的生命周期不再由<code>std::thread</code>对象管理，而是线程退出后自动销毁自己。</p>
+<h3 id="多个线程都结束后才退出"><a href="#多个线程都结束后才退出" class="headerlink" title="多个线程都结束后才退出"></a>多个线程都结束后才退出</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadPool</span>&#123;<br>	vector&lt;thread&gt; m_pool;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(thread thr)</span> </span>&#123;<br>		m_pool.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">move</span>(thr));<br>	&#125;<br>	~<span class="hljs-built_in">ThreadPool</span>() &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;t: m_pool) t.<span class="hljs-built_in">join</span>();<br>	&#125;<br>&#125;;<br>ThreadPool tpool;<br></code></pre></td></tr></table></figure>
+
+<p>定义一个全局进程池，其声明周期和main函数一致。在main函数结束时，tpool的析构函数会被自动调用，将所有进程都join，这样就可以等待他们全部结束。</p>
+<h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><p><code>std::async</code>接收一个带返回值的lambda，自身返回一个<code>std::future&lt;T&gt;</code>对象。lambda的函数体将在<strong>另一个线程</strong>里执行。</p>
+<p>future的含义是由于这个lambda是异步执行的，所以这个返回值目前还没有，但将来一定会有。调用future的get()方法可以获得返回值。如果还没执行完，则会阻塞在这里。</p>
+<p>wait()函数也有类似的功能，会阻塞等待lambda执行完，但是没有返回值。</p>
+<p><code>wait_for()</code>可以指定一个最长等待时间，返回一个<code>future_status::timeout</code>或<code>future_status::ready</code>表示是否完成。</p>
+<h3 id="推迟执行"><a href="#推迟执行" class="headerlink" title="推迟执行"></a>推迟执行</h3><p><code>std::async</code>的第一个参数可以设为<code>std::launch::deferred</code>，这样lambda就不会另起一个线程来执行，而是<strong>推迟</strong>到get()调用时才在主线程中执行，因此只是函数式编程范式意义上的异步，可以实现<strong>惰性求值</strong>。</p>
+<h3 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h3><p><code>std::async</code>底层实现基于<code>std::promise</code>。如果不想让<code>std::async</code>自动创建线程，想手动创建，可以创建一个<code>std::promise</code>对象。把lambda的返回值处改为调用<code>std::promise</code>的<code>set_value()</code>，然后在主线程里调用<code>get_future()</code>获取其<code>std::future</code>对象，再调用<code>get()</code>。</p>
+<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p><code>std::mutex</code>有lock()和unloc()两种操作。</p>
+<h3 id="复合RAII的互斥锁"><a href="#复合RAII的互斥锁" class="headerlink" title="复合RAII的互斥锁"></a>复合RAII的互斥锁</h3><p>如果将互斥锁视为资源，上锁和解锁分别视为获取和释放，那么互斥锁也可以通过class来自动管理。</p>
+<p><code>std::lock_guard</code>就是这样一个工具类，会在构造函数里传入一个<code>std::mutex</code>并调用lock，析构函数里调用unlock。</p>
+<p>这样的类可以用空花括号来规定声明周期。把需要上锁的代码都放在一个花括号内。</p>
+<h3 id="自由度更高的锁"><a href="#自由度更高的锁" class="headerlink" title="自由度更高的锁"></a>自由度更高的锁</h3><p><code>std::lock_guard</code>严格按照生命周期来解锁，但是如果我们需要<strong>提前unlock</strong>，可以使用<code>std::unique_lock</code>，它额外储存了一个<code>flag</code>表示是否已经被释放，在<strong>析构</strong>时检测这个<code>flag</code>，如果已经被释放则不调用unlock。</p>
+<p><code>std::unique_lock</code>的构造函数还可以有一个额外的参数<code>std::defer_lock</code>，如果指定了该参数，那么<code>unique_lock</code>就不会在构造函数时上锁，而是需要<strong>手动上锁</strong>。</p>
 
             </div>
             <hr>
