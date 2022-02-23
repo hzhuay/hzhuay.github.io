@@ -24,7 +24,7 @@
 <meta property="og:description" content="3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，有什么区别呢？ 区别在于模板参数传入的N是一个编译期常量，对于每一个不同的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-22T01:18:22.000Z">
-<meta property="article:modified_time" content="2022-02-23T01:06:08.767Z">
+<meta property="article:modified_time" content="2022-02-23T05:23:30.853Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="C++, CUDA, 并行计算">
 <meta name="twitter:card" content="summary_large_image">
@@ -197,7 +197,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.7k 字
+      6.2k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      31 分钟
+      52 分钟
     </span>
   
 
@@ -247,7 +247,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月23日 上午
+                  本文最后更新于：2022年2月23日 下午
                 
               </p>
             
@@ -315,12 +315,64 @@
 <p><code>wait_for()</code>可以指定一个最长等待时间，返回一个<code>future_status::timeout</code>或<code>future_status::ready</code>表示是否完成。</p>
 <h3 id="推迟执行"><a href="#推迟执行" class="headerlink" title="推迟执行"></a>推迟执行</h3><p><code>std::async</code>的第一个参数可以设为<code>std::launch::deferred</code>，这样lambda就不会另起一个线程来执行，而是<strong>推迟</strong>到get()调用时才在主线程中执行，因此只是函数式编程范式意义上的异步，可以实现<strong>惰性求值</strong>。</p>
 <h3 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h3><p><code>std::async</code>底层实现基于<code>std::promise</code>。如果不想让<code>std::async</code>自动创建线程，想手动创建，可以创建一个<code>std::promise</code>对象。把lambda的返回值处改为调用<code>std::promise</code>的<code>set_value()</code>，然后在主线程里调用<code>get_future()</code>获取其<code>std::future</code>对象，再调用<code>get()</code>。</p>
-<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p><code>std::mutex</code>有lock()和unloc()两种操作。</p>
+<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p><code>std::mutex</code>有lock()和unlock()两种操作。</p>
+<ul>
+<li>lock：获取锁，如果已经上锁则阻塞等待</li>
+<li>try_lock：尝试上锁，返回bool表示成功或失败</li>
+<li><code>std::timed_mutex</code>的try_lock_for：等到一段时间，超时返回false。</li>
+</ul>
 <h3 id="复合RAII的互斥锁"><a href="#复合RAII的互斥锁" class="headerlink" title="复合RAII的互斥锁"></a>复合RAII的互斥锁</h3><p>如果将互斥锁视为资源，上锁和解锁分别视为获取和释放，那么互斥锁也可以通过class来自动管理。</p>
 <p><code>std::lock_guard</code>就是这样一个工具类，会在构造函数里传入一个<code>std::mutex</code>并调用lock，析构函数里调用unlock。</p>
 <p>这样的类可以用空花括号来规定声明周期。把需要上锁的代码都放在一个花括号内。</p>
-<h3 id="自由度更高的锁"><a href="#自由度更高的锁" class="headerlink" title="自由度更高的锁"></a>自由度更高的锁</h3><p><code>std::lock_guard</code>严格按照生命周期来解锁，但是如果我们需要<strong>提前unlock</strong>，可以使用<code>std::unique_lock</code>，它额外储存了一个<code>flag</code>表示是否已经被释放，在<strong>析构</strong>时检测这个<code>flag</code>，如果已经被释放则不调用unlock。</p>
+<h4 id="自由度更高的锁"><a href="#自由度更高的锁" class="headerlink" title="自由度更高的锁"></a>自由度更高的锁</h4><p><code>std::lock_guard</code>严格按照生命周期来解锁，但是如果我们需要<strong>提前unlock</strong>，可以使用<code>std::unique_lock</code>，它额外储存了一个<code>flag</code>表示是否已经被释放，在<strong>析构</strong>时检测这个<code>flag</code>，如果已经被释放则不调用unlock。</p>
 <p><code>std::unique_lock</code>的构造函数还可以有一个额外的参数<code>std::defer_lock</code>，如果指定了该参数，那么<code>unique_lock</code>就不会在构造函数时上锁，而是需要<strong>手动上锁</strong>。</p>
+<p><code>std::unique_lock</code>也可以用<code>std::try_to_lock</code>作为构造函数，这样就要调用try_lock()上锁和用<code>owns_lock()</code>判断是否上锁成功。</p>
+<p>如果<code>std::unique_lock</code>或者<code>std::lock_guard</code>传入的参数mutex已经上锁，要在构造函数传入<code>std::adopt_lock</code>，那么依然可以自动解锁。</p>
+<h4 id="概念（鸭子类型）"><a href="#概念（鸭子类型）" class="headerlink" title="概念（鸭子类型）"></a>概念（鸭子类型）</h4><p><code>std::unique_lock</code>也有lock和unlock函数，所以也可以作为<code>std::lock_guard</code>的参数。</p>
+<p>只要具有特定名字的成员函数，就判断一个类是否满足某些功能，这种机制在Python中称为<strong>鸭子类型</strong>，在C++中称为<strong>概念</strong>。比起虚函数和动态多态的接口抽象，concept使实现和接口更加解耦，且没有性能损失。</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><ol>
+<li><strong>互斥条件</strong>：进程对所需求的资源具有排他性，若有其他进程请求该资源，请求进程只能等待。</li>
+<li><strong>不剥夺条件</strong>：进程在所获得的资源未释放前，不能被其他进程强行夺走，只能自己释放。</li>
+<li><strong>请求和保持条件</strong>：进程当前所拥有的资源在进程请求其他新资源时，由该进程继续占有。</li>
+<li><strong>循环等待条件</strong>：存在一种进程资源循环等待链，链中每个进程已获得的资源同时被链中下一个进程所请求。</li>
+</ol>
+<p>避免死锁最简单的方法：</p>
+<ol>
+<li>永远不要同时持有两个锁。</li>
+<li>保证不同进程上锁的顺序一致。</li>
+<li>使用<code>std::lock(mtx1, mtx2, ...)</code>，可以对多个mutex上锁且保证不会死锁。解锁则按照任意顺序对mutex调用unlock即可。</li>
+</ol>
+<p>就和mutex有RAII版本的<code>std::lock_guard</code>一样，<code>std::lock</code>的RAII版本是 <code>std::scoped_lock</code></p>
+<h3 id="单线程也可以死锁"><a href="#单线程也可以死锁" class="headerlink" title="单线程也可以死锁"></a>单线程也可以死锁</h3><p>死锁不一定发生在并发环境中，单线程中调用了一个会加锁的函数，如果这个函数又调用了自己，那么就会死锁。</p>
+<p>解决这种情况最好是不要在该函数内上锁，并在文档中说明：</p>
+<blockquote>
+<p>该函数不是线程安全的，调用本函数前请先保证mutex已经上锁。</p>
+</blockquote>
+<p>如果代码已经无法改动，可以改用<code>std::recursive_mutex</code>，它会自动判断是不会是在<strong>同一线程</strong>中多次对同一个mutex上锁，如果是则让计数器加一，解锁则减一，减到0才真正解锁。缺点是相比普通的<code>std::mutex</code>有性能损失。</p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><code>std::shared_mutex</code>是读写锁。</p>
+<p>lock和unlock对应写锁，有修改数据的需求。<code>lock_shared</code>和<code>unlock_shared</code>对应读锁。</p>
+<p><code>std::shared_lock</code>是符合RAII的<code>shared_mutex</code>，不同于<code>unique_lock</code>会调用lock，<code>shared_lock</code>调用的是<code>lock_shared</code>。</p>
+<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MTVector</span> &#123;<br>	std::vector&lt;<span class="hljs-type">int</span>&gt; m_arr;<br>	std::mutex m_mtx;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-keyword">class</span> <span class="hljs-title class_">Accessor</span> &#123;<br>		MTVector &amp;m_that;<br>        std::unique_lock&lt;std::mutex&gt; m_guard;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-built_in">Accessor</span>(MTVector &amp;that): <span class="hljs-built_in">m_that</span>(that), <span class="hljs-built_in">m_guard</span>(that.m_mtx) &#123;&#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">int</span> val)</span> <span class="hljs-type">const</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> m_that.arr.<span class="hljs-built_in">push_back</span>(val);<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>			<span class="hljs-keyword">return</span> m_that.m_arr.<span class="hljs-built_in">size</span>();<br>        &#125;<br>	&#125;<br>    <span class="hljs-function">Accessor <span class="hljs-title">access</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> &#123;*<span class="hljs-keyword">this</span>&#125;;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>访问者模式可以很好地为了多线程上锁服务。如果我们自定义了一个线程安全的vector，在每次操作时都加锁，那么有很大的性能开销。</p>
+<p>使用时只需要<code>auto axr = arr.access();</code>。访问者模式分离了数据的存储和访问，在需要访问时只加一次锁。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>等待特定条件，满足后被唤醒。<code>std::condition_variable</code>就是条件变量，必须和<code>std::unique_lock&lt;std::mutex&gt;</code>一起使用。</p>
+<p><code>wait(lck)</code>会使线程陷入等待。<code>notify_one()</code>会唤醒那个陷入等待的线程。 <code>notify_all()</code>会唤醒所有等待该条件变量的线程。</p>
+<p><code>wait(lck, lambda)</code>可以额外指定一个lambda作为参数，只有当返回值为true时才真正唤醒。这样就可以实现生产者-消费者模式。</p>
+<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>一个<code>counter += i</code>在CPU看来会变成3个指令：</p>
+<ol>
+<li>读取counter变量到rax寄存器</li>
+<li>rax寄存器的值加上1</li>
+<li>把rax写入到counter变量</li>
+</ol>
+<p>即使编译器优化为<code>add [counter], 1</code>也没用，因为现代CPU为了高效，会把一条汇编指令拆分为很多微指令，然后可能会重排、乱序执行、并行执行。</p>
+<p>保证操作原子性的暴力解决方案是用mutex上锁，但是mutex是操作系统提供的，太过<strong>重量级</strong>，它会让线程被挂起，从而需要通过系统调用，进入<strong>内核态</strong>，调度到其他线程执行，有很大开销。</p>
+<p>用<code>atomic</code>是更高效，更轻量的，它会被编译器转换为专门的硬件指令。</p>
+<p>CPU在识别到该指令时，会锁住内存总线，放弃乱序执行等优化策略（将该指令视为一个同步点，强制同步之前所有的内存操作），从而保证该操作是<strong>原子</strong>的。</p>
+<p>对于程序员而言，只需要把<code>int</code>改为<code>atomic&lt;int&gt;</code>即可，不需要mutex那样手动控制锁，也更加直观。</p>
+<h3 id="注意运算符"><a href="#注意运算符" class="headerlink" title="注意运算符"></a>注意运算符</h3><p>注意，不是所有的运算都保证原子性，只有<code>+=</code>，<code>-=</code>，<code>&amp;=</code>，<code>|=</code>，<code>^=</code>，<code>++</code>，<code>--</code>可以。</p>
+<p>用<code>=</code>赋值也不能保证原子，需要调用<code>store(val)</code>。<code>exchange</code>会在赋值的同时返回旧值。</p>
+<p>除了调用重载运算符，还可以调用函数。<code>fatch_add</code>不仅能执行加法，还可以返回<strong>旧值</strong>。</p>
 
             </div>
             <hr>
