@@ -116,3 +116,20 @@ double findMedianSortedArrays(vector<int>& X, vector<int>& Y) {
 
 ```
 
+# [7. 整数反转](https://leetcode-cn.com/problems/reverse-integer/)
+
+`n`声明为`long`保证足够的空间，然后正常将其反转。最后判断强转为int后是否还等于自身，如果不是则说明溢出了。
+
+```C++
+int reverse(int x) {
+    long long n = 0;
+    while(x){
+        n = n * 10 + x % 10;
+        x /= 10;
+    }
+    return n == int(n) ? int(n) : 0;
+}
+```
+
+# [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+

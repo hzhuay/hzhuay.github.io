@@ -2,7 +2,7 @@
 title: 进行复杂的初始化时为什么要用do-while
 date: 2022-02-21 11:02:07
 tags: 
-categories: 小技巧
+categories: 笔记
 ---
 
 `do-while(0)`这样的语句为什么存在？
