@@ -16,17 +16,17 @@
   <meta name="author" content="JackZhu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，有什么区别呢？ 区别在于模板参数传入的N是一个编译期常量，对于每一个不同的">
+    <meta name="description" content="课程来源：【录播】现代C++中的高性能并行编程与优化（持续更新中）]  3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并行公开课笔记">
 <meta property="og:url" content="http://example.com/2022/02/22/%E5%B9%B6%E8%A1%8C%E5%85%AC%E5%BC%80%E8%AF%BE%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，有什么区别呢？ 区别在于模板参数传入的N是一个编译期常量，对于每一个不同的">
+<meta property="og:description" content="课程来源：【录播】现代C++中的高性能并行编程与优化（持续更新中）]  3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="d:/code/hzhuay.github.io/source/img/image-20220223203420445.png">
 <meta property="og:image" content="d:/code/hzhuay.github.io/source/img/image-20220223204038287.png">
 <meta property="article:published_time" content="2022-02-22T01:18:22.000Z">
-<meta property="article:modified_time" content="2022-02-24T02:57:14.948Z">
+<meta property="article:modified_time" content="2022-02-24T03:10:13.184Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="C++, CUDA, 并行计算">
 <meta name="twitter:card" content="summary_large_image">
@@ -200,7 +200,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.7k 字
+      8.8k 字
     </span>
   
 
@@ -209,7 +209,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      73 分钟
+      74 分钟
     </span>
   
 
@@ -255,7 +255,10 @@
               </p>
             
             <div class="markdown-body">
-              <h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-type">int</span> N&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show_times</span><span class="hljs-params">(string msg)</span></span>&#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;N; i++)&#123;<br>		cout &lt;&lt; msg &lt;&lt; endl;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+              <blockquote>
+<p>课程来源：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fa411r7zp">【录播】现代C++中的高性能并行编程与优化（持续更新中）</a>]</p>
+</blockquote>
+<h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-type">int</span> N&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show_times</span><span class="hljs-params">(string msg)</span></span>&#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;N; i++)&#123;<br>		cout &lt;&lt; msg &lt;&lt; endl;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><code>N</code>作为模板参数和作为函数参数，有什么区别呢？</p>
 <p>区别在于模板参数传入的<code>N</code>是一个<strong>编译期常量</strong>，对于每一个不同的N，编译器都会单独生成一份代码，从而可以做单独优化。</p>
