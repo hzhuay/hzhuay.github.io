@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="为了开展我的个人项目，第一周的任务是学习区块链的背景知识，了解zkSync的basic idea。 比特币Bit Coin，代号（BTC），于2008年以论文形式发布，2009年创世区块诞生。 定位是一种点对点的电子现金系统，可以消除目前线上交易对可信第三方的依赖。 基本规则： 每10分钟左右会产生一个新的区块，一定数量的比特币会奖励给创建者。 奖励数量每4年减半1次，最初创建一区块奖励50btc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链学习笔记">
+<meta property="og:url" content="http://example.com/%E7%AC%94%E8%AE%B0/blobkchain/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="为了开展我的个人项目，第一周的任务是学习区块链的背景知识，了解zkSync的basic idea。 比特币Bit Coin，代号（BTC），于2008年以论文形式发布，2009年创世区块诞生。 定位是一种点对点的电子现金系统，可以消除目前线上交易对可信第三方的依赖。 基本规则： 每10分钟左右会产生一个新的区块，一定数量的比特币会奖励给创建者。 奖励数量每4年减半1次，最初创建一区块奖励50btc">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-26T02:11:55.000Z">
+<meta property="article:modified_time" content="2022-03-01T02:38:55.192Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="区块链, 比特币, 以太坊">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>区块链学习笔记 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="区块链学习笔记">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-26 10:11" pubdate>
+        2022年2月26日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">区块链学习笔记</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年3月1日 上午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>为了开展我的个人项目，第一周的任务是学习区块链的背景知识，了解zkSync的basic idea。</p>
+<h1 id="比特币"><a href="#比特币" class="headerlink" title="比特币"></a>比特币</h1><p>Bit Coin，代号（BTC），于2008年以论文形式发布，2009年创世区块诞生。</p>
+<p>定位是一种<strong>点对点的电子现金系统</strong>，可以消除目前线上交易对<strong>可信第三方</strong>的依赖。</p>
+<h2 id="基本规则："><a href="#基本规则：" class="headerlink" title="基本规则："></a>基本规则：</h2><ul>
+<li>每10分钟左右会产生一个新的区块，<strong>一定数量</strong>的比特币会奖励给创建者。</li>
+<li>奖励数量<strong>每4年减半1次</strong>，最初创建一区块奖励50btc。产生到21万个区块后降为25btc，后面一次对半递减。</li>
+<li>比特币的上限约为<strong>2100万</strong>个，预计<strong>2140</strong>年左右全部挖出。目前已经挖出近<strong>1800万</strong>个。</li>
+</ul>
+<h3 id="区块链和比特币之间的关系"><a href="#区块链和比特币之间的关系" class="headerlink" title="区块链和比特币之间的关系"></a>区块链和比特币之间的关系</h3><p>区块链是支持比特币作为一款应用的底层技术，提供了<strong>分布式账本技术</strong>，解决了交易各方的<strong>信任问题</strong>。</p>
+<p>实际上，比特币是站在巨人的肩膀上的：</p>
+<ul>
+<li>1982年，David Chaum提出了注重隐私安全的密码学网络支付系统</li>
+<li>1985年，Neal Koblitz和Victor Miller各自独立提出著名的椭圆曲线加密算法</li>
+<li>1991年，Stuart Haber和W. Scott Stornetta提出用时间戳确保数位文件安全的协议</li>
+<li>1997年，Adam Back发明了Hashcash（哈希现金），采用工作量证明演算法（PoW）</li>
+<li>1998年，Wei Dai发表了匿名的分散式电子现金系统B-money</li>
+<li>2001年，NSA发布SHA-2系列算法，其中包括比特币最终采用的SHA-256哈希算法</li>
+<li>至此，比特币所采用的区块链技术所依赖的所有技术基础都具备了</li>
+</ul>
+<h2 id="如何运行"><a href="#如何运行" class="headerlink" title="如何运行"></a>如何运行</h2><p>假设有交易双方发生了交易，他们会将这比交易的信息全网广播，使分布式账本的状态发生改变。</p>
+<p>记账者负责记录一段时间内的<strong>交易信息</strong>，一起参与交易的双方<strong>账户状态</strong>，并打包到一个区块中。由于大约每10分钟产生一个新区块，所以可以看做每一个区块就是<strong>一页账单</strong>，记录了这10分钟内发生的交易。区块按照<strong>时间顺序</strong>串联，上一个区块的结尾时的状态紧接着下一个区块开头的状态，就形成了<strong>区块链</strong>。</p>
+<h3 id="账户体系"><a href="#账户体系" class="headerlink" title="账户体系"></a>账户体系</h3><p>比特币采用<strong>非对称加密</strong>，公钥作为<strong>账号</strong>，私钥作为<strong>密码</strong>。</p>
+<p>随机生成私钥，通过数学加密曲线（如椭圆加密曲线）生成公钥。知道公钥<strong>难以</strong>计算出私钥。</p>
+<h3 id="交易发出"><a href="#交易发出" class="headerlink" title="交易发出"></a>交易发出</h3><p>假设A要给B转账，那么A需要：</p>
+<ul>
+<li>一个交易单，内容包括：付款人A，收款人B，比特币数量，来源（A的余额）。</li>
+<li>A对交易单进行<strong>数字签名</strong></li>
+<li>B用A的公钥验证数字签名。</li>
+</ul>
+<h3 id="挖矿：争夺记账权"><a href="#挖矿：争夺记账权" class="headerlink" title="挖矿：争夺记账权"></a>挖矿：争夺记账权</h3><p>网络中有很多记账者，他们在自己的账单里记录了上一页账单的哈希值（以此证明账单的连续性），监听别人广播的交易信息并记录在自己的账单中。</p>
+<p>那么问题来了，那么多记账者，每个人都有自己版本的账单，到底谁的账单会被公认为下一页账单呢？比特币解决这个问题的方式是<strong>数学谜题</strong>。</p>
+<p><code>H ( nonce || prev_hash || tx || tx ... || tx ) &lt; target</code> </p>
+<p>（随机值+上个区块的哈希值+记录的交易）取哈希值，结果要满足一个很难达到的条件。记账者需要不断尝试随机数，第一个尝试成功的人拥有记账权。</p>
+<h3 id="记账验证"><a href="#记账验证" class="headerlink" title="记账验证"></a>记账验证</h3><h1 id="以太坊"><a href="#以太坊" class="headerlink" title="以太坊"></a>以太坊</h1><p>Ethereum，数字货币代号<strong>ETH</strong>，是区块链2.0应用的代表。相比1.0：</p>
+<table>
+<thead>
+<tr>
+<th align="left">区块链1.0（以比特币为代表）</th>
+<th>区块链2.0（以太坊为代表）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">非图灵完备：只能执行有限类型指定</td>
+<td>图灵完备的</td>
+</tr>
+<tr>
+<td align="left">不支持智能合约</td>
+<td>支持智能合约</td>
+</tr>
+<tr>
+<td align="left">定位于支付网络，数字货币</td>
+<td>定位于平台，可以衍生出各种应用</td>
+</tr>
+</tbody></table>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE-%E6%AF%94%E7%89%B9%E5%B8%81-%E4%BB%A5%E5%A4%AA%E5%9D%8A/">区块链, 比特币, 以太坊</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E7%AC%94%E8%AE%B0/binary-search/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">二分查找的细节问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%AE%97%E6%B3%95/nowcoder/">
+                        <span class="hidden-mobile">牛客网TOP101</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
