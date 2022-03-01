@@ -4,25 +4,6 @@
   
   
   <entry>
-    <title>photo</title>
-    <link href="/uncategorized/photo/"/>
-    <url>/uncategorized/photo/</url>
-    
-    <content type="html"><![CDATA[<p><img src="/img/image-20220301185326707.png" alt="image-20220301185326707"></p>]]></content>
-    
-    
-    
-    <tags>
-      
-      <tag>hide</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>二分查找的细节问题</title>
     <link href="/%E7%AC%94%E8%AE%B0/binary-search/"/>
     <url>/%E7%AC%94%E8%AE%B0/binary-search/</url>
