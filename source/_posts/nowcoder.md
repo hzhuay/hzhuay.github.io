@@ -31,16 +31,16 @@ ListNode* ReverseList(ListNode* pHead) {
 ListNode* reverseBetween(ListNode* head, int m, int n) {
     ListNode* dummy = new ListNode(0);
     dummy->next = head;
-    ListNode *pre = dummy, *left = head; 
+    ListNode *pre = dummy, *cur = head; 
     //获取反转区间的起点和起点前的点pre
     for(int i = 1; i < m; i++){
-        pre = left;
-        left = left->next;
+        pre = cur;
+        cur = cur->next;
     }
     // 这个循环相当于把每次遍历到的节点提前至反转区间的头部
     for(int i = 0; i < n - m; i++){
-        ListNode *tmp = left->next;
-        left->next = tmp->next;
+        ListNode *tmp = cur->next;
+        cur->next = tmp->next;
         tmp->next = pre->next;
         pre->next = tmp;			//每次都更新反转区间与链表头部的连接的节点
     }
@@ -48,7 +48,36 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
 }
 ```
 
-![image-20220224144831853](D:\code\hzhuay.github.io\source\img\image-20220224144831853.png)
+相当于每次都将`cur->next`移动到`pre->next`，然后`cur`前进一格。
+
+[<img src="https://s4.ax1x.com/2022/03/02/b8JUI0.png" alt="b8JUI0.png" style="zoom:50%;" />](https://imgtu.com/i/b8JUI0)
+
+[<img src="https://s4.ax1x.com/2022/03/02/b8D73n.png" alt="b8D73n.png" style="zoom:50%;" />](https://imgtu.com/i/b8D73n)
+
+## BM3 链表中的节点每k个一组翻转
+
+和上一题一样的思路，采用递归写法，先判断节点数量是否需要反转。如果需要，那么执行`k-1`次，每次都是把`cur->next`移动到`pre->next`，然后`cur`前进一格。执行完后`cur`正好处在反转区间的尾部，`cur->next`就是下一个反转区间的开头。
+
+```C++
+ListNode* reverseKGroup(ListNode* head, int k) {
+    if(!head || k <= 1) return head;
+    ListNode *pre = new ListNode(-1), *cur = head, *next = nullptr;
+    pre->next = head;
+    for(int i = 0; i < k; i++){
+        if(!cur) return head;	//节点数不到k个
+        cur = cur->next;		//寻找反转区间的右边界，开区间
+    }
+    cur = head;
+    for(int i = 1; i < k; i++){	//只需要执行k-1次
+        next = cur->next;
+        cur->next = next->next;
+        next->next = pre->next;
+        pre->next = next;
+    }
+    cur->next = reverseKGroup(cur->next, k);
+    return pre->next;
+}
+```
 
 ## BM4 合并两个排序的链表
 
@@ -116,8 +145,6 @@ ListNode *mergeKLists(vector<ListNode *> &lists) {
 }
 ```
 
-
-
 ## BM6 判断链表中是否有环
 
 快慢指针。
@@ -136,7 +163,7 @@ bool hasCycle(ListNode *head) {
 
 ## BM7 链表中环的入口结点
 
-
+快慢指针。
 
 ```C++
 ListNode* EntryNodeOfLoop(ListNode* pHead) {
@@ -149,7 +176,7 @@ ListNode* EntryNodeOfLoop(ListNode* pHead) {
     }
     if(fast && fast->next){
         // 确定有环，再来寻找环的入口
-        fast = pHead;
+        fast = pHead;	//这一步很关键，有数学证明这样可以使快慢指针在入口相遇
         while(fast != slow){
             fast = fast->next;
             slow = slow->next;
@@ -158,8 +185,6 @@ ListNode* EntryNodeOfLoop(ListNode* pHead) {
     }else return nullptr;
 }
 ```
-
-
 
 ## BM8 链表中倒数最后k个结点
 
@@ -337,8 +362,6 @@ ListNode* oddEvenList(ListNode* head) {
 }
 ```
 
-
-
 ## BM15 删除有序链表中重复的元素-I
 
 每次遍历到该节点和下一个节点一样的，就让该节点跳过下一个节点。
@@ -421,16 +444,25 @@ bool Find(int target, vector<vector<int> > array) {
 
 ## BM19 寻找峰值
 
-```C++
+二分法，判断当前点`mid`是上坡还是下坡，向上坡方向靠拢。
 
+```C++
+int findPeakElement(vector<int>& nums) {
+    int left = 0, right = nums.size() - 1;//由于right=mid，所以right是有可能被返回的
+    while(left < right){//退出条件left==right
+        int mid = (right + left) >> 1;
+        if(nums[mid] < nums[mid + 1])//这是上坡，右侧可能有峰值
+            left = mid + 1;//mid+1是因为mid不可能是峰值
+        else right = mid;//mid可能是峰值
+    }
+    return left;
+}
 ```
 
-
-
-## 
+## BM20 数组中的逆序对
 
 ```C++
-d
+
 ```
 
 ## 
