@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="JackZhu&#39;s Blog">
 <meta property="og:description" content="为了开展我的个人项目，第一周的任务是学习区块链的背景知识，了解zkSync的basic idea。 区块链区块链是站在巨人的肩膀上的：  1982年，David Chaum提出了注重隐私安全的密码学网络支付系统 1985年，Neal Koblitz和Victor Miller各自独立提出著名的椭圆曲线加密算法 1991年，Stuart Haber和W. Scott Stornetta提出用时间戳确">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/..%5Cimg%5Cimage-20220301133949310.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8Y1Fx.jpg">
 <meta property="article:published_time" content="2022-02-26T02:11:55.000Z">
-<meta property="article:modified_time" content="2022-03-01T09:06:34.124Z">
+<meta property="article:modified_time" content="2022-03-02T08:03:19.004Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="区块链, 比特币, 以太坊">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/..%5Cimg%5Cimage-20220301133949310.png">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8Y1Fx.jpg">
   
   
   <title>区块链学习笔记 - JackZhu&#39;s Blog</title>
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.1k 字
+      6.8k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      43 分钟
+      57 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月1日 下午
+                  本文最后更新于：2022年3月2日 下午
                 
               </p>
             
@@ -277,7 +277,7 @@
 <li>SHA家族：SHA-1（已被攻破）、SHA-256（比特币）、SHA-384、SHA-512</li>
 </ul>
 <p>在比特币的系统中，除了公钥和私钥外，由于公钥本身还是太复杂了，因此会对公钥使用哈希函数，生成一个<strong>比特币地址</strong>，通过这个地址来进行交易。</p>
-<p><img src="/..%5Cimg%5Cimage-20220301133949310.png" srcset="/img/loading.gif" lazyload alt="image-20220301133949310"></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/b8Y1Fx"><img src="https://s4.ax1x.com/2022/03/02/b8Y1Fx.jpg" srcset="/img/loading.gif" lazyload alt="b8Y1Fx.jpg"></a></p>
 <h2 id="共识机制"><a href="#共识机制" class="headerlink" title="共识机制"></a>共识机制</h2><p>拜占庭将军问题：一组拜占庭将军分贝率军围困一座易守难攻的城池。他们的行动只有进攻或撤退，并且他们必须行动一致，否则会损失惨重。他们会通过信使来互相联系，将自己的信息告知给其他将军。每个将军通过自己收到的信息来决定进攻还是撤退。</p>
 <p>在是个分布式系统里的模型，可以用来归纳共识机制面临的问题：</p>
 <ul>
@@ -333,6 +333,7 @@
 </li>
 </ul>
 <h4 id="工作量证明（PoW）"><a href="#工作量证明（PoW）" class="headerlink" title="工作量证明（PoW）"></a>工作量证明（PoW）</h4><p>挖矿的谜题就像个模仿，解密很苦难，但是结果是否正确很容易检验。</p>
+<p>至于难度目标到底是多少，则是由比特币的程序每隔2016个区块就自动调节一次的，根据之前出块速度和之前难度目标反推全网算力，再根据全网算力设置一个合适的难度目标，让全网平均<strong>10分钟</strong>能出一个块。这样一来，**谁的计算能力强，谁在单位时间内计算次数多，谁就有更大的概率试出符合要求的哈希值，获得记账权和比特币奖励，这种共识机制也被称为工作量证明(PoW)**。</p>
 <h4 id="权益证明（POS）"><a href="#权益证明（POS）" class="headerlink" title="权益证明（POS）"></a>权益证明（POS）</h4><ul>
 <li><p>PoW：拥有算力越大，出块概率越大</p>
 </li>
@@ -356,7 +357,7 @@
 <li>控制记账者的数量，大大降低了达成共识需要的节点数，可以极大提高性能，加快达成共识的速度（每笔交易确认的速度）</li>
 </ul>
 <p>劣势：去中心化程度低</p>
-<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h1 id="比特币"><a href="#比特币" class="headerlink" title="比特币"></a>比特币</h1><p>Bit Coin，代号（BTC），于2008年以论文形式发布，2009年创世区块诞生。</p>
+<h1 id="比特币"><a href="#比特币" class="headerlink" title="比特币"></a>比特币</h1><p>Bit Coin，代号（BTC），于2008年以论文形式发布，2009年创世区块诞生。</p>
 <p>定位是一种<strong>点对点的电子现金系统</strong>，可以消除目前线上交易对<strong>可信第三方</strong>的依赖。</p>
 <h2 id="基本规则："><a href="#基本规则：" class="headerlink" title="基本规则："></a>基本规则：</h2><ul>
 <li>每10分钟左右会产生一个新的区块，<strong>一定数量</strong>的比特币会奖励给创建者。</li>
@@ -457,6 +458,34 @@
 </li>
 <li><p>两条链：将于以太坊1.0并行存在，后期可能合并</p>
 </li>
+</ul>
+<h1 id="zkSync"><a href="#zkSync" class="headerlink" title="zkSync"></a>zkSync</h1><blockquote>
+<p>This video [L2 scalability and zkSync (Edcon talk) ](<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=el-9YYGN1nw&t=97s">L2 scalability and zkSync (Edcon talk) - YouTube</a>)is from the website of zkSync</p>
+</blockquote>
+<p>This video talks about scalability problem. In the speaker’s opinion, it is hard to scale blockchain because the core value propositon of layer 1 is resilience. The way that BitCoin and Etherum reach resilience is decentralization. </p>
+<p>However, in order to ensure security in such an open system, every transactioin executed every L1 node should be verified, rather than easily trusted. Including more nodes in the system requires more verification, and this could be bad for scalability. Only increasing throughput will rise the requirement of nodes, which leads to less qualified nodes. Therefore, the scalability means increasing throughput without increasing node load.</p>
+<p>There are two way to do this:</p>
+<ul>
+<li>Sharding: not verify every transaction, but only a few of them.</li>
+<li>Compression: verify a larger amount of transcations by spending the same amount of computational resources.</li>
+</ul>
+<p>Most of technologies, no matter they belong to Sharding or Compression, have <strong>data availbility problem</strong>. Most of them keep data off-chain, which makes it possible to withhold the data. <strong>Optimisitc rollup</strong> and <strong>zkRollup</strong> keep data on-chain. With rollup technology, the levels of security and usability are very close to mainnet, but the cost is that scalability boost is capped at 100x compared to mainnet. </p>
+<p>key words:</p>
+<ul>
+<li>zero-knowledge proofs</li>
+<li>on-chain data availability</li>
+</ul>
+<p>Problems zkSync solves:</p>
+<ul>
+<li>Reduce the gas fees on Ethereum</li>
+<li>Provide a banking alternative</li>
+<li>DeFi with Paypal-scale</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Mainnet-level security with zero reliance on 3rd parties</li>
+<li>ETH and ERC20 token transfers with instant confirmations and 10-minute finality on L1*; see <a target="_blank" rel="noopener" href="https://docs.zksync.io/userdocs/tokens.html#supported-tokens">supported tokens</a></li>
+<li>Ultra-low transaction fees (~1&#x2F;100th of mainnet costs for ERC20 tokens and ~1&#x2F;30th for ETH transfers)</li>
 </ul>
 
             </div>

@@ -23,12 +23,12 @@
 <meta property="og:site_name" content="JackZhu&#39;s Blog">
 <meta property="og:description" content="算是在LeetCode之外开一个新坑，毕竟LeetCode是写过一次的，而且不是专项练习。牛客网的101题是有分单元的，而且我没有写过。 链表BM1 反转链表1234567891011ListNode* ReverseList(ListNode* pHead) &amp;#123;    ListNode* last &#x3D; nullptr;    ListNode* next &#x3D; pHead-&gt;nex">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:/code/hzhuay.github.io/source/img/image-20220224144831853.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
 <meta property="article:published_time" content="2022-02-23T06:21:25.000Z">
-<meta property="article:modified_time" content="2022-02-26T06:52:18.458Z">
+<meta property="article:modified_time" content="2022-03-02T08:00:11.427Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="d:/code/hzhuay.github.io/source/img/image-20220224144831853.png">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
   
   
   <title>牛客网TOP101 - JackZhu&#39;s Blog</title>
@@ -198,7 +198,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      7.5k 字
+      7.8k 字
     </span>
   
 
@@ -207,7 +207,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      63 分钟
+      66 分钟
     </span>
   
 
@@ -248,7 +248,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月26日 下午
+                  本文最后更新于：2022年3月2日 下午
                 
               </p>
             
@@ -258,7 +258,7 @@
 
 <h2 id="BM2-链表内指定区间反转"><a href="#BM2-链表内指定区间反转" class="headerlink" title="BM2 链表内指定区间反转"></a>BM2 链表内指定区间反转</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">ListNode* <span class="hljs-title">reverseBetween</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> m, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>    dummy-&gt;next = head;<br>    ListNode *pre = dummy, *left = head; <br>    <span class="hljs-comment">//获取反转区间的起点和起点前的点pre</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; m; i++)&#123;<br>        pre = left;<br>        left = left-&gt;next;<br>    &#125;<br>    <span class="hljs-comment">// 这个循环相当于把每次遍历到的节点提前至反转区间的头部</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n - m; i++)&#123;<br>        ListNode *tmp = left-&gt;next;<br>        left-&gt;next = tmp-&gt;next;<br>        tmp-&gt;next = pre-&gt;next;<br>        pre-&gt;next = tmp;			<span class="hljs-comment">//每次都更新反转区间与链表头部的连接的节点</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> dummy-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p><img src="D:\code\hzhuay.github.io\source\img\image-20220224144831853.png" srcset="/img/loading.gif" lazyload alt="image-20220224144831853"></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/b8JUI0"><img src="https://s4.ax1x.com/2022/03/02/b8JUI0.png" srcset="/img/loading.gif" lazyload alt="b8JUI0.png"></a></p>
 <h2 id="BM4-合并两个排序的链表"><a href="#BM4-合并两个排序的链表" class="headerlink" title="BM4 合并两个排序的链表"></a>BM4 合并两个排序的链表</h2><p>递推版本</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">ListNode* <span class="hljs-title">Merge</span><span class="hljs-params">(ListNode* pHead1, ListNode* pHead2)</span> </span>&#123;<br>    ListNode* cur = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>    ListNode* dummy = cur;<br>    <span class="hljs-keyword">while</span>(pHead1 &amp;&amp; pHead2)&#123;<br>       <span class="hljs-keyword">if</span> (pHead1-&gt;val &lt; pHead2-&gt;val) &#123;<br>            cur-&gt;next = pHead1;<br>            pHead1 = pHead1-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>            cur-&gt;next = pHead2;<br>            pHead2 = pHead2-&gt;next;<br>        &#125;<br>        cur = cur-&gt;next;<br>    &#125;<br>    cur-&gt;next = pHead1 ? pHead1 : pHead2;<br>    <span class="hljs-keyword">return</span> dummy-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -314,7 +314,8 @@
 <h2 id="BM18-二维数组中的查找"><a href="#BM18-二维数组中的查找" class="headerlink" title="BM18 二维数组中的查找"></a>BM18 二维数组中的查找</h2><p>从矩阵的右上角开始查找，如果偏大了就向左走，偏小了就向右走。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">Find</span><span class="hljs-params">(<span class="hljs-type">int</span> target, vector&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt; array)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(array.<span class="hljs-built_in">empty</span>())<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-type">int</span> R = array.<span class="hljs-built_in">size</span>(), C = array[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">int</span> r = <span class="hljs-number">0</span>, c = C - <span class="hljs-number">1</span>;<span class="hljs-comment">//起点是右上角</span><br>    <span class="hljs-keyword">while</span>(r &lt; R &amp;&amp; c &gt;= <span class="hljs-number">0</span>)&#123;<span class="hljs-comment">//坐标还在合理范围内</span><br>        <span class="hljs-keyword">if</span>(array[r][c] &lt; target) r++;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(array[r][c] &gt; target) c--;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="BM19-寻找峰值"><a href="#BM19-寻找峰值" class="headerlink" title="BM19 寻找峰值"></a>BM19 寻找峰值</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+<h2 id="BM19-寻找峰值"><a href="#BM19-寻找峰值" class="headerlink" title="BM19 寻找峰值"></a>BM19 寻找峰值</h2><p>二分法，判断当前点<code>mid</code>是上坡还是下坡，向上坡方向靠拢。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findPeakElement</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<span class="hljs-comment">//由于right=mid，所以right是有可能被返回的</span><br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<span class="hljs-comment">//退出条件left==right</span><br>        <span class="hljs-type">int</span> mid = (right + left) &gt;&gt; <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] &lt; nums[mid + <span class="hljs-number">1</span>])<span class="hljs-comment">//这是上坡，右侧可能有峰值</span><br>            left = mid + <span class="hljs-number">1</span>;<span class="hljs-comment">//mid+1是因为mid不可能是峰值</span><br>        <span class="hljs-keyword">else</span> right = mid;<span class="hljs-comment">//mid可能是峰值</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
