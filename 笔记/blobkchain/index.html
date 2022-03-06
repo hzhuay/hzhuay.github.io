@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8Y1Fx.jpg">
 <meta property="article:published_time" content="2022-02-26T02:11:55.000Z">
-<meta property="article:modified_time" content="2022-03-02T08:06:53.743Z">
+<meta property="article:modified_time" content="2022-03-06T13:37:45.091Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="区块链, 比特币, 以太坊">
 <meta name="twitter:card" content="summary_large_image">
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.8k 字
+      8.4k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      57 分钟
+      71 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月2日 下午
+                  本文最后更新于：2022年3月6日 晚上
                 
               </p>
             
@@ -472,21 +472,39 @@
 <p>Most of technologies, no matter they belong to Sharding or Compression, have <strong>data availbility problem</strong>. Most of them keep data off-chain, which makes it possible to withhold the data. <strong>Optimisitc rollup</strong> and <strong>zkRollup</strong> keep data on-chain. With rollup technology, the levels of security and usability are very close to mainnet, but the cost is that scalability boost is capped at 100x compared to mainnet. </p>
 <p>key words:</p>
 <ul>
-<li>zero-knowledge proofs</li>
-<li>on-chain data availability</li>
+<li><p>zK：zero-knowledge proofs</p>
+</li>
+<li><p>Layer2：基于以太坊主网的系统，为了对主网进行扩展</p>
+</li>
+<li><p><strong>zkSync</strong>：A Layer 2 scaling solution on Ethereum that offers low gas and fast transactions, without compromising on security. </p>
+</li>
+<li><p><strong>Rollup：</strong>Layer2 方案之一，也叫卷叠，通过将以太坊主网上交易的计算和存储转移至 Layer2 处理并压缩，再将压缩后的数据上传至以太坊主网以拓展以太坊性能。</p>
+</li>
+<li><p><strong>ZK Rollup：</strong>采用零知识证明的 Rollup 方案，和其他 Rollup 的不同之处在于采用 zkSNARK 算法（一种零知识证明算法）压缩数据。</p>
+<p>zkRollup（zkSync 将其所采用的 ZK Rollup 写作 zkRollup）通过将每笔交易压缩后的数据传到以太坊主网上，保证数据的有效性和可用性，使 zkSync 网络具备和以太坊主网同等的安全性。</p>
+</li>
+<li><p><strong>EVM</strong>：以太坊虚拟机就是智能合约的运行环境。</p>
+</li>
 </ul>
-<p>Problems zkSync solves:</p>
-<ul>
-<li>Reduce the gas fees on Ethereum</li>
-<li>Provide a banking alternative</li>
-<li>DeFi with Paypal-scale</li>
+<h4 id="Layer2"><a href="#Layer2" class="headerlink" title="Layer2"></a>Layer2</h4><p>为了解决以太坊的可拓展性问题，开发者提出了两个方向的解决方案，Layer2 和分片（Eth2 的一个重要升级）。Layer2 字面意思是二层网络，相对的，当前的以太坊主网也称为一层网络（Layer1），二层网络也就是基于当前以太坊主网的一个系统。</p>
+<p>Layer2 方案主要是从减轻 Layer1 负担的角度出发，将 Layer1 的大量计算需求搬到 Layer2 上。</p>
+<p>主流 Layer2 方案有 ZK Rollup、Optimistic Rollup、Plasma、State Channels（状态通道）、Validium 等。</p>
+<h4 id="Rollups"><a href="#Rollups" class="headerlink" title="Rollups"></a>Rollups</h4><p>Rollups 是一种「混合」的 Layer2 方案。<strong>Rollups 将计算（以及状态存储）转移至链下，但同时将每笔交易的部分数据保留在链上。</strong></p>
+<p>为了提高效率，他们使用了不少 fancy 的压缩技巧，尽可能地使用「计算」代替「数据」。其结果是系统的扩容仍然受限于底层区块链的数据带宽，但效率是可观的：Ethereum ERC20 代币转账成本约为 45,000 gas，而 Rollup 中的 ERC20 代币转账仅使用 16 字节的链上空间，成本低于 300 gas。</p>
+<p>事实上，数据上链是关键（注意：将数据放在 IPFS 上是行不通的，因为 IPFS 不提供任何给定数据是否可用的共识，所以数据必须放到区块链上）。将数据放在链上并获得共识，如果任何人愿意，他们可以在本地处理 rollup 中的所有操作，从而允许他们监测欺诈交易，请求提款，或亲自生成 transaction batches。</p>
+<p>因为没有数据可用性问题，所以恶意或离线运营者所造成的损失会更少（比如他们不能造成 1 周的延迟），从而为谁有权发布 batches 打开了更大的设计空间，并简化 rollups 系统。最重要的是，没有数据可用性问题也意味着不再需要将资产映射到 owners。</p>
+<p>这是 Ethereum 社区对 rollups 比以往的 Layer2 扩容方案更兴奋的关键原因：<strong>Rollups 是完全通用的，我们甚至可以在 rollup 内运行一个 EVM，使得现有的 Ethereum 应用不必编写过多新的代码就可以迁移到 rollups 上。</strong></p>
+<h4 id="ZK-Rollup"><a href="#ZK-Rollup" class="headerlink" title="ZK Rollup"></a>ZK Rollup</h4><p>ZK 是 Zero Knowledge（零知识）的缩写，零知识证明是指证明者能够在不向验证者提供任何有用信息的情况下，使验证者相信某个论断是正确的。</p>
+<p>Rollup 中文叫做卷叠，是一种以太坊扩容方案的统称。Rollup 通过将链上计算转移至链下（二层网络），但同时将每笔交易的部分数据保留在链上达到提升以太坊网络性能的目的。</p>
+<p>ZK Rollup &#x3D; 交易压缩 + 零知识证明（zk-SNARK）</p>
+<p>ZK Rollup 核心思想是在链下达成交易共识，并通过零知识证明算法压缩交易数据，保证链下交易状态的有效性，最后将数据同步至以太坊主网。</p>
+<h4 id="Optimistic-rollups-VS-ZK-rollups"><a href="#Optimistic-rollups-VS-ZK-rollups" class="headerlink" title="Optimistic rollups VS ZK rollups"></a>Optimistic rollups VS ZK rollups</h4><ul>
+<li><p><strong>Optimistic rollups</strong>，采用欺诈性证明：rollup 合约会跟踪历史的 state roots 和每一个 batch 的哈希值。如果有人发现某个 batch 的 post-state root 不正确，那么他们可以向合约提交证明，证明该 batch 计算错误。合约验证该证明有效后，会对该 batch 和之后的所有 batch 进行回滚。</p>
+</li>
+<li><p><strong>ZK rollups</strong>，采用有效性证明：每一个 batch 都包含一个称为 ZK-SNARK 的密码学证明（例如采用 PLONK 协议），它可以证明 post-state root 是执行该 batch 的正确结果。无论计算量有多大，合约都可以迅速地在链上验证证明。</p>
+</li>
 </ul>
-<p>Features:</p>
-<ul>
-<li>Mainnet-level security with zero reliance on 3rd parties</li>
-<li>ETH and ERC20 token transfers with instant confirmations and 10-minute finality on L1*; see <a target="_blank" rel="noopener" href="https://docs.zksync.io/userdocs/tokens.html#supported-tokens">supported tokens</a></li>
-<li>Ultra-low transaction fees (~1&#x2F;100th of mainnet costs for ERC20 tokens and ~1&#x2F;30th for ETH transfers)</li>
-</ul>
+<h4 id="zK-SNARK"><a href="#zK-SNARK" class="headerlink" title="zK-SNARK"></a>zK-SNARK</h4><p>Zk-SNARK是一个首字母缩略词，代表”零知识简洁的非交互式知识论证”。zk-SNARK是一种加密证明，允许一方证明其拥有某些信息而不泄露该信息。使用在交易发生之前创建的密钥可以证明此证明。它被用作加密货币<a target="_blank" rel="noopener" href="https://www.investopedia.com/terms/z/zcash.asp">Zcash</a>协议的一部分。</p>
 
             </div>
             <hr>

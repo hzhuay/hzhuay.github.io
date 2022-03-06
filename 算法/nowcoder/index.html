@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8D73n.png">
 <meta property="article:published_time" content="2022-02-23T06:21:25.000Z">
-<meta property="article:modified_time" content="2022-03-03T08:52:13.610Z">
+<meta property="article:modified_time" content="2022-03-05T16:31:11.954Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      15k 字
+      16k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      129 分钟
+      137 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月3日 下午
+                  本文最后更新于：2022年3月6日 凌晨
                 
               </p>
             
@@ -368,9 +368,29 @@
 <h2 id="BM37-二叉搜索树的最近公共祖先"><a href="#BM37-二叉搜索树的最近公共祖先" class="headerlink" title="BM37 二叉搜索树的最近公共祖先"></a>BM37 二叉搜索树的最近公共祖先</h2><p>根节点一定是祖先，因此从根往下找。如果<code>root</code>比p和q都大，那么说明p和q都在root的左子树上，反之则在右子树上。当p和q分别位于<code>root</code>的左右两边时，说明<code>root</code>是最近公共祖先。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lowestCommonAncestor</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> p, <span class="hljs-type">int</span> q)</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(root)&#123;<br>        <span class="hljs-keyword">if</span>(root-&gt;val &gt; p &amp;&amp; root-&gt;val &gt; q)<br>            root = root-&gt;left;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(root-&gt;val &lt; p &amp;&amp; root-&gt;val &lt; q)<br>            root = root-&gt;right;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> root-&gt;val;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="BM38-在二叉树中找到两个节点的最近公共祖先"><a href="#BM38-在二叉树中找到两个节点的最近公共祖先" class="headerlink" title="BM38 在二叉树中找到两个节点的最近公共祖先"></a>BM38 在二叉树中找到两个节点的最近公共祖先</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+<h2 id="BM38-在二叉树中找到两个节点的最近公共祖先（重要）"><a href="#BM38-在二叉树中找到两个节点的最近公共祖先（重要）" class="headerlink" title="BM38 在二叉树中找到两个节点的最近公共祖先（重要）"></a>BM38 在二叉树中找到两个节点的最近公共祖先（重要）</h2><ol>
+<li><p>如果该节点不是O1也不是O2，那么O1与O2必然分别在该节点的左子树和右子树中</p>
+</li>
+<li><p>如果该节点就是O1或者O2，那么另一个节点在它的左子树或右子树中</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lowestCommonAncestor</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> o1, <span class="hljs-type">int</span> o2)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">dfs</span>(root, o1, o2)-&gt;val;<br>&#125;<br><br><span class="hljs-function">TreeNode* <span class="hljs-title">dfs</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> o1, <span class="hljs-type">int</span> o2)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(!root || root-&gt;val == o1 || root-&gt;val == o2)<br>        <span class="hljs-keyword">return</span> root;<br>    TreeNode* left = <span class="hljs-built_in">dfs</span>(root-&gt;left, o1, o2);<br>    TreeNode* right = <span class="hljs-built_in">dfs</span>(root-&gt;right, o1, o2);<br>    <span class="hljs-comment">//如果不在左子树，就肯定在右子树；反正依然</span><br>    <span class="hljs-keyword">if</span>(!left) <span class="hljs-keyword">return</span> right;<br>    <span class="hljs-keyword">if</span>(!right) <span class="hljs-keyword">return</span> left;<br>    <span class="hljs-comment">//如果左右子树都不为空，那么说明该点就是最近公共祖先</span><br>    <span class="hljs-keyword">return</span> root;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="BM40-重建二叉树"><a href="#BM40-重建二叉树" class="headerlink" title="BM40 重建二叉树"></a>BM40 重建二叉树</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">TreeNode* <span class="hljs-title">reConstructBinaryTree</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; pre,vector&lt;<span class="hljs-type">int</span>&gt; vin)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(pre.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    TreeNode *root = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(pre[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">if</span>(pre.<span class="hljs-built_in">size</span>() == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> root;<br>    <span class="hljs-keyword">auto</span> mid = <span class="hljs-built_in">find</span>(vin.<span class="hljs-built_in">begin</span>(), vin.<span class="hljs-built_in">end</span>(), root-&gt;val);<br>    <span class="hljs-type">int</span> left = mid - vin.<span class="hljs-built_in">begin</span>(), right = vin.<span class="hljs-built_in">end</span>() - mid;<br>    root-&gt;left = <span class="hljs-built_in">reConstructBinaryTree</span>(<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(pre.<span class="hljs-built_in">begin</span>()+<span class="hljs-number">1</span>, pre.<span class="hljs-built_in">begin</span>()+<span class="hljs-number">1</span>+left), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(vin.<span class="hljs-built_in">begin</span>(), mid));<br>    root-&gt;right = <span class="hljs-built_in">reConstructBinaryTree</span>(<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(pre.<span class="hljs-built_in">begin</span>()+<span class="hljs-number">1</span>+left, pre.<span class="hljs-built_in">end</span>()), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(mid+<span class="hljs-number">1</span>, vin.<span class="hljs-built_in">end</span>()));<br>    <span class="hljs-keyword">return</span> root;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id=""><a href="#" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-2"><a href="#-2" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-3"><a href="#-3" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-4"><a href="#-4" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-5"><a href="#-5" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
+
+<h2 id="-6"><a href="#-6" class="headerlink" title=""></a></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><br></code></pre></td></tr></table></figure>
 
 
             </div>
