@@ -24,8 +24,12 @@
 <meta property="og:description" content="为了开展我的个人项目，第一周的任务是学习区块链的背景知识，了解zkSync的basic idea。 区块链区块链是站在巨人的肩膀上的：  1982年，David Chaum提出了注重隐私安全的密码学网络支付系统 1985年，Neal Koblitz和Victor Miller各自独立提出著名的椭圆曲线加密算法 1991年，Stuart Haber和W. Scott Stornetta提出用时间戳确">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8Y1Fx.jpg">
+<meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310130157561.png">
+<meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310130130956.png">
+<meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310131320802.png">
+<meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310132852516.png">
 <meta property="article:published_time" content="2022-02-26T02:11:55.000Z">
-<meta property="article:modified_time" content="2022-03-06T13:47:42.245Z">
+<meta property="article:modified_time" content="2022-03-10T05:41:07.369Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="区块链, 比特币, 以太坊">
 <meta name="twitter:card" content="summary_large_image">
@@ -199,7 +203,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.5k 字
+      9.8k 字
     </span>
   
 
@@ -208,7 +212,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      71 分钟
+      82 分钟
     </span>
   
 
@@ -249,7 +253,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月6日 晚上
+                  本文最后更新于：2022年3月10日 下午
                 
               </p>
             
@@ -399,10 +403,14 @@
 </ul>
 <p>比如A要给B转账20btc，账本中记录的不是A的余额减少了20，B增加了20。而是50个btc从A点流出，其中20流入了B，30流入了A。</p>
 <p>用上一笔的流入作为下一笔的流出，并且可能是多笔流入一起作为下一笔流出。</p>
+<p>因此在比特币交易中，没有<strong>余额</strong>的概念，上一次交易的流入减去的币就是余额。在花费的时候，必须知名每一笔余额的来源，而且必须全部花完，多余部分流回自己的地址，也可以每次都创建一个新的地址，这又是一个不符合直觉的地方。没有账户系统，每个人可以对应多个地址。</p>
 <h4 id="双花问题"><a href="#双花问题" class="headerlink" title="双花问题"></a>双花问题</h4><p>电子货币容易出现<strong>双花问题</strong>。A可以同时声称自己将一比钱转给了B和C。比特币使用<strong>分叉与最长链原则</strong>来解决。</p>
 <p>A如果要双花，那么他会将这两笔交易都广播。由于网络状况，不同的记账者接收到这两笔交易的先后顺序不同，并且收到一种一条后就不会再记录另一条。假设有两个记账者分别记录的给B和C的交易，并且几乎同时完成了数学谜题，那么他们会各自产生新区块，并且都认为自己是应该被公认的，这样就产生了<strong>分叉</strong>。</p>
 <p>不同的分叉产生了不同的账本，只有记账者认可数最多的版本，才是公认的账本。如何体现认可数呢？通过区块链的<strong>长度</strong>。记账者会在他们认可的账本后面继续记账，因此越多人认可的区块链，有越多人参与，经过一段时间后该链的长度就会明显长与其他分叉，成为公认的账本。在比特币中，大家一般等待<strong>6个区块</strong>来确认一笔交易。注意，这只是一个<strong>约定俗成</strong>的数字。</p>
-<h1 id="以太坊"><a href="#以太坊" class="headerlink" title="以太坊"></a>以太坊</h1><p>Ethereum，数字货币代号<strong>ETH</strong>，是区块链2.0应用的代表。相比1.0：</p>
+<h1 id="以太坊"><a href="#以太坊" class="headerlink" title="以太坊"></a>以太坊</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Vt411X7JF">北京大学肖臻老师《区块链技术与应用》公开课</a></p>
+</blockquote>
+<p>Ethereum，数字货币代号<strong>ETH</strong>，是区块链2.0应用的代表。相比1.0：</p>
 <table>
 <thead>
 <tr>
@@ -428,6 +436,44 @@
 <h2 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a>智能合约</h2><p>传统的非智能合约，需要一个第三方来确保合约执行。</p>
 <p>智能合约就是写在区块链上的一串自动执行的代码，一方面它不断地监听预置触发条件是否达到，如果达到了则执行预置的行动。</p>
 <h3 id="DApp"><a href="#DApp" class="headerlink" title="DApp"></a>DApp</h3><p>以智能合约作为后台，加上数据库和前段界面后，就形成了DApp（去中心化的APP）。与传统APP最大的区别在于去中心化，说明其后端和数据库不是在某个中心化服务器，而是放在区块链上的。</p>
+<h2 id="交易模型"><a href="#交易模型" class="headerlink" title="交易模型"></a>交易模型</h2><p>以太币的交易相较于比特币更加符合直觉，因为加入了<strong>账户系统</strong>。</p>
+<p>因此天然避免双花问题，因为直接从余额中扣除两次即可。但是也引来了新的攻击——<strong>重放攻击</strong>。因此需要在交易中加入<strong>nonce</strong>，表示这个账户的第几次交易，并且由数字签名保护。</p>
+<h3 id="账户类型"><a href="#账户类型" class="headerlink" title="账户类型"></a>账户类型</h3><p>以太坊中有两种账户：</p>
+<ul>
+<li>外部账户：由私钥来控制，包含信息有余额、交易次数（nonce）</li>
+<li>合约账户：<ul>
+<li>包含信息有：balance、nonce（表示调用其他合约的次数）、代码、存储（storage）</li>
+<li>不能够主动发起交易。以太坊规定交易只能由外部账户发起。</li>
+</ul>
+</li>
+</ul>
+<h2 id="状态树"><a href="#状态树" class="headerlink" title="状态树"></a>状态树</h2><p>维护地址到状态的映射。以太坊中的地址是160位的，也就是40个16进制的整数。</p>
+<ul>
+<li>为什么不用哈希表维护这个映射：某些账户状态的更新需要重新计算整个哈希表的hash值，不能像markle树那样只修改受到影响的部分。</li>
+<li>为什么不使用markle树：因为markle树不提供快速查找的功能。而且如果不规定底层叶子节点的排序问题，那么每个全节点构造的markle树可能是不一样的。比特币中其实也没有规定顺序，每个记账者监听到的交易的顺序是不同的，但是由于会竞争记账权，因此最后大家都遵循到记账权的人所记录的版本。</li>
+<li>为什么不使用排序的markle树：地址生成是随机的，很可能新增地址需要从中间插入，那么也会影响到大半个markle树。</li>
+</ul>
+<p>以太坊实际使用的是<strong>trie</strong>结构，也就是我们熟知的<strong>前缀树</strong>。地址由40个16进制数组成，最后还需要一个结束标志符，则branching factor是17。</p>
+<p>trie有很多很好的性质：</p>
+<ul>
+<li>无论插入节点的顺序是什么，构造出来的树都是一样的</li>
+<li>只要地址不发生碰撞，那么每个地址一定对应唯一的分支</li>
+<li>更新的局部性很好</li>
+</ul>
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310130157561.png" srcset="/img/loading.gif" lazyload alt="image-20220310130157561" style="zoom:50%;" />
+
+<p>但是有个问题：当节点数量很少的时候，很多分支都是“一脉单传”的，有压缩的空间。以太坊使用的结构对trie进行了路径压缩，形成了<strong>Patricia trie</strong>。他可以将上面的树压缩成下面的状态。</p>
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310130130956.png" srcset="/img/loading.gif" lazyload alt="image-20220310130130956" style="zoom:50%;" />
+
+<p>Patricia trie在键值分布比较稀疏的时候效果好。对于以太坊地址而言，这个场景就非常适合，因为用户都可以在本地创建地址，为了避免地址碰撞，只能将地址规定得足够长。</p>
+<p>Markle tree和binary tree的区别就是使用了哈希指针。那么Markle Patricia tree就是在Patricia tree的基础上使用了哈希指针。和比特币的markle tree一样，Markle Patricia tree也提供了避免篡改、markle proof的功能。</p>
+<p>以太坊最终使用的是<strong>Modified MPT</strong>，shared nibbles表示共享的前缀。</p>
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310131320802.png" srcset="/img/loading.gif" lazyload alt="image-20220310131320802" style="zoom:50%;" />
+
+<p>在新的区块中，有些节点的信息发生了变化，这些变化不是在原地改动的，而是在新的区块中，没有修改的部分指向原区块的数据，修改的部分存在新区块中。</p>
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310132852516.png" srcset="/img/loading.gif" lazyload alt="image-20220310132852516" style="zoom:50%;" />
+
+<p>视频说保留历史信息可以在发送分支的时候回滚，那么为什么不能直接放弃分支，去复制主分支呢？</p>
 <h2 id="发币和ICO"><a href="#发币和ICO" class="headerlink" title="发币和ICO"></a>发币和ICO</h2><p>为什么市面上有那么多数字货币？</p>
 <p>因为他们很多是基于以太坊上的<strong>ERC20协议</strong>发行的代币。该协议允许用户自定义并发行Token，该Token的交易会被监听并记录在以太坊区块链上，因此其安全性和可信度等同于以太币ETH。该种代币发行方式有开源的代码模板可以借鉴，因此技术门槛比较低，吸引了各种人来发币。</p>
 <p>其实很多代币的发行是一种<strong>众筹模式</strong>。比如一个团队打算开发一款DApp，他们可以先发币，声称该货币会在他们DApp中有作用，但是目前还在开发阶段。别人可以先买币，项目团队用买币的收入来开发，等开发完成后，这种货币也会有价值了，那么前期买币的人就获得了收益。这种就是Initial Coin Offering（<strong>首次发行代币</strong>）。</p>
@@ -472,20 +518,18 @@
 <p>Most of technologies, no matter they belong to Sharding or Compression, have <strong>data availbility problem</strong>. Most of them keep data off-chain, which makes it possible to withhold the data. <strong>Optimisitc rollup</strong> and <strong>zkRollup</strong> keep data on-chain. With rollup technology, the levels of security and usability are very close to mainnet, but the cost is that scalability boost is capped at 100x compared to mainnet. </p>
 <p>key words:</p>
 <ul>
-<li><p>zK：zero-knowledge proofs</p>
+<li><p><strong>zK</strong>：zero-knowledge proofs</p>
 </li>
-<li><p>Layer2：基于以太坊主网的系统，为了对主网进行扩展</p>
+<li><p><strong>Layer2</strong>：基于以太坊主网的系统，为了对主网进行扩展</p>
 </li>
 <li><p><strong>zkSync</strong>：A Layer 2 scaling solution on Ethereum that offers low gas and fast transactions, without compromising on security. </p>
 </li>
-<li><p><strong>Rollup：</strong>Layer2 方案之一，也叫卷叠，通过将以太坊主网上交易的计算和存储转移至 Layer2 处理并压缩，再将压缩后的数据上传至以太坊主网以拓展以太坊性能。</p>
+<li><p><strong>Rollup</strong>：Layer2 方案之一，也叫卷叠，通过将以太坊主网上交易的计算和存储转移至 Layer2 处理并压缩，再将压缩后的数据上传至以太坊主网以拓展以太坊性能。</p>
 </li>
-<li><p><strong>ZK Rollup：</strong>采用零知识证明的 Rollup 方案，和其他 Rollup 的不同之处在于采用 zkSNARK 算法（一种零知识证明算法）压缩数据。</p>
+<li><p>ZK Rollup：采用零知识证明的 Rollup 方案，和其他 Rollup 的不同之处在于采用 zkSNARK 算法（一种零知识证明算法）压缩数据。</p>
 <p>zkRollup（zkSync 将其所采用的 ZK Rollup 写作 zkRollup）通过将每笔交易压缩后的数据传到以太坊主网上，保证数据的有效性和可用性，使 zkSync 网络具备和以太坊主网同等的安全性。</p>
 </li>
-<li><p>zKSNARK：指的是一种证明结构，其中人们可以证明拥有某些信息，例如密钥，而无需透露该信息，并且证明者和验证者之间没有任何相互作用。</p>
-</li>
-<li><p><strong>EVM</strong>：以太坊虚拟机就是智能合约的运行环境。</p>
+<li><p><strong>zKSNARK</strong>：指的是一种证明结构，其中人们可以证明拥有某些信息，例如密钥，而无需透露该信息，并且证明者和验证者之间没有任何相互作用。</p>
 </li>
 </ul>
 <h4 id="Layer2"><a href="#Layer2" class="headerlink" title="Layer2"></a>Layer2</h4><p>为了解决以太坊的可拓展性问题，开发者提出了两个方向的解决方案，Layer2 和分片（Eth2 的一个重要升级）。Layer2 字面意思是二层网络，相对的，当前的以太坊主网也称为一层网络（Layer1），二层网络也就是基于当前以太坊主网的一个系统。</p>
