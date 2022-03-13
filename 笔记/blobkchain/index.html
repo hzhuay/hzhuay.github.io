@@ -29,7 +29,7 @@
 <meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310131320802.png">
 <meta property="og:image" content="c:/Users/JackZhu/AppData/Roaming/Typora/typora-user-images/image-20220310132852516.png">
 <meta property="article:published_time" content="2022-02-26T02:11:55.000Z">
-<meta property="article:modified_time" content="2022-03-10T05:41:07.369Z">
+<meta property="article:modified_time" content="2022-03-11T05:56:12.961Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="区块链, 比特币, 以太坊">
 <meta name="twitter:card" content="summary_large_image">
@@ -203,7 +203,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      9.8k 字
+      10k 字
     </span>
   
 
@@ -212,7 +212,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      82 分钟
+      84 分钟
     </span>
   
 
@@ -253,7 +253,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月10日 下午
+                  本文最后更新于：2022年3月11日 下午
                 
               </p>
             
@@ -449,9 +449,9 @@
 </ul>
 <h2 id="状态树"><a href="#状态树" class="headerlink" title="状态树"></a>状态树</h2><p>维护地址到状态的映射。以太坊中的地址是160位的，也就是40个16进制的整数。</p>
 <ul>
-<li>为什么不用哈希表维护这个映射：某些账户状态的更新需要重新计算整个哈希表的hash值，不能像markle树那样只修改受到影响的部分。</li>
-<li>为什么不使用markle树：因为markle树不提供快速查找的功能。而且如果不规定底层叶子节点的排序问题，那么每个全节点构造的markle树可能是不一样的。比特币中其实也没有规定顺序，每个记账者监听到的交易的顺序是不同的，但是由于会竞争记账权，因此最后大家都遵循到记账权的人所记录的版本。</li>
-<li>为什么不使用排序的markle树：地址生成是随机的，很可能新增地址需要从中间插入，那么也会影响到大半个markle树。</li>
+<li>为什么不用哈希表维护这个映射：某些账户状态的更新需要重新计算整个哈希表的hash值，不能像merkle树那样只修改受到影响的部分。</li>
+<li>为什么不使用merkle树：因为merkle树不提供快速查找的功能。而且如果不规定底层叶子节点的排序问题，那么每个全节点构造的merkle树可能是不一样的。比特币中其实也没有规定顺序，每个记账者监听到的交易的顺序是不同的，但是由于会竞争记账权，因此最后大家都遵循到记账权的人所记录的版本。</li>
+<li>为什么不使用排序的merkle树：地址生成是随机的，很可能新增地址需要从中间插入，那么也会影响到大半个merkle树。</li>
 </ul>
 <p>以太坊实际使用的是<strong>trie</strong>结构，也就是我们熟知的<strong>前缀树</strong>。地址由40个16进制数组成，最后还需要一个结束标志符，则branching factor是17。</p>
 <p>trie有很多很好的性质：</p>
@@ -466,14 +466,16 @@
 <img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310130130956.png" srcset="/img/loading.gif" lazyload alt="image-20220310130130956" style="zoom:50%;" />
 
 <p>Patricia trie在键值分布比较稀疏的时候效果好。对于以太坊地址而言，这个场景就非常适合，因为用户都可以在本地创建地址，为了避免地址碰撞，只能将地址规定得足够长。</p>
-<p>Markle tree和binary tree的区别就是使用了哈希指针。那么Markle Patricia tree就是在Patricia tree的基础上使用了哈希指针。和比特币的markle tree一样，Markle Patricia tree也提供了避免篡改、markle proof的功能。</p>
+<p>merkle tree和binary tree的区别就是使用了哈希指针。那么merkle Patricia tree就是在Patricia tree的基础上使用了哈希指针。和比特币的merkle tree一样，merkle Patricia tree也提供了避免篡改、merkle proof的功能。</p>
 <p>以太坊最终使用的是<strong>Modified MPT</strong>，shared nibbles表示共享的前缀。</p>
 <img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310131320802.png" srcset="/img/loading.gif" lazyload alt="image-20220310131320802" style="zoom:50%;" />
 
-<p>在新的区块中，有些节点的信息发生了变化，这些变化不是在原地改动的，而是在新的区块中，没有修改的部分指向原区块的数据，修改的部分存在新区块中。</p>
+<p>在新的区块中，有些节点的信息发生了变化，这些变化不是在原地改动的，而是在新的区块中，没有修改的部分指向原区块的数据，修改的部分存在新区块中。Storage tree也是一个MPT，其中按键值对的形式保存，可以看做是程序中的<strong>变量</strong>。</p>
 <img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310132852516.png" srcset="/img/loading.gif" lazyload alt="image-20220310132852516" style="zoom:50%;" />
 
-<p>视频说保留历史信息可以在发送分支的时候回滚，那么为什么不能直接放弃分支，去复制主分支呢？</p>
+<p>为什么状态树要保存全局信息，而不是只保存当前区块内的交易涉及到的信息：因为假如A给B转账，需要知道A和B的状态。如果账户很久没有发生过交易，那么需要往前扫描很多区块才能找到；如果是新账户，那么要扫描到创世区块才能确定是新账户。</p>
+<h3 id="交易树和收据树"><a href="#交易树和收据树" class="headerlink" title="交易树和收据树"></a>交易树和收据树</h3><p>由于智能合约的复杂性，所以以太坊引入这两种树来保存交易信息。这两个树不需要保存全局的信息，只包含新区块中产生的交易。理论上只需要使用普通的merkle tree，但实际使用MPT。</p>
+<p>交易树的键值是交易在发布区块时的序号。</p>
 <h2 id="发币和ICO"><a href="#发币和ICO" class="headerlink" title="发币和ICO"></a>发币和ICO</h2><p>为什么市面上有那么多数字货币？</p>
 <p>因为他们很多是基于以太坊上的<strong>ERC20协议</strong>发行的代币。该协议允许用户自定义并发行Token，该Token的交易会被监听并记录在以太坊区块链上，因此其安全性和可信度等同于以太币ETH。该种代币发行方式有开源的代码模板可以借鉴，因此技术门槛比较低，吸引了各种人来发币。</p>
 <p>其实很多代币的发行是一种<strong>众筹模式</strong>。比如一个团队打算开发一款DApp，他们可以先发币，声称该货币会在他们DApp中有作用，但是目前还在开发阶段。别人可以先买币，项目团队用买币的收入来开发，等开发完成后，这种货币也会有价值了，那么前期买币的人就获得了收益。这种就是Initial Coin Offering（<strong>首次发行代币</strong>）。</p>
