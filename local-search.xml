@@ -33,7 +33,7 @@
     <link href="/%E7%AC%94%E8%AE%B0/interview/"/>
     <url>/%E7%AC%94%E8%AE%B0/interview/</url>
     
-    <content type="html"><![CDATA[<p>用来记录我面试过程中遇到的问题</p><p>3.10</p><ul><li>http 2.0</li><li>http 状态码</li><li>TCP的状态</li><li>三次握手时候SYN、Seq、Ack的值</li><li>TCP头部字段</li><li>分布式系统如何解决一致性</li><li>快速排序</li></ul>]]></content>
+    <content type="html"><![CDATA[<p>用来记录我面试过程中遇到的问题</p><p>3.10</p><ul><li>http 2.0</li><li>http 状态码</li><li>TCP的状态</li><li>三次握手时候SYN、Seq、Ack的值</li><li>TCP头部字段</li><li>分布式系统如何解决一致性</li><li>快速排序</li></ul><p>3.16</p><ul><li>IO多路复用是为了解决什么问题：</li><li>堆和栈：<ul><li>栈：分配专门的寄存器存放栈的地址，压栈和出栈都有专门的指令执行；编译时决定大小；有OS控制</li><li>堆：由C&#x2F;C++库函数实现，由算法寻找足够大的内存空间，需要调用函数；运行时决定；由程序员控制</li><li>栈直接访问数据；堆先获得指针，再访问数据</li><li>栈被换出内存可能性比堆大</li></ul></li></ul><p>需要背的东西：</p><ul><li>HTTP，TCP协议的头部内容</li><li>HTTP状态码</li><li>TCP状态图</li><li></li></ul>]]></content>
     
     
     <categories>
