@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8D73n.png">
 <meta property="article:published_time" content="2022-02-23T06:21:25.000Z">
-<meta property="article:modified_time" content="2022-03-19T02:33:52.314Z">
+<meta property="article:modified_time" content="2022-03-21T16:26:24.787Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      18k 字
+      19k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      151 分钟
+      156 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年3月19日 上午
+                  本文最后更新于：2022年3月22日 凌晨
                 
               </p>
             
@@ -399,11 +399,12 @@
 
 <h3 id="-5"><a href="#-5" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d<br></code></pre></td></tr></table></figure>
 
+<h3 id="BM50-两数之和"><a href="#BM50-两数之和" class="headerlink" title="BM50 两数之和"></a>BM50 两数之和</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">twoSum</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; numbers, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; m;<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">ans</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span></span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; numbers.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(m[target - numbers[i]] != <span class="hljs-number">0</span>)&#123;<br>            ans[<span class="hljs-number">0</span>] = m[target - numbers[i]];<br>            ans[<span class="hljs-number">1</span>] = i + <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            m[numbers[i]] = i + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="BM51-数组中出现次数超过一半的数字"><a href="#BM51-数组中出现次数超过一半的数字" class="headerlink" title="BM51 数组中出现次数超过一半的数字"></a>BM51 数组中出现次数超过一半的数字</h3><p>投票法。记录当前遇到的出现最多的数字和次数，如果遍历到一样的就增加次数，不一样则减少次数；次数如果减到-1则换一个数字来记录。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">MoreThanHalfNum_Solution</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; numbers)</span> </span>&#123;<br>    <span class="hljs-type">int</span> ans = <span class="hljs-number">-1</span>, cnt = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i : numbers)&#123;<br>        <span class="hljs-keyword">if</span>(ans == i)&#123;<br>            cnt++;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">if</span>(cnt == <span class="hljs-number">0</span>)&#123;<br>                ans = i;<br>                cnt++;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                cnt--;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <h3 id="-6"><a href="#-6" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d<br></code></pre></td></tr></table></figure>
-
-<h3 id="-7"><a href="#-7" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d<br></code></pre></td></tr></table></figure>
-
-<h3 id="-8"><a href="#-8" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d<br></code></pre></td></tr></table></figure>
 
 
             </div>
