@@ -218,6 +218,8 @@ UTXO: Unspent Transaction Output 未花费的交易输出
 
 用上一笔的流入作为下一笔的流出，并且可能是多笔流入一起作为下一笔流出。
 
+因此在比特币交易中，没有**余额**的概念，上一次交易的流入减去的币就是余额。在花费的时候，必须知名每一笔余额的来源，而且必须全部花完，多余部分流回自己的地址，也可以每次都创建一个新的地址，这又是一个不符合直觉的地方。没有账户系统，每个人可以对应多个地址。
+
 #### 双花问题
 
 电子货币容易出现**双花问题**。A可以同时声称自己将一比钱转给了B和C。比特币使用**分叉与最长链原则**来解决。
@@ -229,6 +231,8 @@ A如果要双花，那么他会将这两笔交易都广播。由于网络状况�
 
 
 # 以太坊
+
+> [北京大学肖臻老师《区块链技术与应用》公开课](https://www.bilibili.com/video/BV1Vt411X7JF)
 
 Ethereum，数字货币代号**ETH**，是区块链2.0应用的代表。相比1.0：
 
@@ -251,6 +255,65 @@ Ethereum，数字货币代号**ETH**，是区块链2.0应用的代表。相比1.
 ### DApp
 
 以智能合约作为后台，加上数据库和前段界面后，就形成了DApp（去中心化的APP）。与传统APP最大的区别在于去中心化，说明其后端和数据库不是在某个中心化服务器，而是放在区块链上的。
+
+## 交易模型
+
+以太币的交易相较于比特币更加符合直觉，因为加入了**账户系统**。
+
+因此天然避免双花问题，因为直接从余额中扣除两次即可。但是也引来了新的攻击——**重放攻击**。因此需要在交易中加入**nonce**，表示这个账户的第几次交易，并且由数字签名保护。
+
+### 账户类型
+
+以太坊中有两种账户：
+
+- 外部账户：由私钥来控制，包含信息有余额、交易次数（nonce）
+- 合约账户：
+  - 包含信息有：balance、nonce（表示调用其他合约的次数）、代码、存储（storage）
+  - 不能够主动发起交易。以太坊规定交易只能由外部账户发起。
+
+## 状态树
+
+维护地址到状态的映射。以太坊中的地址是160位的，也就是40个16进制的整数。
+
+- 为什么不用哈希表维护这个映射：某些账户状态的更新需要重新计算整个哈希表的hash值，不能像merkle树那样只修改受到影响的部分。
+- 为什么不使用merkle树：因为merkle树不提供快速查找的功能。而且如果不规定底层叶子节点的排序问题，那么每个全节点构造的merkle树可能是不一样的。比特币中其实也没有规定顺序，每个记账者监听到的交易的顺序是不同的，但是由于会竞争记账权，因此最后大家都遵循到记账权的人所记录的版本。
+- 为什么不使用排序的merkle树：地址生成是随机的，很可能新增地址需要从中间插入，那么也会影响到大半个merkle树。
+
+以太坊实际使用的是**trie**结构，也就是我们熟知的**前缀树**。地址由40个16进制数组成，最后还需要一个结束标志符，则branching factor是17。
+
+trie有很多很好的性质：
+
+- 无论插入节点的顺序是什么，构造出来的树都是一样的
+- 只要地址不发生碰撞，那么每个地址一定对应唯一的分支
+- 更新的局部性很好
+
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310130157561.png" alt="image-20220310130157561" style="zoom:50%;" />
+
+但是有个问题：当节点数量很少的时候，很多分支都是“一脉单传”的，有压缩的空间。以太坊使用的结构对trie进行了路径压缩，形成了**Patricia trie**。他可以将上面的树压缩成下面的状态。
+
+
+
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310130130956.png" alt="image-20220310130130956" style="zoom:50%;" />
+
+Patricia trie在键值分布比较稀疏的时候效果好。对于以太坊地址而言，这个场景就非常适合，因为用户都可以在本地创建地址，为了避免地址碰撞，只能将地址规定得足够长。
+
+merkle tree和binary tree的区别就是使用了哈希指针。那么merkle Patricia tree就是在Patricia tree的基础上使用了哈希指针。和比特币的merkle tree一样，merkle Patricia tree也提供了避免篡改、merkle proof的功能。
+
+以太坊最终使用的是**Modified MPT**，shared nibbles表示共享的前缀。
+
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310131320802.png" alt="image-20220310131320802" style="zoom:50%;" />
+
+在新的区块中，有些节点的信息发生了变化，这些变化不是在原地改动的，而是在新的区块中，没有修改的部分指向原区块的数据，修改的部分存在新区块中。Storage tree也是一个MPT，其中按键值对的形式保存，可以看做是程序中的**变量**。
+
+<img src="C:\Users\JackZhu\AppData\Roaming\Typora\typora-user-images\image-20220310132852516.png" alt="image-20220310132852516" style="zoom:50%;" />
+
+为什么状态树要保存全局信息，而不是只保存当前区块内的交易涉及到的信息：因为假如A给B转账，需要知道A和B的状态。如果账户很久没有发生过交易，那么需要往前扫描很多区块才能找到；如果是新账户，那么要扫描到创世区块才能确定是新账户。
+
+### 交易树和收据树
+
+由于智能合约的复杂性，所以以太坊引入这两种树来保存交易信息。这两个树不需要保存全局的信息，只包含新区块中产生的交易。理论上只需要使用普通的merkle tree，但实际使用MPT。
+
+交易树的键值是交易在发布区块时的序号。
 
 ## 发币和ICO
 
@@ -318,17 +381,56 @@ Most of technologies, no matter they belong to Sharding or Compression, have **d
 
 key words:
 
-- zero-knowledge proofs
-- on-chain data availability
+- **zK**：zero-knowledge proofs
 
-Problems zkSync solves:
+- **Layer2**：基于以太坊主网的系统，为了对主网进行扩展
 
-- Reduce the gas fees on Ethereum
-- Provide a banking alternative
-- DeFi with Paypal-scale
+- **zkSync**：A Layer 2 scaling solution on Ethereum that offers low gas and fast transactions, without compromising on security. 
 
-Features:
+- **Rollup**：Layer2 方案之一，也叫卷叠，通过将以太坊主网上交易的计算和存储转移至 Layer2 处理并压缩，再将压缩后的数据上传至以太坊主网以拓展以太坊性能。
 
-- Mainnet-level security with zero reliance on 3rd parties
-- ETH and ERC20 token transfers with instant confirmations and 10-minute finality on L1*; see [supported tokens](https://docs.zksync.io/userdocs/tokens.html#supported-tokens)
-- Ultra-low transaction fees (~1/100th of mainnet costs for ERC20 tokens and ~1/30th for ETH transfers)
+- ZK Rollup：采用零知识证明的 Rollup 方案，和其他 Rollup 的不同之处在于采用 zkSNARK 算法（一种零知识证明算法）压缩数据。
+
+  zkRollup（zkSync 将其所采用的 ZK Rollup 写作 zkRollup）通过将每笔交易压缩后的数据传到以太坊主网上，保证数据的有效性和可用性，使 zkSync 网络具备和以太坊主网同等的安全性。
+
+- **zKSNARK**：指的是一种证明结构，其中人们可以证明拥有某些信息，例如密钥，而无需透露该信息，并且证明者和验证者之间没有任何相互作用。
+
+#### Layer2
+
+为了解决以太坊的可拓展性问题，开发者提出了两个方向的解决方案，Layer2 和分片（Eth2 的一个重要升级）。Layer2 字面意思是二层网络，相对的，当前的以太坊主网也称为一层网络（Layer1），二层网络也就是基于当前以太坊主网的一个系统。
+
+Layer2 方案主要是从减轻 Layer1 负担的角度出发，将 Layer1 的大量计算需求搬到 Layer2 上。
+
+主流 Layer2 方案有 ZK Rollup、Optimistic Rollup、Plasma、State Channels（状态通道）、Validium 等。
+
+#### Rollups
+
+Rollups 是一种「混合」的 Layer2 方案。**Rollups 将计算（以及状态存储）转移至链下，但同时将每笔交易的部分数据保留在链上。**
+
+为了提高效率，他们使用了不少 fancy 的压缩技巧，尽可能地使用「计算」代替「数据」。其结果是系统的扩容仍然受限于底层区块链的数据带宽，但效率是可观的：Ethereum ERC20 代币转账成本约为 45,000 gas，而 Rollup 中的 ERC20 代币转账仅使用 16 字节的链上空间，成本低于 300 gas。
+
+事实上，数据上链是关键（注意：将数据放在 IPFS 上是行不通的，因为 IPFS 不提供任何给定数据是否可用的共识，所以数据必须放到区块链上）。将数据放在链上并获得共识，如果任何人愿意，他们可以在本地处理 rollup 中的所有操作，从而允许他们监测欺诈交易，请求提款，或亲自生成 transaction batches。
+
+因为没有数据可用性问题，所以恶意或离线运营者所造成的损失会更少（比如他们不能造成 1 周的延迟），从而为谁有权发布 batches 打开了更大的设计空间，并简化 rollups 系统。最重要的是，没有数据可用性问题也意味着不再需要将资产映射到 owners。
+
+这是 Ethereum 社区对 rollups 比以往的 Layer2 扩容方案更兴奋的关键原因：**Rollups 是完全通用的，我们甚至可以在 rollup 内运行一个 EVM，使得现有的 Ethereum 应用不必编写过多新的代码就可以迁移到 rollups 上。**
+
+#### ZK Rollup
+
+ZK 是 Zero Knowledge（零知识）的缩写，零知识证明是指证明者能够在不向验证者提供任何有用信息的情况下，使验证者相信某个论断是正确的。
+
+Rollup 中文叫做卷叠，是一种以太坊扩容方案的统称。Rollup 通过将链上计算转移至链下（二层网络），但同时将每笔交易的部分数据保留在链上达到提升以太坊网络性能的目的。
+
+ZK Rollup = 交易压缩 + 零知识证明（zk-SNARK）
+
+ZK Rollup 核心思想是在链下达成交易共识，并通过零知识证明算法压缩交易数据，保证链下交易状态的有效性，最后将数据同步至以太坊主网。
+
+#### Optimistic rollups VS ZK rollups
+
+- **Optimistic rollups**，采用欺诈性证明：rollup 合约会跟踪历史的 state roots 和每一个 batch 的哈希值。如果有人发现某个 batch 的 post-state root 不正确，那么他们可以向合约提交证明，证明该 batch 计算错误。合约验证该证明有效后，会对该 batch 和之后的所有 batch 进行回滚。
+
+- **ZK rollups**，采用有效性证明：每一个 batch 都包含一个称为 ZK-SNARK 的密码学证明（例如采用 PLONK 协议），它可以证明 post-state root 是执行该 batch 的正确结果。无论计算量有多大，合约都可以迅速地在链上验证证明。
+
+#### zK-SNARK
+
+Zk-SNARK是一个首字母缩略词，代表"零知识简洁的非交互式知识论证"。zk-SNARK是一种加密证明，允许一方证明其拥有某些信息而不泄露该信息。使用在交易发生之前创建的密钥可以证明此证明。它被用作加密货币[Zcash](https://www.investopedia.com/terms/z/zcash.asp)协议的一部分。
