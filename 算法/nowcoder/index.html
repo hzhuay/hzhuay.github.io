@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8D73n.png">
 <meta property="article:published_time" content="2022-02-23T06:21:25.000Z">
-<meta property="article:modified_time" content="2022-04-03T16:29:23.662Z">
+<meta property="article:modified_time" content="2022-04-04T08:31:33.081Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      215 分钟
+      220 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年4月4日 凌晨
+                  本文最后更新于：2022年4月4日 下午
                 
               </p>
             
@@ -423,9 +423,13 @@
 <h3 id="BM51-数组中出现次数超过一半的数字"><a href="#BM51-数组中出现次数超过一半的数字" class="headerlink" title="BM51 数组中出现次数超过一半的数字"></a>BM51 数组中出现次数超过一半的数字</h3><p>投票法。记录当前遇到的出现最多的数字和次数，如果遍历到一样的就增加次数，不一样则减少次数；次数如果减到-1则换一个数字来记录。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">MoreThanHalfNum_Solution</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; numbers)</span> </span>&#123;<br>    <span class="hljs-type">int</span> ans = <span class="hljs-number">-1</span>, cnt = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i : numbers)&#123;<br>        <span class="hljs-keyword">if</span>(ans == i)&#123;<br>            cnt++;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">if</span>(cnt == <span class="hljs-number">0</span>)&#123;<br>                ans = i;<br>                cnt++;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                cnt--;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="BM52-数组中只出现一次的两个数字"><a href="#BM52-数组中只出现一次的两个数字" class="headerlink" title="BM52 数组中只出现一次的两个数字"></a>BM52 数组中只出现一次的两个数字</h3><p>首先需要做过一道前置题目：数组中只出现一次的数字。那道题中将所有的数组元素异或即可，因为出现两次的数字异或后会抵消，最后只留下出现一次的数字。</p>
+<h3 id="BM52-数组中只出现一次的两个数字"><a href="#BM52-数组中只出现一次的两个数字" class="headerlink" title="BM52 数组中只出现一次的两个数字"></a>BM52 <em>数组中只出现一次的两个数字</em></h3><p>首先需要做过一道前置题目：数组中只出现一次的数字。那道题中将所有的数组元素异或即可，因为出现两次的数字异或后会抵消，最后只留下出现一次的数字。</p>
 <p>这道题中有2个数字只出现一次，如果按照同样的方式，只能得到这两个数字的异或值。已知这两个数肯定不同，那么异或的结果必然不同，至少有一位为1。那么就找到这一位，将数组中的数按照这一位是否为1来分成2类，分别将两类数异或后即是所求的答案。可以理解为每一类数各contribute to其中一个答案。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">FindNumsAppearOnce</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; array)</span> </span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">0</span>, p = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i : array) a ^= i;<br>    cout &lt;&lt; a &lt;&lt; endl;<br>    <span class="hljs-keyword">while</span>((a &amp; p) == <span class="hljs-number">0</span>) p &lt;&lt;= <span class="hljs-number">1</span>;<br>    cout &lt;&lt; p &lt;&lt; endl;<br>    <span class="hljs-comment">// p在最先遇到a为1的那位上为1</span><br>    <span class="hljs-type">int</span> n = <span class="hljs-number">0</span>, m = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i : array)&#123;<br>        <span class="hljs-keyword">if</span>(i &amp; p) n ^= i;<br>        <span class="hljs-keyword">else</span> m ^= i;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(n &gt; m) <span class="hljs-built_in">swap</span>(n, m);<br>    <span class="hljs-keyword">return</span> &#123;n,m&#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="BM53-缺失的第一个正整数"><a href="#BM53-缺失的第一个正整数" class="headerlink" title="BM53 缺失的第一个正整数"></a>BM53 <em>缺失的第一个正整数</em></h3><p>在恢复后，数组应当有 <code>[1, 2, ..., N]</code> 的形式，但其中有若干个位置上的数是错误的，每一个错误的位置就代表了一个缺失的正数。我们遍历，如果遍历到的<code>x=nums[i]</code>在<code>[1,N]</code>内，就把这个数交换到他应该在的位置：<code>nums[x-1]</code>。持续交换直到<code>x</code>是一个<code>[1,N]</code>以外的数，或者就是这个位置应该所在的数：<code>x-1==i</code>。</p>
+<p>由于每次的交换操作都会使得某一个数交换到正确的位置，因此交换的次数最多为 N，整个方法的时间复杂度为 O(N)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minNumberDisappeared</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-comment">// 如果nums[i]不是该在的位置上应有的数，则继续循环。注意避免死循环</span><br>        <span class="hljs-keyword">while</span>(<span class="hljs-number">0</span> &lt; nums[i] &amp;&amp; nums[i] &lt;= nums.<span class="hljs-built_in">size</span>() &amp;&amp; nums[nums[i]<span class="hljs-number">-1</span>] != nums[i])<br>            <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i]<span class="hljs-number">-1</span>]);<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(nums[i] != i + <span class="hljs-number">1</span>)<br>            <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums.<span class="hljs-built_in">size</span>() + <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="-3"><a href="#-3" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
@@ -440,8 +444,6 @@
 <h3 id="-8"><a href="#-8" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
 <h3 id="-9"><a href="#-9" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
-
-<h3 id="-10"><a href="#-10" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
 
             </div>

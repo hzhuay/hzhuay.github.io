@@ -24,7 +24,7 @@
 <meta property="og:description" content="面向对象   复制控制一般来说，需要析构函数的场景会比需要拷贝构造或拷贝赋值运算符更容易识别。如果一个类需要析构函数，那么它大概率需要拷贝赋值运算符和拷贝构造函数。 如果一个类需要拷贝构造，那么它大概率需要拷贝赋值运算符。反之亦然。 构造函数默认构造函数只有当类没有声明任何构造函数时，编译器才会自动生成一个默认构造函数，其初始化类成员的规则：  优先使用类内初始值  没有初始值的成员将被默认初始化">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-11T14:00:46.000Z">
-<meta property="article:modified_time" content="2022-02-20T10:37:16.088Z">
+<meta property="article:modified_time" content="2022-04-06T04:56:29.882Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary_large_image">
@@ -247,7 +247,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月20日 晚上
+                  本文最后更新于：2022年4月6日 下午
                 
               </p>
             
@@ -275,7 +275,7 @@
 </li>
 <li><p>将一个对象作为实参传递给一个非引用类型的形参。</p>
 </li>
-<li><p>从一个返回类型为费引用类型的函数返回一个对象</p>
+<li><p>从一个返回类型为非引用类型的函数返回一个对象</p>
 </li>
 <li><p>用花括号列表初始化一个数组中的元素，或一个聚合类中的成员</p>
 </li>
@@ -326,9 +326,9 @@
 <p>一个成员函数是否有const是两个不同的重载函数，有无引用限定也是类似。</p>
 <p>如果一个函数有引用限定符，那么所有具有相同参数列表的重载版本都要有引用限定符。</p>
 <h2 id="move语义"><a href="#move语义" class="headerlink" title="move语义"></a>move语义</h2><p>有些时候，对象在被复制后就马上被销毁了，这种情况下，<strong>移动</strong>它会有更好的性能。还有些情况下，对象不应该被复制，比如IO。</p>
-<p>容器，<code>string</code>，<code>shared_ptr支持复制和移动；IO和</code>unique_ptr&#96;只支持移动。</p>
+<p>容器，<code>string</code>，<code>shared_ptr</code>支持复制和移动；IO和<code>unique_ptr</code>只支持移动。</p>
 <h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>右值引用必须绑定在右值上，使用的符号是<code>&amp;&amp;</code>而不是<code>&amp;</code>。由于右值是马上要被销毁的，所以可以<strong>移动</strong>右值引用。</p>
-<p>左值表示的是对象的<strong>身份</strong>，右值表示对象的<strong>值</strong>。左值拥有持久的状态，而右值要么是字面值常量，要么是表达式求值过程中创建的临时独享。</p>
+<p>左值表示的是对象的<strong>身份</strong>，右值表示对象的<strong>值</strong>。左值拥有持久的状态，而右值要么是字面值常量，要么是表达式求值过程中创建的临时对象。</p>
 <p>之前学的常规引用可以看做<strong>左值引用</strong>，我们不能把左值引用绑定到要求转换的表达式，字面常量或返回右值的表达式。右值引用则相反，可以绑定到这些表达式上，但是不能直接绑定到左值上。</p>
 <ul>
 <li><p>返回左值的表达式：返回左值引用的函数，赋值、下标、解引用和前置递增、递减运算符。</p>
