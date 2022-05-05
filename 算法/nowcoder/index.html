@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
 <meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8D73n.png">
 <meta property="article:published_time" content="2022-02-23T06:21:25.000Z">
-<meta property="article:modified_time" content="2022-04-04T08:31:33.081Z">
+<meta property="article:modified_time" content="2022-04-16T12:35:52.500Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JUI0.png">
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      26k 字
+      28k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      220 分钟
+      237 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年4月4日 下午
+                  本文最后更新于：2022年4月16日 晚上
                 
               </p>
             
@@ -431,7 +431,27 @@
 <p>由于每次的交换操作都会使得某一个数交换到正确的位置，因此交换的次数最多为 N，整个方法的时间复杂度为 O(N)。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minNumberDisappeared</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-comment">// 如果nums[i]不是该在的位置上应有的数，则继续循环。注意避免死循环</span><br>        <span class="hljs-keyword">while</span>(<span class="hljs-number">0</span> &lt; nums[i] &amp;&amp; nums[i] &lt;= nums.<span class="hljs-built_in">size</span>() &amp;&amp; nums[nums[i]<span class="hljs-number">-1</span>] != nums[i])<br>            <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i]<span class="hljs-number">-1</span>]);<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(nums[i] != i + <span class="hljs-number">1</span>)<br>            <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums.<span class="hljs-built_in">size</span>() + <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<h3 id="三数之和"><a href="#三数之和" class="headerlink" title="三数之和"></a>三数之和</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
+
+<h3 id="BM55-没有重复项数字的全排列"><a href="#BM55-没有重复项数字的全排列" class="headerlink" title="BM55 没有重复项数字的全排列"></a>BM55 没有重复项数字的全排列</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">bool</span> vis[<span class="hljs-number">10</span>];<br>vector&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt; ans;<br>vector&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt; <span class="hljs-built_in">permute</span>(vector&lt;<span class="hljs-type">int</span>&gt; &amp;num) &#123;<br>    <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(vis));<br>    ans.<span class="hljs-built_in">clear</span>();<br>    vector&lt;<span class="hljs-type">int</span>&gt; tmp;<br>    <span class="hljs-built_in">dfs</span>(num, tmp);<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;num, vector&lt;<span class="hljs-type">int</span>&gt; &amp;tmp)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(tmp.<span class="hljs-built_in">size</span>() == num.<span class="hljs-built_in">size</span>())&#123;<br>        ans.<span class="hljs-built_in">push_back</span>(tmp);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; num.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(!vis[num[i]])&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(num[i]);<br>            vis[num[i]] = <span class="hljs-number">1</span>;<br>            <span class="hljs-built_in">dfs</span>(num, tmp);<br>            tmp.<span class="hljs-built_in">pop_back</span>();<br>            vis[num[i]] = <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="BM56-有重复项数字的全排列"><a href="#BM56-有重复项数字的全排列" class="headerlink" title="BM56 有重复项数字的全排列"></a>BM56 有重复项数字的全排列</h3><p>通过<code>last</code>来控制，在同一层递归的循环中，不重复使用相同数字。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">bool</span> vis[<span class="hljs-number">10</span>];<br>vector&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt; <span class="hljs-built_in">permuteUnique</span>(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums) &#123;<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; ans;<br>    <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">empty</span>())<span class="hljs-keyword">return</span> ans;<br>    <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(vis));<br>    <span class="hljs-built_in">sort</span>(nums.<span class="hljs-built_in">begin</span>(), nums.<span class="hljs-built_in">end</span>());<br>    vector&lt;<span class="hljs-type">int</span>&gt; tmp;<br>    <span class="hljs-built_in">dfs</span>(nums, tmp, ans);<br>    <span class="hljs-keyword">return</span> ans;  <br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, vector&lt;<span class="hljs-type">int</span>&gt;&amp; tmp, vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; ans)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(tmp.<span class="hljs-built_in">size</span>() == nums.<span class="hljs-built_in">size</span>())&#123;<br>        ans.<span class="hljs-built_in">push_back</span>(tmp);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-type">int</span> last = INT_MAX;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(vis[i] || last == nums[i])<br>            <span class="hljs-keyword">continue</span>;<br>        last = nums[i];<br>        vis[i] = <span class="hljs-literal">true</span>;<br>        tmp.<span class="hljs-built_in">push_back</span>(nums[i]);<br>        <span class="hljs-built_in">dfs</span>(nums, tmp, ans);<br>        vis[i] = <span class="hljs-literal">false</span>;<br>        tmp.<span class="hljs-built_in">pop_back</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <h3 id="-3"><a href="#-3" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
+
+<h3 id="BM77-最长的括号子串"><a href="#BM77-最长的括号子串" class="headerlink" title="BM77 最长的括号子串"></a>BM77 最长的括号子串</h3><p>始终保持栈底元素为当前已经遍历过的元素中<strong>最后一个没有被匹配的右括号的下标</strong>，这样的做法主要是考虑了边界条件的处理，栈里其他元素维护左括号的下标：</p>
+<ol>
+<li>对于遇到的每个<code>(</code> ，将它的下标放入栈中</li>
+<li>对于遇到的每个<code>)</code>，先弹出栈顶元素表示匹配了当前右括号：<ol>
+<li>如果栈为空，说明当前的右括号为没有被匹配的右括号，将其下标放入栈中来更新我们之前提到的<strong>最后一个没有被匹配的右括号的下标</strong></li>
+<li>如果栈不为空，当前右括号的下标减去栈顶元素即为<strong>以该右括号为结尾的最长有效括号的长度</strong></li>
+</ol>
+</li>
+<li>从前往后遍历字符串并更新答案即可。</li>
+</ol>
+<p>需要注意的是，如果一开始栈为空，第一个字符为左括号的时候我们会将其放入栈中，这样就不满足提及的<strong>最后一个没有被匹配的右括号的下标</strong>，为了保持统一，我们在一开始的时候往栈中放入一个值为 -1 的元素。(注意，这样栈里无论如何都<strong>至少有一个元素</strong>）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">longestValidParentheses</span><span class="hljs-params">(string s)</span> </span>&#123;<br>    stack&lt;<span class="hljs-type">int</span>&gt; st;<br>    <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>    st.<span class="hljs-built_in">push</span>(<span class="hljs-number">-1</span>);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span> ; i &lt; s.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(s[i] == <span class="hljs-string">&#x27;(&#x27;</span>)&#123;<br>            st.<span class="hljs-built_in">push</span>(i);<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">if</span>(st.<span class="hljs-built_in">size</span>() &lt;= <span class="hljs-number">1</span>)&#123;<br>                st.<span class="hljs-built_in">pop</span>();<br>                st.<span class="hljs-built_in">push</span>(i);<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                st.<span class="hljs-built_in">pop</span>(); <br>                ans = <span class="hljs-built_in">max</span>(i - st.<span class="hljs-built_in">top</span>(), ans);<br>            &#125;  <br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="-4"><a href="#-4" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
@@ -440,10 +460,6 @@
 <h3 id="-6"><a href="#-6" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
 <h3 id="-7"><a href="#-7" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
-
-<h3 id="-8"><a href="#-8" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
-
-<h3 id="-9"><a href="#-9" class="headerlink" title=""></a></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">d	<br></code></pre></td></tr></table></figure>
 
 
             </div>
