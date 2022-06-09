@@ -172,3 +172,22 @@ kappa统计量被认为比简单的准确度更好。也已经证实，较高的
 正在进行的新冠肺炎大流行对人类构成威胁。与全球变暖等其他全球挑战不同，遏制和战胜新冠肺炎在很大程度上取决于人们共享信息的质量和可信度。然而，研究表明，有关大流行的错误信息在OSN上迅速传播。
 
 在这项工作中，我们使用来自Twitter社交网络的真实数据进行了一项综合实验。结果表明，所提出的集成学习模型比基于单机学习的模型具有更好的性能。我们通过评估元模型和WeakLearner来增强堆叠模型的性能。我们得出的结论是，最终的模型大小可以包含较少的特征，并且它的性能略好于原始模型。到目前为止，我们的模型设计用于检测两类推特可信度：可信或不可信。我们承认有改进的余地，其中部分应包括以下内容。首先是包含新闻和情感内容的复杂推文。此外，我们还将考虑其他有助于增强数据集的OSN。其次，我们将寻找更新的集成技术和机器学习方法来增强当前模型。
+
+
+
+Hello everyone, our team is glad to deliver this presentation to introduce our project. The topic is advanced spatial keyword search.
+
+Many applications need to find the object nearest to a specified location that contains a set of keywords.This kind of search is spatial keyword search. 
+Spatial keyword search has been widely studied and plays an essential role in personalized route recommendation and geo-textual information retrieval.
+This project is to study the recent progress of spatial keyword queries. Specifically, to research newly proposed methods that improve the previous query from different perspectives.
+
+Different kinds of users also have various kinds of requirements. Here we give some examples and corresponding solutions that we studied in this project.
+
+To address the convenience problem, this paper proposed a way to efficiently search for a subset of tuples in the database at each round that can learn the users' preferences based on their choice. The interactive framework contains three phases. 
+In the first phase, the system defines a candidate subset that contains all potential candidates. It significantly reduces the size of search space in the following phases. 
+In the second phase, there are three strategies and a greedy algorithm to maximize the expected benefit and learn user preferences quickly. 
+In the third phase, the system can terminate the learning phase automatically and estimate preferences.
+
+As for the performance, the experiments show that the advantage is significant when the dataset is large. The accuracy of using three strategies is better than treating each keyword equally.
+
+There are some papers about the interactive query and speculating user preferences from feedback. However, the interactive query we studied in this project only asks users to choose the favorite tuple, while related work asks for users' evaluation of the presented results.

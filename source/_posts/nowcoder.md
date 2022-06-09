@@ -521,8 +521,28 @@ int minNumberInRotateArray(vector<int> rotateArray) {
 
 ### BM22 比较版本号
 
-```C++
+双指针，每次提取一个数字来比较。如果遇到不相等就提前结束。
 
+```C++
+int compare(string version1, string version2) {
+    int i = 0, j = 0, len1 = version1.size(), len2 = version2.size();
+    int num1, num2;
+    while(i < len1 || j < len2){
+        num1 = consume(i, version1);
+        num2 = consume(j, version2);
+        if(num1 > num2)return 1;
+        else if(num1 < num2)return -1;
+    }
+    return 0;
+}
+
+int consume(int& p, string& s){
+    int ret = 0;
+    while(p < s.size() && s[p] != '.')
+        ret = ret * 10 + s[p++] - '0';
+    p++;
+    return ret;
+}
 ```
 
 ## 二叉树
@@ -823,6 +843,59 @@ TreeNode* dfs(TreeNode* root, int o1, int o2){
 }
 ```
 
+### BM39 序列化二叉树
+
+采用先序遍历的方式序列化和反序列化。序列化时遇到空节点则设置为`#`，反序列化时遇到空节点则设置为不可能的值。采用队列来保存节点值。
+
+```C++
+char* Serialize(TreeNode *root) {    
+    string ans = "";
+    dfs(root, ans); 
+    char* ret = new char[ans.size()+1];
+    strcpy(ret, ans.c_str());
+    return ret;
+}
+
+TreeNode* Deserialize(char *str) {
+    queue<int> vals;
+    int tmp = 0;
+    for(int i = 0; i < strlen(str); i++){
+        if(str[i] == ','){
+            vals.push(tmp);
+            tmp = 0;
+        }else if(str[i] == '#'){
+            tmp = -1;
+        }else{
+            tmp = tmp * 10 + str[i] - '0';
+        }
+    }
+    index = 0;
+    return build(vals);
+}
+
+void dfs(TreeNode* node, string& ans){
+    if(!node){
+        ans += "#,";
+        return;
+    }
+    ans += to_string(node->val) + ",";
+    dfs(node->left, ans);
+    dfs(node->right, ans);
+}
+
+TreeNode* build(queue<int>& vals){
+    if(vals.front() == -1){
+        vals.pop();
+        return nullptr;
+    }
+    TreeNode* node = new TreeNode(vals.front());
+    vals.pop();
+    node->left = build(vals);
+    node->right = build(vals);
+    return node;
+}
+```
+
 ### BM40 重建二叉树
 
 ```C++
@@ -838,25 +911,38 @@ TreeNode* reConstructBinaryTree(vector<int> pre,vector<int> vin) {
 }
 ```
 
-## 
+### BM41 输出二叉树的右视图
+
+先使用上一题的代码重建二叉树，再层序遍历，每层取最后一个。
+
+```C++
+vector<int> solve(vector<int>& xianxu, vector<int>& zhongxu) {
+    TreeNode *root = reConstructBinaryTree(xianxu, zhongxu);
+    queue<TreeNode*> q;
+    q.push(root);
+    vector<int> ans;
+    while(!q.empty()){
+        int size = q.size();
+        TreeNode *last = nullptr;
+        for(int i = 0; i < size; i++){
+            last = q.front();
+            q.pop();
+            if(last->left)q.push(last->left);
+            if(last->right)q.push(last->right);
+        }
+        ans.push_back(last->val);
+    }
+    return ans;
+}
+```
+
+### 
 
 ```C++
 
 ```
 
-## 
-
-```C++
-
-```
-
-## 
-
-```C++
-
-```
-
-## 
+### 
 
 ```C++
 d
@@ -967,11 +1053,205 @@ vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
 }
 ```
 
-### 
+### BM47 寻找第K大
+
+两种思路。第一种，构造一个小顶堆，控制堆的size不超过k。在size达到k的时候，新元素和堆顶比较，如果比堆顶更大则可以入堆。最后返回堆顶就是第k大。
 
 ```C++
-d
+int findKth(vector<int> a, int n, int K) {
+    priority_queue<int, vector<int>, greater<int>> pq;
+    for(int i : a){
+        if(pq.size() < K) pq.push(i);
+        else if(pq.top() < i){
+            pq.pop();
+            pq.push(i);
+        }
+    }
+    return pq.top();
+}
 ```
+
+第二种思路是分治，利用快排的思想。每次只对第k大的元素可能在的半边排序。
+
+```C++
+int findKthLargest(vector<int>& a, int n, int k) {
+    return quickSort(a, 0, n - 1, k);
+}
+int quickSort(vector<int>& a, int l, int r, int k){
+    int pivot = partition(a, l, r);
+    if(pivot == k - 1) return a[pivot];
+    else if(pivot > k - 1) return quickSort(a, l, pivot - 1, k);
+    else return quickSort(a, pivot + 1, r, k);
+}
+int partition(vector<int>& a, int l, int r){
+    int tmp = a[l];
+    while(l < r){
+        while(l < r && tmp >= a[r]) r--;
+        a[l] = a[r];
+        while(l < r && tmp <= a[l]) l++;
+        a[r] = a[l];
+    }
+    a[l] = tmp;
+    return l;
+}
+```
+
+### BM48 数据流中的中位数
+
+维护一个大顶堆和一个小顶堆。大顶堆保存数据流中较小的数据，小顶堆保存较大的数据。插入时尽量插入小顶堆，并且控制小顶堆比大顶堆多1个或者相等。然后如果需要取中位数的时候，奇数情况下从小顶堆取。
+
+```C++
+priority_queue<int> big_heap;
+priority_queue<int, vector<int>, greater<int>> small_heap;
+void Insert(int num) {
+    if(!big_heap.empty() && num < big_heap.top())
+        big_heap.push(num);
+    else 
+        small_heap.push(num);
+    if(small_heap.size() == big_heap.size() + 2){
+        big_heap.push(small_heap.top());
+        small_heap.pop();
+    }else if(small_heap.size() + 1 == big_heap.size()){
+        small_heap.push(big_heap.top());
+        big_heap.pop();
+    }
+}
+
+double GetMedian() { 
+    if((small_heap.size() + big_heap.size()) % 2 == 0)
+        return (small_heap.top() + big_heap.top()) / 2.0;
+    else 
+        return small_heap.top();
+}
+```
+
+### BM49 表达式求值
+
+首先提供的是直接求值的版本。
+
+```C++
+int solve(string s) {
+    stack<char> ops;
+    stack<int> nums;
+    for(int i = 0; i < s.size(); i++){
+        char c = s[i];
+        if(c == '('){
+            ops.push(c);
+        }else if(c == ')'){
+            while(ops.top() != '(')cal(ops, nums);
+            ops.pop();
+        }else if(c == '+' || c == '-' || c == '*'){
+            while(!ops.empty() && priority(ops.top()) >= priority(c))
+                cal(ops, nums);
+            ops.push(c);
+        }else{
+            int tmp = 0;
+            while('0' <= s[i] && s[i] <= '9'){
+                tmp = tmp * 10 + s[i] - '0';
+                i++;
+            }
+            i--;
+            nums.push(tmp);
+        }
+    }
+    while(!ops.empty())cal(ops, nums);
+    return nums.top();
+}
+
+int priority(char op){
+    if(op == '+' || op == '-')return 0;
+    if(op == '*')return 1;
+    return -1;
+}
+
+void cal(stack<char>& ops, stack<int>& nums){
+    int b = nums.top(); nums.pop();
+    int a = nums.top(); nums.pop();
+    char op = ops.top(); ops.pop();
+    printf("%d %c %d\n", a, op, b);
+    if(op == '+')nums.push(a + b);
+    else if(op == '-')nums.push(a - b);
+    else if(op == '*')nums.push(a * b);
+}
+```
+
+然后提供的版本由2个函数组成。先由`getSuffixExpr()`将中缀表达式转换为后缀表达式，注意这一步已经将运算符优先级处理完毕。第二部由`parseSuffixExpr()`将后缀表达式转换为计算结果，只一步不需要考虑运算符优先级，只需要按照规则逐个运算符计算即可。
+
+如何处理运算符优先级：每次运算符入栈时，先将栈内优先级大于等于新运算符的出栈，表示这些应当被优先计算。
+
+```C++
+int solve(string s) {
+    vector<string> exp = getSuffixExpr(s);
+    return parseSuffixExpr(exp);
+}
+
+vector<string> getSuffixExpr(string s){
+    stack<char> ops;
+    vector<string> exp;
+    for(int i = 0; i < s.size(); i++){
+        char c = s[i];
+        if(c == '('){
+            ops.push(c);
+        }else if(c == ')'){
+            while(ops.top() != '(')exp.push_back(pop(ops));
+            ops.pop();
+        }else if(isDigit(c)){
+            int tmp = 0;
+            while(isDigit(s[i])){
+                tmp = tmp * 10 + s[i] - '0';
+                i++;
+            }
+            i--;
+            exp.push_back(to_string(tmp));
+        }else{
+            while(!ops.empty() && priority(ops.top()) >= priority(c))
+                exp.push_back(pop(ops));
+            ops.push(c);
+        }
+    }
+    while(!ops.empty())exp.push_back(pop(ops));
+    return exp;
+}
+
+int parseSuffixExpr(vector<string>& exp){
+    stack<int> nums;
+    for(string& s : exp)
+        if(isDigit(s[0]))
+            nums.push(atoi(s.c_str()));
+        else
+            cal(s[0], nums);
+    return nums.top();
+}
+
+bool isDigit(char c){
+    return '0' <= c && c <= '9';
+}
+
+string pop(stack<char>& ops){
+    string ret(1, ops.top());
+    ops.pop();
+    return ret;
+}
+
+int priority(char op){
+    if(op == '+' || op == '-')return 0;
+    if(op == '*' || op == '/')return 1;
+    return -1;
+}
+
+void cal(char op, stack<int>& nums){
+    int b = nums.top(); nums.pop();
+    int a = nums.top(); nums.pop();
+    if(op == '+')nums.push(a + b);
+    else if(op == '-')nums.push(a - b);
+    else if(op == '*')nums.push(a * b);
+    else if(op == '/')nums.push(a / b);
+}
+```
+
+
+
+## 哈希
 
 ### BM50 两数之和
 
@@ -1015,9 +1295,319 @@ int MoreThanHalfNum_Solution(vector<int> numbers) {
 }
 ```
 
+### BM52 *数组中只出现一次的两个数字*
+
+首先需要做过一道前置题目：数组中只出现一次的数字。那道题中将所有的数组元素异或即可，因为出现两次的数字异或后会抵消，最后只留下出现一次的数字。
+
+这道题中有2个数字只出现一次，如果按照同样的方式，只能得到这两个数字的异或值。已知这两个数肯定不同，那么异或的结果必然不同，至少有一位为1。那么就找到这一位，将数组中的数按照这一位是否为1来分成2类，分别将两类数异或后即是所求的答案。可以理解为每一类数各contribute to其中一个答案。
+
+```C++
+vector<int> FindNumsAppearOnce(vector<int>& array) {
+    int a = 0, p = 1;
+    for(int i : array) a ^= i;
+    cout << a << endl;
+    while((a & p) == 0) p <<= 1;
+    cout << p << endl;
+    // p在最先遇到a为1的那位上为1
+    int n = 0, m = 0;
+    for(int i : array){
+        if(i & p) n ^= i;
+        else m ^= i;
+    }
+    if(n > m) swap(n, m);
+    return {n,m};
+}
+```
+
+### BM53 *缺失的第一个正整数*
+
+在恢复后，数组应当有 `[1, 2, ..., N]` 的形式，但其中有若干个位置上的数是错误的，每一个错误的位置就代表了一个缺失的正数。我们遍历，如果遍历到的`x=nums[i]`在`[1,N]`内，就把这个数交换到他应该在的位置：`nums[x-1]`。持续交换直到`x`是一个`[1,N]`以外的数，或者就是这个位置应该所在的数：`x-1==i`。
+
+由于每次的交换操作都会使得某一个数交换到正确的位置，因此交换的次数最多为 N，整个方法的时间复杂度为 O(N)。
+
+```C++
+int minNumberDisappeared(vector<int>& nums) {
+    for(int i = 0; i < nums.size(); i++){
+        // 如果nums[i]不是该在的位置上应有的数，则继续循环。注意避免死循环
+        while(0 < nums[i] && nums[i] <= nums.size() && nums[nums[i]-1] != nums[i])
+            swap(nums[i], nums[nums[i]-1]);
+    }
+    for(int i = 0; i < nums.size(); i++){
+        if(nums[i] != i + 1)
+            return i + 1;
+    }
+    return nums.size() + 1;
+}
+```
+
+### 三数之和
+
+```C++
+d	
+```
+
+### BM55 没有重复项数字的全排列
+
+```C++
+bool vis[10];
+vector<vector<int> > ans;
+vector<vector<int> > permute(vector<int> &num) {
+    memset(vis, 0, sizeof(vis));
+    ans.clear();
+    vector<int> tmp;
+    dfs(num, tmp);
+    return ans;
+}
+
+void dfs(vector<int> &num, vector<int> &tmp){
+    if(tmp.size() == num.size()){
+        ans.push_back(tmp);
+        return;
+    }
+    for(int i = 0; i < num.size(); i++){
+        if(!vis[num[i]]){
+            tmp.push_back(num[i]);
+            vis[num[i]] = 1;
+            dfs(num, tmp);
+            tmp.pop_back();
+            vis[num[i]] = 0;
+        }
+    }
+}
+```
+
+### BM56 有重复项数字的全排列
+
+通过`last`来控制，在同一层递归的循环中，不重复使用相同数字。
+
+```C++
+bool vis[10];
+vector<vector<int> > permuteUnique(vector<int> &nums) {
+    vector<vector<int>> ans;
+    if(nums.empty())return ans;
+    memset(vis, 0, sizeof(vis));
+    sort(nums.begin(), nums.end());
+    vector<int> tmp;
+    dfs(nums, tmp, ans);
+    return ans;  
+}
+
+void dfs(vector<int>& nums, vector<int>& tmp, vector<vector<int>>& ans){
+    if(tmp.size() == nums.size()){
+        ans.push_back(tmp);
+        return;
+    }
+    int last = INT_MAX;
+    for(int i = 0; i < nums.size(); i++){
+        if(vis[i] || last == nums[i])
+            continue;
+        last = nums[i];
+        vis[i] = true;
+        tmp.push_back(nums[i]);
+        dfs(nums, tmp, ans);
+        vis[i] = false;
+        tmp.pop_back();
+    }
+}
+```
+
+### BM57 岛屿数量
+
+```C++
+int solve(vector<vector<char> >& grid) {
+    int ans = 0;
+    for(int i = 0; i < grid.size(); i++){
+        for(int j = 0; j < grid[0].size(); j++){
+            if(grid[i][j] == '1'){
+                ans++;
+                dfs(i, j, grid);
+            }
+        }
+    }
+    return ans;
+}
+
+int mr[4] = {0, 1, 0, -1};
+int mc[4] = {1, 0, -1, 0};
+void dfs(int r, int c, vector<vector<char> >& grid){
+    grid[r][c] = '0';
+    for(int i = 0; i < 4; i++){
+        int nr = r + mr[i];
+        int nc = c + mc[i];
+        if(nr >= 0 && nr < grid.size() && nc >= 0 && nc < grid[0].size() && grid[nr][nc] == '1'){
+            dfs(nr, nc, grid);
+        }
+    }
+}
+```
+
+### BM58 字符串的排列
+
+直接用set保存所有遇到过的字符串排列会使得空间复杂度达到O(n!)，通过先将字符串排序，然后每层递归都判断自己这个字符是否是第一次使用，这样可以将空间复杂度减少到O(n)。还有一种next_permutation算法，基于交换，对每一个排列找到需要交换的元素，得到下一个字典序的排列，可以将空间复杂度减少到O(1)。
+
+```C++
+vector<string> ans;
+vector<bool> vis;
+string tmp;
+vector<string> Permutation(string str) {
+    sort(str.begin(), str.end());
+    vis.resize(str.size(), false);
+    dfs(str);
+    return ans;
+}
+void dfs(string& str){
+    if(tmp.size() == str.size()){
+        ans.push_back(tmp);
+        return;
+    }
+    for(int i = 0; i < str.size(); i++){
+        if(vis[i])continue;
+        if(i > 0 && vis[i-1] && str[i-1] == str[i])continue;
+        vis[i] = true;
+        tmp.push_back(str[i]);
+        dfs(str);
+        tmp.pop_back();
+        vis[i] = false;
+    }
+}
+```
+
 ### 
 
 ```C++
 d
+```
+
+### BM60 括号生成
+
+```C++
+vector<string> generateParenthesis(int n) {
+    vector<string> ans;
+    string tmp;
+    dfs(ans, tmp, n, 0);
+    return ans;
+}
+
+void dfs(vector<string>& ans, string& cur, int n, int l){
+    if(cur.size() == 2 * n){
+        ans.push_back(cur);
+        return;
+    }
+    if(l < n){
+        string tmp = cur + "(";
+        dfs(ans, tmp, n, l+1);
+    }
+    if(l == n || l > cur.size() - l){
+        string tmp = cur + ")";
+        dfs(ans, tmp, n, l);
+    }
+}
+```
+
+### BM61 矩阵最长递增路径
+
+一种新的写法，不同于我习惯的循环向四个方向扩展。注意这是递归，会先探到死路在逐层返回，所以每个节点都已经充分访问过其可能路径，之后不需要再访问，可直接返回。
+
+```C++
+    int n,m;
+    int solve(vector<vector<int> >& matrix) {
+        n = matrix.size();
+        if(n == 0)return 0;
+        m = matrix[0].size();
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0 ; j < m; j++){
+                ans = max(ans, dfs(matrix, dp, i, j, -1));
+            }
+        }
+        return ans;
+    }
+
+    int dfs(vector<vector<int> >& matrix, vector<vector<int> >& dp, int r, int c, int pre){
+        if(matrix[r][c] <= pre)return 0;
+        if(dp[r][c] != -1)return dp[r][c];
+        int tmp = 0;
+        if(r + 1 < n) tmp = max(tmp, dfs(matrix, dp, r+1, c, matrix[r][c]));
+        if(r - 1 >= 0)tmp = max(tmp, dfs(matrix, dp, r-1, c, matrix[r][c]));
+        if(c + 1 < m) tmp = max(tmp, dfs(matrix, dp, r, c+1, matrix[r][c]));
+        if(c - 1 >= m)tmp = max(tmp, dfs(matrix, dp, r, c-1, matrix[r][c]));
+        dp[r][c] = tmp + 1;
+        return tmp + 1;
+    }
+```
+
+### 
+
+```C++
+d
+```
+
+### 
+
+```C++
+d
+```
+
+### 
+
+
+
+### BM77 最长的括号子串
+
+始终保持栈底元素为当前已经遍历过的元素中**最后一个没有被匹配的右括号的下标**，这样的做法主要是考虑了边界条件的处理，栈里其他元素维护左括号的下标：
+
+1. 对于遇到的每个`(` ，将它的下标放入栈中
+2. 对于遇到的每个`)`，先弹出栈顶元素表示匹配了当前右括号：
+   1. 如果栈为空，说明当前的右括号为没有被匹配的右括号，将其下标放入栈中来更新我们之前提到的**最后一个没有被匹配的右括号的下标**
+   2. 如果栈不为空，当前右括号的下标减去栈顶元素即为**以该右括号为结尾的最长有效括号的长度**
+3. 从前往后遍历字符串并更新答案即可。
+
+需要注意的是，如果一开始栈为空，第一个字符为左括号的时候我们会将其放入栈中，这样就不满足提及的**最后一个没有被匹配的右括号的下标**，为了保持统一，我们在一开始的时候往栈中放入一个值为 -1 的元素。(注意，这样栈里无论如何都**至少有一个元素**）
+
+```C++
+int longestValidParentheses(string s) {
+    stack<int> st;
+    int ans = 0;
+    st.push(-1);
+    for(int i = 0 ; i < s.size(); i++){
+        if(s[i] == '('){
+            st.push(i);
+        }else{
+            if(st.size() <= 1){
+                st.pop();
+                st.push(i);
+            }else{
+                st.pop(); 
+                ans = max(i - st.top(), ans);
+            }  
+        }
+    }
+    return ans;
+}
+```
+
+### 
+
+```C++
+d	
+```
+
+### 
+
+```C++
+d	
+```
+
+### 
+
+```C++
+d	
+```
+
+### 
+
+```C++
+d	
 ```
 
