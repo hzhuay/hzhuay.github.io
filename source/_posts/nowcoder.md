@@ -1537,21 +1537,75 @@ void dfs(vector<string>& ans, string& cur, int n, int l){
     }
 ```
 
+## 动态规划
+
+### BM62 斐波那契数列
+
+```C++
+int Fibonacci(int n) {
+    if(n == 1)return 1;
+    if(n == 2)return 1;
+    return Fibonacci(n-1) + Fibonacci(n-2);
+}
+```
+
+### BM63 跳台阶
+
+```C++
+int jumpFloor(int n) {
+    if(n <= 2)return n;
+    return jumpFloor(n-1) + jumpFloor(n-2);
+}
+```
+
+### BM64 最小花费爬楼梯
+
+```C++
+int minCostClimbingStairs(vector<int>& cost) {
+    int dp[100005];
+    memset(dp, 0, sizeof(dp));
+    int n = cost.size();
+    for(int i = 2; i <= n; i++){
+        dp[i] = min(dp[i-1] + cost[i-1], dp[i-2] + cost[i-2]);
+    }
+    return dp[n];
+}
+```
 ### 
 
 ```C++
 d
 ```
-
 ### 
 
 ```C++
 d
 ```
-
 ### 
 
+```C++
+d
+```
+### 
 
+```C++
+d
+```
+### 
+
+```C++
+d
+```
+### 
+
+```C++
+d
+```
+### 
+
+```C++
+d
+```
 
 ### BM77 最长的括号子串
 
