@@ -1734,10 +1734,17 @@ int LIS(vector<int>& arr) {
     return ans;
 }
 ```
-### 
+### BM72 连续子数组的最大和
 
 ```C++
-
+int FindGreatestSumOfSubArray(vector<int> array) {
+    int ans = array[0];
+    for(int i = 1; i < array.size(); i++){
+        array[i] = max(array[i], array[i] + array[i-1]);
+        ans = max(ans, array[i]);
+    }
+    return ans;
+}
 ```
 ### 
 
