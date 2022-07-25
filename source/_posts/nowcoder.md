@@ -1571,40 +1571,203 @@ int minCostClimbingStairs(vector<int>& cost) {
     return dp[n];
 }
 ```
-### 
+### ❗BM65 最长公共子序列(二)
+
+如果是只用求最长公共子序列的长度，只需要前半部分的代码。如果需要求具体的字串是什么，需要根据长度反推，从后往前推。
+
+[![jjJsSS.png](https://s1.ax1x.com/2022/07/24/jjJsSS.png)](https://imgtu.com/i/jjJsSS)
 
 ```C++
-d
+string LCS(string s1, string s2) {
+    // dp[i][j]表示s[:i]和s[:j]之间的最长公共字串长度
+    int dp[2005][2005];
+    memset(dp, 0, sizeof(dp));
+    for(int i = 1; i <= s1.size(); i++){
+        for(int j = 1; j <= s2.size(); j++){
+            if(s1[i-1] == s2[j-1]){
+                dp[i][j] = dp[i-1][j-1] + 1;
+            }else{
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+    // 得到了最长公共字串的长度，接下来求对应子串
+    printf("%d\n", dp[s1.size()][s2.size()]);
+    string ans = "";
+    for(int i = s1.size(), j = s2.size(); dp[i][j] >= 1; ){
+        if(s1[i-1] == s2[j-1]){
+            // dp[i][j]来自dp[i-1][j-1]
+            ans += s1[i-1];
+            i--; j--;
+        }else if(dp[i-1][j] > dp[i][j-1]) i--; // 哪边大就来自哪边
+        else j--;
+    }
+    reverse(ans.begin(), ans.end());
+    return ans.empty() ? "-1" : ans;
+}
+```
+### ❗BM66 最长公共子串
+
+全部清零后，直接二重遍历，如果遇到更长的字串就记录长度和结束位置。
+
+```C++
+string LCS(string str1, string str2) {
+    int dp[5005][5005];
+    // 最长公共字串的长度，以及结束位置
+    int maxLen = 0, last = 0;
+    memset(dp, 0, sizeof(dp));
+    for(int i = 1; i <= str1.size(); i++){
+        for(int j = 1; j <= str2.size(); j++){
+            if(str1[i-1] == str2[j-1]){
+                dp[i][j] = dp[i-1][j-1] + 1;
+                if(dp[i][j] > maxLen){
+                    maxLen = dp[i][j];
+                    last = i;
+                }
+            }
+        }
+    }
+    return str1.substr(last - maxLen, maxLen);
+}
+```
+### BM67 不同路径的数目(一)
+
+能到达`dp[i][j]`的路径只能来自`dp[i-1][j]`和`dp[i][j-1]`。
+
+```C++
+int uniquePaths(int m, int n) {
+    int dp[105][105];
+    memset(dp, 0, sizeof(dp));
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){
+            if(i == 0 || j == 0){
+                dp[i][j] = 1;
+            }else{
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+    }
+    return dp[m-1][n-1];
+}
+```
+### BM68 矩阵的最小路径和
+
+```C++
+int minPathSum(vector<vector<int> >& matrix) {
+    int dp[505][505];
+    int n = matrix.size(), m = matrix[0].size();
+    memset(dp, 0, sizeof(dp));
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(i == 0 && j == 0) dp[i][j] = matrix[i][j];
+            else if(i == 0) dp[i][j] = matrix[i][j] + dp[i][j-1];
+            else if(j == 0) dp[i][j] = matrix[i][j] + dp[i-1][j];
+            else dp[i][j] = matrix[i][j] + min(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+    return dp[n-1][m-1];
+}
+```
+### BM69 把数字翻译成字符串
+
+由于每次解析要么用1位数，要么用2位数，所以`dp[i]`的状态由`dp[i-1]`和`dp[i-2]`推出。
+
+```C++
+int solve(string nums) {
+    // dp[i]: 到nums[:i]为止有几种解析方式
+    int dp[100];
+    memset(dp, 0, sizeof(dp));
+    dp[0] = 1;
+    for(int i = 1; i <= nums.size(); i++){
+        // 如果当前数字是0，那么无法作为1位数解析
+        dp[i] = nums[i-1] == '0' ? 0 : dp[i-1];
+        if(i >= 2){
+            int twoDigits = nums[i-1] - '0' + 10 * (nums[i-2] - '0');
+            // 十位数不能是0，并且值要在范围内
+            if(nums[i-2] != 0 && twoDigits >= 10 && twoDigits <= 26){
+                dp[i] += dp[i-2];
+            }
+        }
+    }
+    return dp[nums.size()];
+}
+```
+### BM70 兑换零钱(一)
+
+```C++
+int minMoney(vector<int>& arr, int aim) {
+    // dp[i]: 达到i金额，最少需要d[i]张纸币
+    // MAX: 不可能达到的最大值
+    int dp[5005], MAX = aim + 1;
+    dp[0] = 0;
+    if(aim == 0) return 0;
+    for(int i = 1; i <= aim; i++) dp[i] = MAX;
+    for(int i = 1; i <= aim; i++){
+        for(int v : arr){
+            // 目前检查的金额i大于钞票v，说明状态dp[i]可以由dp[i-v]达到
+            if(i >= v){
+                dp[i] = min(dp[i], dp[i-v] + 1);
+            }
+        }
+    }
+    return dp[aim] == MAX ? -1 : dp[aim];
+}
+```
+### BM71 最长上升子序列(一)
+
+```C++
+int LIS(vector<int>& arr) {
+    // dp[i]: arr[:i]以内的最长上升子序列
+    int dp[1005], ans = 0;
+    memset(dp, 0, sizeof(dp));
+    // 这一步很关键，因为每一个元素都可以作为子序列的起点
+    for(int i = 0; i < arr.size(); i++) dp[i] = 1;
+    for(int i = 1; i < arr.size(); i++){
+        for(int j = 0; j < i; j++){
+            if(arr[j] < arr[i]){
+                dp[i] = max(dp[i], dp[j] + 1);
+                // 答案不一定是dp[arr.size()-1]
+                ans = max(ans, dp[i]);
+            }
+        }
+    }
+    return ans;
+}
 ```
 ### 
 
 ```C++
-d
+
 ```
 ### 
 
 ```C++
-d
+
 ```
 ### 
 
 ```C++
-d
+
 ```
 ### 
 
 ```C++
-d
+
 ```
 ### 
 
 ```C++
-d
+
 ```
 ### 
 
 ```C++
-d
+
+```
+### 
+
+```C++
+
 ```
 
 ### BM77 最长的括号子串
