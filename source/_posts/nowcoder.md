@@ -1746,10 +1746,31 @@ int FindGreatestSumOfSubArray(vector<int> array) {
     return ans;
 }
 ```
-### 
+### BM73 最长回文子串
+
+中心扩散法和动态规划法的时间复杂度都是O(N^2^)， 但是中心扩散法的空间复杂度是O(1)，动态规划是O(N^2^)。还有一种时间复杂度O(N)的马拉车算法，暂时还没学会。
 
 ```C++
+int getLongestPalindrome(string A) {
+    if(A.size() < 2) return A.size();
+    int ans = 1;
+    for(int i = 0; i < A.size() - 1; i++){
+        ans = max(ans, getLen(A, i, i));
+        ans = max(ans, getLen(A, i, i + 1));
+    }
+    return ans;
+}
 
+int getLen(string& A, int l, int r){
+    while(l >= 0 && r < A.size()){
+        if(A[l] == A[r]){
+            l--;
+            r++;
+        }else break;
+    }
+    // 此时A[l] ！= A[r]，需要减2
+    return r - l + 1 - 2;
+}
 ```
 ### 
 
