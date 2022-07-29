@@ -1,5 +1,5 @@
 ---
-≈title: daily_report
+title: daily_report
 date: 2022-06-20 14:55:28
 tags:
 ---
