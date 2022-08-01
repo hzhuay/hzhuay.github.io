@@ -1772,32 +1772,46 @@ int getLen(string& A, int l, int r){
     return r - l + 1 - 2;
 }
 ```
-### 
+### BM74 数字字符串转化成IP地址
+
+比牛客的官解稍微简洁一点。
+
+```C++
+vector<string> restoreIpAddresses(string s) {
+    vector<string> ans;
+    solve(s, ans, vector<string>(), 0);
+    return ans;
+}
+
+void solve(string s, vector<string>& ans, vector<string> tmp, int beg){
+    if(beg == s.size() && tmp.size() != 4) return;
+    if(beg >= s.size() && tmp.size() == 4){
+        // 拼接答案
+        string s1 = "";
+        for(string& i : tmp)
+            s1 += i + '.';
+        ans.push_back(s1.substr(0, s1.size() - 1));
+        return;
+    }
+    for(int len = 1; len <= 3 && beg + len <= s.size(); len++){
+        int num = stoi(s.substr(beg, len));
+        if(num > 255 || (len > 1 && s[beg] == '0')) break;
+        tmp.push_back(s.substr(beg, len));
+        solve(s, ans, tmp, beg + len);
+        tmp.pop_back();
+    }
+}
+```
+### BM75 编辑距离(一)
 
 ```C++
 
 ```
-### 
+### BM76 正则表达式匹配
 
 ```C++
 
 ```
-### 
-
-```C++
-
-```
-### 
-
-```C++
-
-```
-### 
-
-```C++
-
-```
-
 ### BM77 最长的括号子串
 
 始终保持栈底元素为当前已经遍历过的元素中**最后一个没有被匹配的右括号的下标**，这样的做法主要是考虑了边界条件的处理，栈里其他元素维护左括号的下标：
@@ -1831,28 +1845,183 @@ int longestValidParentheses(string s) {
     return ans;
 }
 ```
+### BM78 打家劫舍(一)
+
+`dp[i]`表示`nums[:i]`部分（左闭右开）能取得的最大值。对于每一个i，要么不偷，那么`dp[i+1]=dp[i]`；要么偷，那么`dp[i+1]=dp[i-1]+nums[i]`
+
+```C++
+int rob(vector<int>& nums) {
+    vector<int> dp(nums.size() + 1, 0);
+    for(int i = 0; i < nums.size(); i++){
+        dp[i+1] = max(dp[i], dp[i-1] + nums[i]);
+    }
+    return dp[nums.size()];
+}
+```
+### BM79 打家劫舍(二)
+
+使用两个dp数组，分别忽略第一个和最后一个房子进行dp。
+
+```C++
+int rob(vector<int>& nums) {
+    // 最开始的房不偷
+    vector<int> dp1(nums.size() + 1, 0);
+    // 最后一个房不偷
+    vector<int> dp2(nums.size() + 1, 0);
+    for(int i = 1; i < nums.size(); i++)
+        dp1[i+1] = max(dp1[i], dp1[i-1] + nums[i]);
+    for(int i = 0; i < nums.size() - 1; i++)
+        dp2[i+1] = max(dp2[i], dp2[i-1] + nums[i]);
+    return max(dp1[nums.size()], dp2[nums.size() - 1]);
+}
+```
+### BM80 买卖股票的最好时机(一)
+
+不需要用到动态规划，只用遍历数组，维护目前遇到的最小值和最大利润，遍历时更新这两个值即可。
+
+```C++
+int maxProfit(vector<int>& prices) {
+    int minPrice = prices[0], ans = 0;
+    for(int i : prices){
+        ans = max(ans, i - minPrice);
+        minPrice = min(minPrice, i);
+    }
+    return ans;
+}
+```
+
+### BM81 买卖股票的最好时机(二)
+
+一个合理的买卖股票过程就是寻找数组中的一段连续上升子序列。只要找出所有的连续上升子序列，就可以得到总利润。
+
+```C++
+int maxProfit(vector<int>& prices) {
+    int ans = 0, last = prices[0];
+    for(int i = 1; i < prices.size(); i++){
+        if(prices[i] < prices[i-1]){
+            // 连续上升子序列断了，结算之前的利润，更新起点为当前价格
+            ans += prices[i-1] - last;
+            last = prices[i];
+        }
+    }
+    if(*prices.rbegin() > last)
+        ans += *prices.rbegin() - last;
+    return ans;
+}
+```
+
+### ❓BM82 买卖股票的最好时机(三)
+
+- `dp[i][0]`表示到第i天为止没有买过股票的最大收益
+- `dp[i][1]`表示到第i天为止买过一次股票还没有卖出的最大收益
+- `dp[i][2]`表示到第i天为止买过一次也卖出过一次股票的最大收益
+- `dp[i][3]`表示到第i天为止买过两次只卖出过一次股票的最大收益
+- `dp[i][4]`表示到第i天为止买过两次同时也买出过两次股票的最大收益
+
+```C++
+int maxProfit(vector<int>& prices) {
+    int ans = 0, last = prices[0];
+    vector<vector<int>> dp(prices.size(), vector<int>(5, -1e9));
+    dp[0][0] = 0;
+    dp[0][1] = -prices[0];
+    for(int i = 1; i < prices.size(); i++){
+        // 没有操作过，所以和前一天一样
+        dp[i][0] = dp[i-1][0];
+        // 第一次买入，从没操作过转移
+        dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i]);
+        // 第一次卖出，从第一次买入
+        dp[i][2] = max(dp[i-1][2], dp[i-1][1] + prices[i]);
+        // 第二次买入，从没操作过转移
+        dp[i][3] = max(dp[i-1][3], dp[i-1][2] - prices[i]);
+        // 第二次卖出，从第一次买入
+        dp[i][4] = max(dp[i-1][4], dp[i-1][3] + prices[i]);
+    }
+    return max(dp[prices.size()-1][2], dp[prices.size()-1][4]);
+}
+```
+
+## 字符串
+
+### BM83 字符串变形
+
+```C++
+string trans(string s, int n) {
+    vector<string> tmp;
+    int last = 0;
+    for(int i = 0; i < n; i++){
+        if('a' <= s[i] && s[i] <= 'z') s[i] -= 'a' - 'A';
+        else if('A' <= s[i] && s[i] <= 'Z') s[i] += 'a' - 'A';
+        else {
+            tmp.push_back(s.substr(last, i - last));
+            last = i + 1;
+
+        }
+    }
+    string ans = s.substr(last, s.size() - last);
+    for(auto it = tmp.rbegin(); it != tmp.rend(); ++it){
+        ans += " " + (*it);
+    }
+    return ans;
+}
+```
+### BM84 最长公共前缀
+
+牛客上只有O(N*M)的复杂度，N是字符串数量，M是字符串平均长度。但是牛客的进阶要求是O(N)，题解随便翻翻没有翻到。
+
+```C++
+string longestCommonPrefix(vector<string>& strs) {
+    if(strs.empty()) return "";
+    int len = strs[0].size();
+    for(int i = 0; i < len; i++) {
+        char c = strs[0][i];
+        for(int j = 1; j < strs.size(); j++) {
+            if(strs[j].size() == i || strs[j][i] != c){
+                return strs[0].substr(0, i);
+            }
+        }
+    }
+    return strs[0];
+}
+```
+
 
 ### 
 
 ```C++
-d	
-```
 
+```
 ### 
 
 ```C++
-d	
-```
 
+```
 ### 
 
 ```C++
-d	
-```
 
+```
 ### 
 
 ```C++
-d	
-```
 
+```
+### 
+
+```C++
+
+```
+### 
+
+```C++
+
+```
+### 
+
+```C++
+
+```
+### 
+
+```C++
+
+```
