@@ -1995,6 +1995,127 @@ string longestCommonPrefix(vector<string>& strs) {
 ```C++
 
 ```
+## 双指针
+
+### BM87 合并两个有序的数组
+
+`A[m:]`部分是空的，所以不能思维定式从小到大处理，而是从大到小处理，优先填补`A[m:]`这部分空数组。
+
+```C++
+void merge(int A[], int m, int B[], int n) {
+    int a = m - 1, b = n - 1, i = m + n - 1;
+    while(a >= 0 || b >= 0){
+        if(a < 0) A[i--] = B[b--];
+        else if(b < 0) A[i--] = A[a--];
+        else if(A[a] > B[b]) A[i--] = A[a--];
+        else A[i--] = B[b--];
+    }
+}
+```
+### BM88 判断是否为回文字符串
+
+```C++
+bool judge(string str) {
+    for(int l = 0, r = str.size() - 1; l < r; l++, r--){
+        if(str[l] != str[r])
+            return false;
+    }
+    return true;
+}
+```
+### BM89 合并区间
+
+先按照区间的左边界排序，然后逐一判断合并。
+
+```C++
+vector<Interval> merge(vector<Interval> &intervals) {
+    vector<Interval> ans;
+    if(intervals.empty())return ans;
+    sort(intervals.begin(), intervals.end(), cmp);
+    ans.push_back(intervals[0]);
+    for(auto i : intervals){
+        auto tmp = ans.back();
+        if(tmp.start <= i.start && tmp.end >= i.start){
+            ans[ans.size()-1].end = max(tmp.end, i.end);
+        }else{
+            ans.push_back(i);
+        }
+    }
+    return ans;
+}
+static bool cmp(const Interval& a, const Interval& b){
+    return a.start != b.start ? a.start < b.start : a.end < b.end;
+}
+```
+### BM90 最小覆盖子串
+
+设置两个指针left，right。表示S的子串tmp可由left和right表示，当需要添加元素时候，就将right++，pop元素就left++。
+
+我们用哈希表判断left到right是否完全包含T，动态维护窗口中所有字符以及个数。具体过程如下：
+
+如果新加入的字符是被需要的（指在T里面），那么这个字符加入到窗口中，当窗口中的字符数目和被需要的数目相等时候，匹配度加一。right右移，这里匹配度是window里面的字符与need里面字符相等的数目。
+
+如果新加入的字符不被需要（指不在T里面），right右移
+
+当匹配度等于被需要的字符种类数，说明left-right覆盖到了T的所有字符，并且记录当前的left和right位置，然后就开始向右移动left
+
+如果left位置的字符是被T所需要的，windo所统计的left字符要减一，当窗口中left处的字符数目小于need的字符数目，匹配度减一
+
+如果left位置的字符不是被T所需要的，直接右移即可。
+
+```C++
+string minWindow(string S, string T) {
+    // write code here
+    int need[128], cnt[128], target = 0;
+    memset(need, 0, sizeof(need));
+    memset(cnt, 0, sizeof(cnt));
+    for(char c: T) {
+        // 记录T中出现多少种字符
+        if(need[c] == 0)target++;
+        need[c]++;
+    }
+    int l = 0, r = 0, start = 0, minlen = INT_MAX;
+    // match记录窗口匹配多少个字符
+    int match = 0;
+    for(; r < S.size(); r++){
+        char c = S[r];
+        if(need[c] > 0) {//如果这个字符有需求
+            cnt[c]++;
+            // 如果这个字符的出现次数满足要求了
+            if(cnt[c] == need[c]) match++;
+        }
+        // 当目前字串符合要求时，尽量尝试缩小左边界，直到窗口不符合要求
+        while(match == target){
+            if(minlen > r - l + 1){
+                minlen = r - l + 1;
+                start = l;
+            }
+            c = S[l];
+            if(need[c] > 0){
+                cnt[c]--;
+                if(cnt[c] < need[c]) match--;
+            }
+            l++;
+        }
+    }
+    return minlen == INT_MAX ? "" : S.substr(start, minlen);
+}
+```
+### BM91 反转字符串
+
+```C++
+string solve(string str) {
+    for(int i = 0; i < str.size() / 2; i++){
+        swap(str[i], str[str.size() - i - 1]);
+    }
+    return str;
+}
+```
+### 
+
+```C++
+
+```
 ### 
 
 ```C++
