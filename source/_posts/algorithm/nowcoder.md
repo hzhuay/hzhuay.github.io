@@ -1020,10 +1020,21 @@ bool isValid(string s) {
 }
 ```
 
-### 
+### BM45 滑动窗口的最大值
+
+本来应该是用优先队列来维护窗口内的最大值，但是C++的`priority_queue`无法提供快速的查找功能，这样在串口移动的时候无法删除失效的元素。因此可以改用`multiset`，内部也是有序的，可以直接获取最大值，而且可以O(logN)查找失效元素。
 
 ```C++
-d
+vector<int> maxInWindows(const vector<int>& nums, int size) {
+  multiset<int> m;
+  vector<int> ans;
+  for(int i = 0; i < nums.size(); i++){
+    m.insert(nums[i]);
+    if(i >= size) m.erase(m.find(nums[i - size]));
+    if(i >= size - 1) ans.push_back(*m.rbegin());
+  }
+  return ans;
+}
 ```
 
 ### BM46 最小的K个数
@@ -1984,16 +1995,30 @@ string longestCommonPrefix(vector<string>& strs) {
 }
 ```
 
-
-### 
+### BM85 验证IP地址
 
 ```C++
 
 ```
-### 
+### BM86 大数加法
 
 ```C++
-
+string solve(string s, string t) {
+    string ans = "";
+    reverse(s.begin(), s.end());
+    reverse(t.begin(), t.end());
+    int tmp = 0, a, b;
+    for(int i = 0; i < s.size() || i < t.size(); i++){
+        a = i < s.size() ? s[i] : '0';
+        b = i < t.size() ? t[i] : '0';
+        tmp += a + b - ('0' * 2);
+        ans += (tmp % 10) + '0';
+        tmp /= 10;
+    }
+    if(tmp) ans += '1';
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
 ```
 ## 双指针
 
