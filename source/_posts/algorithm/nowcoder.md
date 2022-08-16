@@ -2136,17 +2136,46 @@ string solve(string str) {
     return str;
 }
 ```
-### 
+### BM92 最长无重复子数组
 
 ```C++
-
+int maxLength(vector<int>& arr) {
+    int loc[100005];
+    for(int i = 0; i <= 100000; i++)
+        loc[i] = -1;
+    int l = -1, r = 0, ans = 0;
+    for(; r < arr.size(); r++){
+        if(loc[arr[r]] != -1){
+            l = max(l, loc[arr[r]]);
+        }
+        ans = max(ans, r - l);
+        loc[arr[r]] = r;
+    }
+    return ans;
+}
 ```
-### 
+### ❓❗BM93 盛水最多的容器
+
+双指针+贪心。双指针分别指向数组的两端，表示从最宽的地方开始计算，每次舍弃掉容器较短的那边，向内部移动。
 
 ```C++
-
+int maxArea(vector<int>& height) {
+    if(height.size() < 2) return 0;
+    int ans = 0;
+    int left = 0, right = height.size() - 1;
+    while(left < right){
+        int cap = min(height[left], height[right]) * (right - left);
+        ans = max(ans, cap);
+        //哪边小就舍弃哪边
+        if(height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+    return ans;
+}
 ```
-### 
+### ❓❗BM94 接雨水问题
 
 ```C++
 
@@ -2193,8 +2222,20 @@ string solve(string str) {
         return ans;
     }
 ```
-### 
+### ❓BM99 顺时针旋转矩阵
+
+这个做法需要背住，不然想不到。先沿着左对角线做反转，然后在根据中轴线做轴对称，结果就是顺时针旋转90度的结果。
 
 ```C++
-
+vector<vector<int> > rotateMatrix(vector<vector<int> > mat, int n) {
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < i; j++){
+            swap(mat[i][j], mat[j][i]);
+        }
+    }
+    for(int i = 0; i < n; i++){
+        reverse(mat[i].begin(), mat[i].end());
+    }
+    return mat;
+}
 ```
