@@ -2161,10 +2161,37 @@ string solve(string str) {
 ```C++
 
 ```
-### 
+### BM98 螺旋矩阵
 
 ```C++
-
+    vector<int> spiralOrder(vector<vector<int> >& matrix) {
+        int mr[4] = {0, 1, 0, -1};
+        int mc[4] = {1, 0, -1, 0};
+        int r = 0, c = -1, cnt = 0;
+        int n = matrix.size();
+        vector<int> ans;
+        if (n == 0)return ans;
+        int m = matrix[0].size();
+        int p = 0;
+        vector<vector<bool> > vis(n, vector<bool>(m, false));
+        while (cnt < n * m) {
+            int nr = r + mr[p];
+            int nc = c + mc[p];
+            if (nr >= 0 && nr < n && nc >= 0 && nc < m && !vis[nr][nc]) {
+                // 什么也不做
+            } else {
+                p = (p + 1) % 4;
+                nr = r + mr[p];
+                nc = c + mc[p];
+            }
+            vis[nr][nc] = true;
+            cnt++;
+            ans.push_back(matrix[nr][nc]);
+            r = nr;
+            c = nc;
+        }
+        return ans;
+    }
 ```
 ### 
 
