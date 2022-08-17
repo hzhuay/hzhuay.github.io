@@ -2,7 +2,7 @@
 title: Redis设计与实现
 date: 2022-07-25 10:03:41
 tags: Redis
-categories: Redis
+categories: Spring
 ---
 
 ## 数据结构
