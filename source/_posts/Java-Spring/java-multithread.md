@@ -51,7 +51,7 @@ Thread类的几个常用的方法：
 - currentThread()：静态方法，返回对当前正在执行的线程对象的引用；
 - start()：开始执行线程的方法，java虚拟机会调用线程内的run()方法；
 - yield()：yield在英语里有放弃的意思，同样，这里的yield()指的是当前线程愿意让出对当前处理器的占用。这里需要注意的是，就算当前线程调用了yield()方法，程序在调度的时候，也还有可能继续运行这个线程的；
-- sleep()：静态方法，使当前线程睡眠一段时间；
+- sleep()：静态方法，使当前正在运行的线程睡眠一段时间；
 - join()：使当前线程等待另一个线程执行完毕之后再继续执行，内部调用的是Object类的wait方法实现的；
 
 ThreadGroup线程组。每个Thread一定属于一个线程组，如果new时没有指定，默认加入父线程线程组。线程组也可以包含其他线程组。
@@ -152,6 +152,12 @@ JMM没有保证顺序一致性，当一个线程吧数据写入本地内存，�
 
 JMM的规定是：对编译器和处理器来说，**只要不改变程序的执行结果（单线程程序和正确同步了的多线程程序），编译器和处理器怎么优化都行。**因此对程序员提供了**happens-before规则**：如果操作A happens-before操作B，那么操作A在内存上所做的操作对操作B都是可见的，不管它们在不在一个线程。
 
+### 架构图
+
+<img src="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/concurrent/java-concurrent-basic-mechanism.png" alt="img" style="zoom:67%;" />
+
+
+
 ### volatile
 
 在Java中，volatile关键字有特殊的内存语义。volatile主要有以下两个功能：
@@ -216,13 +222,7 @@ Java锁基于对象，那么对象里肯定有地方保存了锁的信息。每�
 
 Mark World格式：
 
-| 锁状态   | 29bit或61bit                 | 1bit是否为偏向锁？         | 2bit锁标志位 |
-| -------- | ---------------------------- | -------------------------- | ------------ |
-| 无锁     |                              | 0                          | 01           |
-| 偏向锁   | 线程ID                       | 1                          | 01           |
-| 轻量级锁 | 指向线程栈中锁记录的指针     | 此时这一位不用于标识偏向锁 | 00           |
-| 重量级锁 | 指向互斥量（重量级锁）的指针 | 此时这一位不用于标识偏向锁 | 10           |
-| GC       |                              | 此时这一位不用于标识偏向锁 | 11           |
+<img src="https://raw.githubusercontent.com/dunwu/images/dev/snap/20200629191250.png" alt="img" style="zoom:67%;" />
 
 #### 偏向锁
 
@@ -248,6 +248,57 @@ JVM会为每个线程在当前线程的栈帧中创建用于**存储锁记录的
 #### 重量级锁
 
 重量级锁依赖于操作系统的互斥量（mutex） 实现的，而操作系统中线程间状态的转换需要相对比较长的时间，所以重量级锁效率很低，但被阻塞的线程不会消耗CPU。
+
+#### 锁消除
+
+锁消除是指对于被检测出不可能存在竞争的共享数据的锁进行消除。JIT 编译器在动态编译同步块的时候，借助了一种被称为逃逸分析的技术，来判断同步块使用的锁对象是否只能够被一个线程访问，而没有被发布到其它线程。
+
+#### 锁粗化
+
+在 JIT 编译器动态编译时，如果发现几个相邻的同步块使用的是同一个锁实例，那么 JIT 编译器将会把这几个同步块合并为一个大的同步块，从而避免一个线程“反复申请、释放同一个锁“所带来的性能开销。
+
+### Lock
+
+synchronized 无法通过**破坏不可抢占条件**来避免死锁。原因是 synchronized 申请资源的时候，如果申请不到，线程直接进入阻塞状态了，而线程进入阻塞状态，啥都干不了，也释放不了线程已经占有的资源。
+
+与内置锁 `synchronized` 不同的是，**`Lock` 提供了一组无条件的、可轮询的、定时的以及可中断的锁操作**，所有获取锁、释放锁的操作都是显式的操作。
+
+接口：
+
+- `lock()` - 获取锁。
+- `unlock()` - 释放锁。
+- `tryLock()` - 尝试获取锁，仅在调用时锁未被另一个线程持有的情况下，才获取该锁。
+- `tryLock(long time, TimeUnit unit)` - 和 `tryLock()` 类似，区别仅在于限定时间，如果限定时间内未获取到锁，视为失败。
+- `lockInterruptibly()` - 锁未被另一个线程持有，且线程没有被中断的情况下，才能获取锁。
+- `newCondition()` - 返回一个绑定到 `Lock` 对象上的 `Condition` 实例。
+
+### Condition
+
+Condition 实现了管程模型里面的条件变量。
+
+内置锁（`synchronized`）配合内置条件队列（`wait`、`notify`、`notifyAll` ），显式锁（`Lock`）配合显式条件队列（`Condition` ）。
+
+```java
+public interface Condition {
+    void await() throws InterruptedException;//类似wait
+    void awaitUninterruptibly();
+    long awaitNanos(long nanosTimeout) throws InterruptedException;
+    boolean await(long time, TimeUnit unit) throws InterruptedException;
+    boolean awaitUntil(Date deadline) throws InterruptedException;
+    void signal();//类似notify
+    void signalAll();//类似notifyAll
+}
+```
+
+### ReentrantLock
+
+获取锁操作 `lock()` 必须在 `try catch` 块中进行，并且将释放锁操作 `unlock()` 放在 `finally` 块中进行，以保证锁一定被被释放，防止死锁的发生。
+
+与无条件获取锁相比，tryLock 有更完善的容错机制。
+
+- `tryLock()` - **可轮询获取锁**。如果成功，则返回 true；如果失败，则返回 false。也就是说，这个方法**无论成败都会立即返回**，获取不到锁（锁已被其他线程获取）时不会一直等待。
+- `tryLock(long, TimeUnit)` - **可定时获取锁**。和 `tryLock()` 类似，区别仅在于这个方法在**获取不到锁时会等待一定的时间**，在时间期限之内如果还获取不到锁，就返回 false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回 true。
+- `lockInterruptibly()` - **可中断获取锁**。可中断获取锁可以在获得锁的同时保持对中断的响应。
 
 ### CAS
 
