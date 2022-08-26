@@ -34,6 +34,10 @@ hide: true
 
 我过往的经历主要可以分为两部分。第一部分是我的在校经历，我在校期间成绩优秀，本科获得了北工大优秀毕业生和都柏林大学的一等学位。同时我在课余时间也会给自己充电，比如参加竞赛，阅读专业书籍等，也自学了多门语言。第二部分是我的实习经历，我在实习阶段主要学习了Spring相关的技术栈，以及积累了宝贵的真实项目开发经验。
 
+Hello, thank you very much for giving me this opportunity. My name is XXX. I studied in Beijing University of technology as an undergraduate and in Hong Kong University of science and technology as a postgraduate. I am currently doing an internship in java development in Getui.
+
+My past experience can be divided into two parts. The first part is my school experience. During my school years, I achieved excellent results. I obtained the outstanding graduate of Beijing University of technology and the first-class degree of Dublin University. At the same time, I will also enrich myself in my spare time, such as participating in competitions, reading professional books, etc. I have also learned many programming languages. The second part is my internship experience. In the internship stage, I mainly learned the spring framework and related technologies and accumulated real  experience in project development.
+
 ### 项目中遇到的问题
 
 没遇到难点就诚实的说暂时没遇到什么深刻的难点，然后可以转移话题到做过什么**优化**。
@@ -88,11 +92,13 @@ TCP是通过序列号、检验和、确认应答信号、重发机制、连接�
 
 ### TIME_WAIT
 
-四次挥手时，主动断连的一方发送最后一个ACK后会进入TIME_WAIT，会等待2MSL（最大报文生存期）才会回到初始状态CLOSED。这么做是确保另一方收到这个消息。万一这条消息丢失了，需要花1个MSL的时间，被关闭方会重发FIN，又要1个MSL来接收。
+四次挥手时，主动断连的一方发送最后一个ACK后会进入TIME_WAIT，会等待2MSL（最大报文生存期）才会回到CLOSED。这么做是确保另一方收到这个消息。万一这条消息丢失了，需要花1个MSL的时间，被关闭方会重发FIN，又要1个MSL来接收。
 
 ### 拥塞控制机制
 
-慢开始、拥塞避免、快重传、快恢复。GET和POST区别
+慢开始、拥塞避免、快重传、快恢复。
+
+### GET和POST区别
 
 - 语义不同：GET获取数据，POST提交数据
 - 幂等性：GET有幂等性，每次GET的效果相同。POST没有
@@ -128,19 +134,19 @@ TCP基于字节流，无法判断发送方报文段边界。
 
 4、向DNS服务器发送DNS请求，查询本地DNS服务器，这其中用的是UDP的协议
 
-5、如果在一个子网内采用ARP地址解析协议进行ARP查询。如果不在一个子网那就需要对默认网关进行DNS查询，如果还找不到会一直向上找根DNS服务器，直到最终拿到IP地址（全球400多个根DNS服务器，由13个不同的组织管理）
+5、如果在一个子网内采用ARP地址解析协议进行ARP查询。如果不在一个子网那就需要对默认网关进行DNS查询，如果还找不到会一直向上找根DNS服务器，直到最终拿到IP地址
 
-6、这个时候我们就有了服务器的IP地址 以及默认的端口号了，http默认是80 https是 443 端口号，会首先尝试http然后调用Socket建立TCP连接。
+6、这时已有服务器IP，http默认是80 https是 443 端口号，会首先尝试http然后调用Socket建立TCP连接。
 
 7、经过三次握手成功建立连接后，开始传送数据，如果正是http协议的话，就返回就完事了，
 
-8、如果不是http协议，服务器会返回一个5开头的的重定向消息，告诉我们用的是https，那就是说IP没变，但是端口号从80变成443了，好了，再四次挥手，完事，
+8、如果不是http协议，服务器会返回一个5开头的的重定向消息，告知使用https，也就是IP没变，只是端口变成443了，四次挥手断连
 
-9、再来一遍，这次除了上述的端口号从80变成443之外，还会采用SSL的加密技术来保证传输数据的安全性，保证数据传输过程中不被修改或者替换之类的，
+9、重新对443端口三次握手，还会采用SSL的加密技术来保证传输数据的安全性，保证数据传输过程中不被修改或者替换之类的，
 
 10、这次依然是三次握手，沟通好双方使用的认证算法，加密和检验算法，在此过程中也会检验对方的CA安全证书。
 
-11、确认无误后，开始通信，然后服务器就会返回你所要访问的网址的一些数据，在此过程中会将界面进行渲染，牵涉到ajax技术之类的，直到最后我们看到色彩斑斓的网页
+11、确认无误后，开始通信，然后服务器就会返回你所要访问的网址的一些数据，在此过程中会将界面进行渲染。
 
 ### HTTP状态码
 
@@ -267,10 +273,10 @@ TCP基于字节流，无法判断发送方报文段边界。
 ### 堆和栈的区别
 
 1. 管理方式：对于栈来讲，是由编译器自动管理，无需手动控制；对于堆来说，分配和释放都是由程序员控制的。 
-2. 空间大小：总体来说，栈的空间是要小于堆的。堆内存几乎是没有什么限制的；但是对于栈来讲，一般是有一定的空间大小的。 
+2. 空间大小：一般栈的空间小于堆。堆内存几乎没有限制；但是栈空间一般有限。
 3. 碎片问题：对于堆来讲，由于分配和释放是由程序员控制的（利用new/delete 或 malloc/free），频繁的操作势必会造成**内存空间的不连续**，从而造成大量的内存碎片，使程序效率降低。对于栈来讲，则不会存在这个问题，因为栈是先进后出的数据结构，在某一数据弹出之前，它之前的所有数据都已经弹出。 
-4. 生长方向：对于堆来讲，生长方向是向上的，也就是沿着内存地址增加的方向，对于栈来讲，它的生长方式是向下的，也就是沿着内存地址减小的方向增长。
-5. 分配方式：堆都是动态分配的，没有静态分配的堆。栈有两种分配方式：静态分配和动态分配，静态分配是编译器完成的，比如局部变量的分配；动态分配由alloca函数进行分配，但是栈的动态分配和堆是不同的，它的动态分配是由编译器实现的，无需我们手工实现。
+4. 生长方向：对于堆来讲，生长方向是向上的，也就是沿着内存地址增加的方向，栈相反。
+5. 分配方式：堆都是动态分配的。栈有两种分配方式：静态分配和动态分配，静态分配是编译器完成的，比如局部变量的分配；动态分配由alloca函数进行分配。
 6. 分配效率：栈是机器系统提供的数据结构，计算机会在底层对栈提供支持，分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率很高。堆则是 C/C++ 函数提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率要比栈底的多。
 
 ### 虚拟内存
@@ -482,6 +488,15 @@ JDK8之前是数组+链表，之后是数组+链表+红黑树。相同哈希值�
 
 ### 垃圾收集器
 
+<img src="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg" alt="img" style="zoom:75%;" />
+
+串行收集器：Serial，Serial Old
+并行收集器：Parallel Scavenge, Parallel Old
+
+并发标记清除收集器：CMS，ParNew
+
+G1收集器
+
 ### 多线程
 
 创建方法：继承Thread、实现Runnable、实现Callable（有返回值）
@@ -563,6 +578,11 @@ CGLIB 动态代理特点：
 - **偏向锁** - 偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁。降低获取锁的代价。
 - **轻量级锁** - 是指当锁是偏向锁的时候，被另一个线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，提高性能。
 - **重量级锁** - 是指当锁为轻量级锁的时候，另一个线程虽然是自旋，但自旋不会一直持续下去，当自旋一定次数的时候，还没有获取到锁，就会进入阻塞，该锁膨胀为重量级锁。重量级锁会让其他申请的线程进入阻塞，性能降低。
+
+### ASQ 原理
+
+- AQS 使用一个整型的 `volatile` 变量来 **维护同步状态**。状态的意义由子类赋予。
+- AQS 维护了一个 FIFO 的双链表，用来存储获取锁失败的线程。
 
 ### JVM内存
 
