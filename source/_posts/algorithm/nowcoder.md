@@ -869,7 +869,6 @@ TreeNode* Deserialize(char *str) {
             tmp = tmp * 10 + str[i] - '0';
         }
     }
-    index = 0;
     return build(vals);
 }
 
@@ -1351,10 +1350,35 @@ int minNumberDisappeared(vector<int>& nums) {
 }
 ```
 
-### 三数之和
+### ❓BM54 三数之和
+
+我们进行循环选择第一个数**x**，然后创建两个指针**i**和**j**，指针**i**指向下一个数，指针**j**指向最后一个数。
+
+- 若指针**i** 加指针**j** 大于当前数 **x**则指针**j** --，
+- 若指针**i** 加指针**j** 小于当前数 **x**则指针**i**++，
+- 若指针**i** 加指针**j** 等于当前数**x** 则答案为**x** 和指针**i** 与**j** 的三元组
 
 ```C++
-d	
+vector<vector<int> > threeSum(vector<int> &num) {
+    vector<vector<int>> ans;
+    if(num.size() < 3) return ans;
+    sort(num.begin(), num.end());
+    for(int i = 0; i < num.size() - 2; i++){
+        if(i && num[i] == num[i-1]) continue;
+        int l = i + 1, r = num.size() - 1;
+        while(l < r){
+            if(num[i] + num[l] + num[r] == 0){
+                ans.push_back({num[i], num[l], num[r]});
+                // 跳过一样的
+                while(l + 1 < r && num[l] == num[l+1]) l++;
+                while(r - 1 > l && num[r] == num[r-1]) r--;
+                l++; r--; // 掉过当前数字，到下一个数字
+            }else if(num[i] + num[l] + num[r] > 0) r--;
+            else l++;
+        }
+    }
+    return ans;
+}
 ```
 
 ### BM55 没有重复项数字的全排列
@@ -1483,11 +1507,55 @@ void dfs(string& str){
 }
 ```
 
-### 
+### ❓BM59 N皇后
+
+注释语句可以输出皇后的摆法。这种写法不需要借助vis数组来记录第几行，第几列，低级
 
 ```C++
-d
+int Nqueen(int n) {
+    vector<int> C(n);
+    int ans = 0;
+    search(0, n, C, ans);
+    return ans;
+}
+void search(int cur, int n, vector<int>& C, int& ans){
+    if(cur == n){
+        ans++;
+        // for(int i = 0; i < n; i++)
+        //     printf("%d%c", C[i]+1," \n"[i==n-1]);
+    }
+    else for(int i = 0; i < n; i++){
+        bool ok = true;
+        C[cur] = i;
+        for(int j = 0; j < cur; j++)
+            if(C[cur] == C[j] || cur - C[cur] == j - C[j] || cur + C[cur] == j + C[j]){
+                ok = false;
+                break;
+            }
+        if(ok)
+            search(cur + 1, n, C, ans);
+    }
+}
 ```
+
+```C++ 
+void search(int cur){
+	if(cur==n){
+		tot++;
+		for(int i=0;i<n;i++)printf("%d%c",C[i]+1," \n"[i==n-1]);
+	}
+	else for(int i=0;i<n;i++){
+		if(!vis[0][i]&&!vis[1][cur+i]&&!vis[2][cur-i+n]){
+			C[cur]=i;
+			vis[0][i]=vis[1][cur+i]=vis[2][cur-i+n]=1;
+			search(cur+1);
+			vis[0][i]=vis[1][cur+i]=vis[2][cur-i+n]=0;
+		}
+	}
+}
+```
+
+
 
 ### BM60 括号生成
 
@@ -1813,12 +1881,44 @@ void solve(string s, vector<string>& ans, vector<string> tmp, int beg){
     }
 }
 ```
-### BM75 编辑距离(一)
+### ❓BM75 编辑距离(一)
+
+用`dp[i][j]`表示从两个字符串首部各自到`str1[i]`和`str2[j]`为止的子串需要的编辑距离，那很明显`dp[str1.length][str2.length]`就是我们要求的编辑距离。
+
+初始状态可以看做，空字符串想要变成另一个字符串，只能通过增加字符。
+
+对于`dp[i+1][j+1] = min(dp[i][j], min(dp[i+1][j], dp[i][j+1])) + 1;`这句关键代码的解释：
+
+希望`str1[:i+1]`和`str2[:j+1]`相同，已知`str1[i] != str2[j]`，那么`dp[i+1][j+1]`可以由以下转移：
+
+- `dp[i][j]`：`str1[:i]`和`str2[:j]`已经相同，修改`str1[i]`
+- `dp[i+1][j]`：`str1[:i+1]`和`str2[:j]`已经相同，删除字符`str1[i+1]`
+- `dp[i][j+1]`：`str1[:i]`和`str2[:j+1]`已经相同，增加字符`str2[j]`到str1[:i]
 
 ```C++
-
+int editDistance(string str1, string str2) {
+    int len1 = str1.size(), len2 = str2.size();
+    int dp[1005][1005];
+    memset(dp, 0, sizeof(dp));
+    // 初始化边界
+    for(int i = 0; i < len1; i++)
+        dp[i+1][0] = dp[i][0] + 1;
+    for(int i = 0; i < len2; i++)
+        dp[0][i+1] = dp[0][i] + 1;
+    // 遍历str1的每个位置
+    for(int i = 0; i < len1; i++){
+        // 遍历str2对应的每个位置
+        for(int j = 0; j < len2; j++){
+            if(str1[i] == str2[j]) // 字符相同，不需要编辑，直接从dp[i][j]转移
+                dp[i+1][j+1] = dp[i][j];
+            else // 需要从这3个来源选最小的，增加1个编辑距离
+                dp[i+1][j+1] = min(dp[i][j], min(dp[i+1][j], dp[i][j+1])) + 1;
+        }
+    }
+    return dp[len1][len2];
+}
 ```
-### BM76 正则表达式匹配
+### ❓BM76 正则表达式匹配
 
 ```C++
 
@@ -1997,8 +2097,63 @@ string longestCommonPrefix(vector<string>& strs) {
 
 ### BM85 验证IP地址
 
-```C++
+稍微复杂的模拟，注意代码的结构即可。注意`(i = s.find(spliter))`这里必须要括号，因为`=`的优先级很低，如果不带括号就是`i = (s.find(spliter) && i != s.npos)`。
 
+```C++
+string solve(string IP) {
+    if(IP.size() == 0)
+        return "Neither";
+    if(isIPv4(IP))
+        return "IPv4";
+    else if(isIPv6(IP))
+        return "IPv6";
+    return "Neither";
+}
+
+vector<string> split(string s, string spliter){
+    vector<string> res;
+    int i;
+    while((i = s.find(spliter)) && i != s.npos){
+        res.push_back(s.substr(0, i));
+        s = s.substr(i + 1);
+    }
+    res.push_back(s);
+    return res;
+}
+
+bool isIPv4(string ip){
+    vector<string> s = split(ip, ".");
+    // 必须有4个数
+    if(s.size() != 4) return false;
+    for(int i = 0; i < 4; i++){
+        cout << s[i] << endl;
+        // 不允许缺省
+        if(s[i].size() == 0) return false;
+        if(s[i].size() > 3) return false;
+        // 不允许前导0
+        if(s[i].size() != 1 && s[i][0] == '0') return false;
+        // 必须每一位都是数字
+        for(char c : s[i])
+            if(!isdigit(c)) return false;
+        int num = stoi(s[i]);
+        if(num < 0 || num > 255) return false;
+    }
+    return true;
+}
+
+bool isIPv6(string ip){
+    vector<string> s = split(ip, ":");
+    // 必须有8组
+    if(s.size() != 8) return false;
+    for(int i = 0; i < 8; i++){
+        //位数必须是1-4
+        if(s[i].size() == 0 || s[i].size() > 4) return false;
+        for(char c : s[i])
+            if(!(isdigit(c) || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F')))
+                return false;
+    }
+    return true;
+}
 ```
 ### BM86 大数加法
 
@@ -2177,8 +2332,28 @@ int maxArea(vector<int>& height) {
 ```
 ### ❓❗BM94 接雨水问题
 
-```C++
+- step 1：检查数组是否为空的特殊情况
+- step 2：准备双指针，分别指向数组首尾元素，代表最初的两个边界
+- step 3：指针往中间遍历，遇到更低柱子就是底，用较短的边界减去底就是这一列的接水量，遇到更高的柱子就是新的边界，更新边界大小。
 
+两边的双指针框定了木桶的两边，具体能接多少水取决于短板，遍历时计算每一列能存多少水。
+
+```C++
+long long maxWater(vector<int>& arr) {
+    if(arr.size() < 3)return 0;
+    long long ans = 0;
+    int l = 0, r = arr.size() - 1;
+    int maxL = 0, maxR = 0;
+    while(l < r){
+        maxL = max(maxL, arr[l]);
+        maxR = max(maxR, arr[r]);
+        if(maxL > maxR)
+            ans += maxR - arr[r--];
+        else
+            ans += maxL - arr[l++];
+    }
+    return ans;
+}
 ```
 ### 
 
