@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="C&#x2F;C++基础  1. 字面值1.1. 字符串字面值字符串字面值常量（string literal），是用一堆双引号包围的字符串序列。它应该被视作某种常量，某种匿名对象。   因为历史原因和为了与C兼容，C++中的字符串字面值不是string类型，因此对于字符串字面量的操作会产生限制。比如在做字符串相加时，加号两侧至少要有一个运算对象是string。两个字符串字面量无法直接相加。 1.2. 字面值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++基础">
+<meta property="og:url" content="http://example.com/Linux-C++/C++%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="C&#x2F;C++基础  1. 字面值1.1. 字符串字面值字符串字面值常量（string literal），是用一堆双引号包围的字符串序列。它应该被视作某种常量，某种匿名对象。   因为历史原因和为了与C兼容，C++中的字符串字面值不是string类型，因此对于字符串字面量的操作会产生限制。比如在做字符串相加时，加号两侧至少要有一个运算对象是string。两个字符串字面量无法直接相加。 1.2. 字面值">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T12:08:34.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.191Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>C++基础 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="C++基础">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-11 20:08" pubdate>
+        2022年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      60 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++基础</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1>C/C++基础</h1>
+
+<h1 id="1-字面值"><a href="#1-字面值" class="headerlink" title="1. 字面值"></a>1. 字面值</h1><h2 id="1-1-字符串字面值"><a href="#1-1-字符串字面值" class="headerlink" title="1.1. 字符串字面值"></a>1.1. 字符串字面值</h2><p>字符串字面值常量（string literal），是用一堆双引号包围的字符串序列。它应该被视作某种常量，某种匿名对象。  </p>
+<p>因为历史原因和为了与C兼容，C++中的字符串字面值不是string类型，因此对于字符串字面量的操作会产生限制。比如在做字符串相加时，加号两侧至少要有一个运算对象是string。两个字符串字面量无法直接相加。</p>
+<h2 id="1-2-字面值常量"><a href="#1-2-字面值常量" class="headerlink" title="1.2. 字面值常量"></a>1.2. 字面值常量</h2><ul>
+<li>十进制：20</li>
+<li>八进制：024</li>
+<li>十六进制：0x14<br>八进制和十六进制字面值的类型是能容纳其数值的<code>int</code>、<code>unsigned int</code>、<code>long</code>、<code>unsigned long</code>、<code>long long</code>和<code>unsigned long long</code>中尺寸最小者。</li>
+</ul>
+<p>严格来说，十进制字面值不会是负数，形如-42的负数之所以会被正确识别，是因为现将42作为字面量，再对结果去负值。<br>浮点型字面值表现为小数或者科学计数法，其中指数部分用E或e标识。默认的，浮点型字面值是<code>double</code>。  </p>
+<h2 id="1-3-布尔字面值"><a href="#1-3-布尔字面值" class="headerlink" title="1.3. 布尔字面值"></a>1.3. 布尔字面值</h2><p>当我们写出<code>val == true</code>这样的代码时，如果val不是bool类型，那么编译器不会将val转换为bool类型来比较，而是把<code>true</code>转换为1来比较。<br>因此，进行比较运算时，除非比较的对象是bool类型，否则不要使用布尔字面值true和false作为运算对象。</p>
+<h1 id="2-关于string与C-style字符串"><a href="#2-关于string与C-style字符串" class="headerlink" title="2. 关于string与C-style字符串"></a>2. 关于string与C-style字符串</h1><p>在需要使用字符数组的地方可以使用string，因为有隐式转换，但是反过来不行。C风格字符串不会自动转换为string。<br><code>c_str()</code>返回的数组不一定会一直有效，如果想要长期使用，建议拷贝一份。</p>
+<p>现代C++程序应该尽量使用vector和迭代器而非内置数组和指针；尽量使用string而非字符数组。</p>
+<h1 id="3-输入与输出"><a href="#3-输入与输出" class="headerlink" title="3. 输入与输出"></a>3. 输入与输出</h1><h2 id="3-1-endl"><a href="#3-1-endl" class="headerlink" title="3.1. endl"></a>3.1. endl</h2><p><code>endl</code>是某种操作符，写入<code>endl</code>的效果是结束当前行，并将于设备关联的buffer中的内容flush到设备中。因此不应该把<code>endl</code>看做与<code>\n</code>等价。</p>
+<h2 id="3-2-转义序列"><a href="#3-2-转义序列" class="headerlink" title="3.2. 转义序列**"></a>3.2. 转义序列**</h2><p>有2类字符程序员不能直接使用，一类是不可打印的字符，二类是在C++中有特殊含义的字符。这两种字符需要使用转义序列。转义序列除了用反斜杠加字符外，还可以使用泛化的转义序列，形式是在<code>\x</code>后紧跟1个或多个十六进制数字，或者<code>\</code>后紧跟1或2或3个八进制数字。<br>注意，如果反斜线后面跟着的八进制数字超过3个，只有前三个与<code>\</code>构成转义序列。 </p>
+<h2 id="3-3-gt-gt-string与getline的区别"><a href="#3-3-gt-gt-string与getline的区别" class="headerlink" title="3.3. &gt;&gt;string与getline的区别"></a>3.3. &gt;&gt;string与getline的区别</h2><p>在读取时，string对象会自动忽略开头的空白（空格符，换行符，制表符等），从第一个真正的字符开始，直到下一处空白。<br><code>getline</code>会把换行符也读入。  </p>
+<h2 id="3-4-IO类不能是const"><a href="#3-4-IO类不能是const" class="headerlink" title="3.4. IO类不能是const"></a>3.4. IO类不能是const</h2><p>IO对象在读写后会改变自身的状态，所以他们不能是const。</p>
+<h2 id="3-5-写操作不会立刻执行"><a href="#3-5-写操作不会立刻执行" class="headerlink" title="3.5. 写操作不会立刻执行"></a>3.5. 写操作不会立刻执行</h2><p>对于计算机来说，CPU运算会比调度打印机快很多，出于效率考量，程序不会在调用打印语句时立刻打印，而是将要打印的内容放入buffer，等时机成熟时一次性调用输出设备。以下几种情况会flush buffer:</p>
+<ul>
+<li>程序正常退出。在执行<code>main()</code>的return时，缓冲区会清空。</li>
+<li>buffer满时，会先清空，再放入新数据。</li>
+<li>使用<code>endl</code>或<code>flush</code>这样的操作符。</li>
+<li>使用<code>unitbuf</code>操作符，清空缓冲区。</li>
+<li>输出流对应的输入流要读取时。因此交互系统一定要把输出流和输入流绑定，这样就能保证需要用户输入的时候，该展示的信息都已经输出了。</li>
+</ul>
+<h2 id="3-6-输出调试的弊端"><a href="#3-6-输出调试的弊端" class="headerlink" title="3.6. 输出调试的弊端"></a>3.6. 输出调试的弊端</h2><p>由于上述的性质，可知输出调试未必总是管用。如果程序不是正常退出，那么本该输出的内容可能会停留在缓冲区内，给程序员造成了错误的判断，以为该运行到的输出调试语句没有运行（但其实已经运行了）。</p>
+<h2 id="3-7-永远要检查打开文件是否成功"><a href="#3-7-永远要检查打开文件是否成功" class="headerlink" title="3.7. 永远要检查打开文件是否成功"></a>3.7. 永远要检查打开文件是否成功</h2><h2 id="3-8-当一个文件流对象被销毁，close会自动调用。"><a href="#3-8-当一个文件流对象被销毁，close会自动调用。" class="headerlink" title="3.8. 当一个文件流对象被销毁，close会自动调用。"></a>3.8. 当一个文件流对象被销毁，close会自动调用。</h2><h1 id="4-项目组织和文件管理"><a href="#4-项目组织和文件管理" class="headerlink" title="4. 项目组织和文件管理"></a>4. 项目组织和文件管理</h1><h2 id="4-1-How-to-include-headers？Use-lt-gt-or-“”"><a href="#4-1-How-to-include-headers？Use-lt-gt-or-“”" class="headerlink" title="4.1. How to include headers？Use &lt;&gt; or “” ?"></a>4.1. How to include headers？Use &lt;&gt; or “” ?</h2><p>包含来自标准库的头文件用<code>#include&lt;&gt;</code>，对于不属于标准库的头文件使用<code>#include&quot;&quot;</code>。</p>
+<h2 id="4-2-在头文件中进行函数声明"><a href="#4-2-在头文件中进行函数声明" class="headerlink" title="4.2. 在头文件中进行函数声明"></a>4.2. 在头文件中进行函数声明</h2><p>函数应该在头文件中声明，在源文件中定义。</p>
+<h2 id="4-3-多行注释的推荐写法"><a href="#4-3-多行注释的推荐写法" class="headerlink" title="4.3. 多行注释的推荐写法"></a>4.3. 多行注释的推荐写法</h2><p>多行注释的推荐写法是注释内的每行都以一个星号开头。</p>
+<h2 id="4-4-命名空间的using声明"><a href="#4-4-命名空间的using声明" class="headerlink" title="4.4. 命名空间的using声明"></a>4.4. 命名空间的using声明</h2><p>如果只需要命名空间内的某个名字：<code>using _namespace_::_name_;</code><br>位于头文件的代码一般不应该使用using声明。因为头文件的内容会被拷贝到所有引用它的文件中去，如果使用了using声明，那么每个文件中都有了这个声明，可能导致不经意的名字冲突。</p>
+<h2 id="4-5-预处理变量"><a href="#4-5-预处理变量" class="headerlink" title="4.5. 预处理变量"></a>4.5. 预处理变量</h2><p>一般把预处理变量的名字全部大写。 </p>
+<h1 id="5-算术类型选择指南"><a href="#5-算术类型选择指南" class="headerlink" title="5. 算术类型选择指南"></a>5. 算术类型选择指南</h1><ul>
+<li>当明确知道数值不可能为负时，使用<code>unsigned</code>类型。</li>
+<li>使用<code>int</code>或者<code>long long</code>执行整数运算。<code>short</code>常常太小，<code>long</code>一般和<code>int</code>一样尺寸。</li>
+<li>在算术表达式中不要使用<code>char</code>或<code>bool</code>。<code>char</code>在不同的机器上，既可以是有符号的，也可以是无符号的。</li>
+<li>浮点运算选用<code>double</code>，<code>float</code>常常精度不够，而且两者计算代价差别不大，甚至某些机器上<code>double</code>更快。</li>
+</ul>
+<h1 id="6-类型转换注意点"><a href="#6-类型转换注意点" class="headerlink" title="6. 类型转换注意点"></a>6. 类型转换注意点</h1><ul>
+<li>非bool的算术值赋值给bool时，0 for false, otherwise true.</li>
+<li>When assigning bool to non-bool, false for 0 and true for 1.</li>
+<li>当把整数赋值给浮点数时，小数部分记为0。如果整数所占空间超过了浮点类型的容量，精度会有损失。</li>
+<li>赋值给带符号类型一个超出范围的值时，结果是<strong>未定义的</strong>。</li>
+</ul>
+<h1 id="7-为什么标准库中有size-type"><a href="#7-为什么标准库中有size-type" class="headerlink" title="7. 为什么标准库中有size_type?"></a>7. 为什么标准库中有size_type?</h1><p>当一个算术表达式中既有<code>unsigned int</code>又有<code>int</code>时，那个<code>int</code>的值会被转换成无符号的值。<br>对一个为0的<code>unsigned int</code>减1，结果为-1所对应的<code>unsigned int</code>值，这是一个非常大的<code>int</code>。<br><code>size_type</code>体现了标准库类型与机器无关的特性。标准库中表示size的类型一般是无符号的，尽量用无符号的整数与size进行比较，因为一个负数会被自动转换为一个很大的无符号整数。  </p>
+<h1 id="8-变量定义语句的阅读"><a href="#8-变量定义语句的阅读" class="headerlink" title="8. 变量定义语句的阅读"></a>8. 变量定义语句的阅读</h1><p>在同一条定义语句中，执行顺序从左到右，先已定义的变量值可以用来初始化后定义的其他变量。  </p>
+<h1 id="9-列表初始化"><a href="#9-列表初始化" class="headerlink" title="9. 列表初始化"></a>9. 列表初始化</h1><p>C++11的新标准中，花括号初始化普及，被称为列表初始化。当其被用于内置类型的初始化时，如果初始值存在丢失信息的风险，编译器将报错。<br>​<br>在初始化容器时使用花括号，编译器会优先使用列表初始化，如果无法执行，则会尝试用列表中的参数进行其他初始化方式。</p>
+<h1 id="10-默认初始化"><a href="#10-默认初始化" class="headerlink" title="10. 默认初始化"></a>10. 默认初始化</h1><p>内置类型的变量未被显式初始化，它的值酱油定义的位置决定。定义与任何函数体之外的变量被初始化为0，定义在函数体内部的内置类型变量将<strong>不被初始化</strong>，即它的值为<code>undefined</code>。</p>
+<h1 id="11-变量声明和定义的关系"><a href="#11-变量声明和定义的关系" class="headerlink" title="11. 变量声明和定义的关系"></a>11. 变量声明和定义的关系</h1><p>为了支持分离式编译，C++将声明和定义区分开。<br>声明：使名字被程序所知。<br>定义：创建于名字相关的实体。<br>变量声明规定了变量的类型和名字。定义在该作用之上，还申请了内存空间，也可能为变量赋一个初始值。<br>如果只想声明，不想定义，则需要<code>extern</code>关键字。<br><code>extern int i; //声明i而非定义i</code><br><code>int j; //声明并定义j</code><br><code>extern double pi = 3.14 //定义pi</code><br>任何包含了<strong>显式初始化的声明</strong>即成为<strong>定义</strong>。能给<code>extern</code>标记的变量赋初始值，但是这会抵消掉<code>extern</code>的作用，因此包含初始值的<code>extern</code>语句就不是声明，而是定义了。</p>
+<h1 id="12-标识符"><a href="#12-标识符" class="headerlink" title="12. 标识符"></a>12. 标识符</h1><p>C++的标识符由字母、数字、下划线组成，也就是俗称的<strong>变量名</strong>。</p>
+<h1 id="13-如何显式访问全局变量？"><a href="#13-如何显式访问全局变量？" class="headerlink" title="13. 如何显式访问全局变量？"></a>13. 如何显式访问全局变量？</h1><p>如果局部变量覆盖了全局变量，可以显式地访问全局变量：<code>::var</code></p>
+<h1 id="15-异常处理"><a href="#15-异常处理" class="headerlink" title="15. 异常处理"></a>15. 异常处理</h1><h2 id="15-1-如果捕获不到异常？"><a href="#15-1-如果捕获不到异常？" class="headerlink" title="15.1. 如果捕获不到异常？"></a>15.1. 如果捕获不到异常？</h2><p>当异常抛出时，首先搜索抛出该异常的函数，如果没有找到匹配的<code>catch</code>，那就终止该函数，并向上层函数继续寻找。如果最终还是找不到，程序会转到名为<code>terminate</code>的标准库函数。该函数的行为与系统有关，一般情况下，执行该函数将导致程序非正常退出。</p>
+<h2 id="15-2-stdexcept"><a href="#15-2-stdexcept" class="headerlink" title="15.2. stdexcept"></a>15.2. stdexcept</h2><p>在标准库<code>&lt;stdexcept&gt;</code>中，定义了一些异常类。其中的<code>exception</code>, <code>bad_alloc</code>和<code>bad_cast</code>对象只能使用默认初始化，其他的类可以接收字符串来初始化。<br>异常类型只定义了一个名为<code>what</code>的成员函数，没有参数，返回一个指向C风格字符串的<code>const char*</code>。</p>
+<h1 id="16-运算"><a href="#16-运算" class="headerlink" title="16. 运算"></a>16. 运算</h1><h2 id="16-1-左值和右值"><a href="#16-1-左值和右值" class="headerlink" title="16.1. 左值和右值"></a>16.1. 左值和右值</h2><p>在C语言中，两者区别比较简单：左值可以位于赋值语句的左侧，而右值不行。<br>在C++中，区别变复杂了。简单归纳：</p>
+<ul>
+<li>当对象被用作右值的时候，用的是对象的值（内容）</li>
+<li>当对象被用作左值的时候，用的是对象的身份（在内存中的位置）</li>
+</ul>
+<p>运算对象和求值结果都是右值<br>赋值运算时，无论左侧运算对象是什么类型，初始值列表都可以为空。</p>
+<h2 id="16-2-为什么a-x3D-b比a-x3D-a-b更快？"><a href="#16-2-为什么a-x3D-b比a-x3D-a-b更快？" class="headerlink" title="16.2. 为什么a+&#x3D;b比a&#x3D;a+b更快？"></a>16.2. 为什么a+&#x3D;b比a&#x3D;a+b更快？</h2><p><code>+=</code>这种复合运算符只求值一次，而普通运算符求值两次，包括一次加法运算和一次赋值运算。</p>
+<h2 id="16-3-用i-还是-i"><a href="#16-3-用i-还是-i" class="headerlink" title="16.3. 用i++还是++i?"></a>16.3. 用i++还是++i?</h2><p>除非必要，否则不要用递增递减运算符的后置版本。<br>前置版本避免了不必要的运算，它直接改变变量本身的值。后置版本需要先将原始值拷贝，再修改值，返回原始值的拷贝。如果我们用不到原始值，那么后置版本就产生了浪费。</p>
+<h2 id="16-4-运算对象可按任意顺序求值"><a href="#16-4-运算对象可按任意顺序求值" class="headerlink" title="16.4. 运算对象可按任意顺序求值"></a>16.4. 运算对象可按任意顺序求值</h2><p><code>*beg = toupper(*beg++)</code><br>这样的代码会产生未定义行为。编译器不一定先计算左边还是右边，所以最后可能赋值到<code>*beg</code>上，也可能是<code>*(beg+1)</code>上。</p>
+<h1 id="17-显式类型转换"><a href="#17-显式类型转换" class="headerlink" title="17. 显式类型转换"></a>17. 显式类型转换</h1><h2 id="17-1-static-cast"><a href="#17-1-static-cast" class="headerlink" title="17.1. static_cast"></a>17.1. static_cast</h2><h2 id="17-2-const-cast"><a href="#17-2-const-cast" class="headerlink" title="17.2. const_cast"></a>17.2. const_cast</h2><h2 id="17-3-reinterpret-cast"><a href="#17-3-reinterpret-cast" class="headerlink" title="17.3. reinterpret_cast"></a>17.3. reinterpret_cast</h2><h2 id="17-4-dynamic-cast"><a href="#17-4-dynamic-cast" class="headerlink" title="17.4. dynamic_cast"></a>17.4. dynamic_cast</h2><h1 id="18-流程控制"><a href="#18-流程控制" class="headerlink" title="18. 流程控制"></a>18. 流程控制</h1><h2 id="18-1-悬垂else"><a href="#18-1-悬垂else" class="headerlink" title="18.1. 悬垂else"></a>18.1. 悬垂else</h2><p>C++规定else与离它最近的尚未匹配的if匹配。</p>
+<h2 id="18-2-switch语句"><a href="#18-2-switch语句" class="headerlink" title="18.2. switch语句"></a>18.2. switch语句</h2><ul>
+<li>和<code>case</code>关键字对应的是case标签，必须是<strong>整形常量表达式</strong>。</li>
+<li>C++的switch是瀑布流式的，如果没有<code>break</code>关键字，会执行匹配到的case之后所有的case。</li>
+<li>由于需要通过<code>break</code>来控制代码指定范围，所以理论上不需要花括号，但是还是建议使用，因为这样可以限定局部变量的作用域。</li>
+</ul>
+<h2 id="18-3-for语句头中的多重定义"><a href="#18-3-for语句头中的多重定义" class="headerlink" title="18.3. for语句头中的多重定义"></a>18.3. for语句头中的多重定义</h2><p>和其他声明一行，for语句中的init-statement只能有一条声明语句。因此，可以同时声明多个变量，但是类型必须相同。</p>
+<h2 id="18-4-do-while"><a href="#18-4-do-while" class="headerlink" title="18.4. do while"></a>18.4. do while</h2><p><code>do while</code>至少会执行一次循环。</p>
+<h1 id="19-位运算"><a href="#19-位运算" class="headerlink" title="19. 位运算"></a>19. 位运算</h1><h2 id="19-1-关于符号位"><a href="#19-1-关于符号位" class="headerlink" title="19.1. 关于符号位"></a>19.1. 关于符号位</h2><p>当左移一个带符号且为负数的整数时，如何处理符号位是取决于机器的，算是未定义。因此建议仅将位运算用于处理<code>unsigned</code>类型。</p>
+<h1 id="20-复合类型"><a href="#20-复合类型" class="headerlink" title="20. 复合类型"></a>20. 复合类型</h1><h2 id="20-1-引用"><a href="#20-1-引用" class="headerlink" title="20.1. 引用"></a>20.1. 引用</h2><p>引用必须被初始化，即定义的时候必须明确并立刻指出要引用哪个变量，而且引用只能在初始化时绑定一次，不能重复绑定。<br>因为引用本身不是对象，所以不能定义引用的引用。<br>因为引用本身不是对象，所以不能定义指向引用的指针。</p>
+<h2 id="20-2-指针"><a href="#20-2-指针" class="headerlink" title="20.2. 指针"></a>20.2. 指针</h2><p>过去的程序中会用到<code>NULL</code>的预处理变量来给指针赋值，这个变量定义在头文件<code>cstdlib</code>中，值为0。预处理变量会被预处理器自动替换为实际值，所以用<code>NULL</code>初始化指针和用0是一样的。但是，直接把int变量赋值给指针是错误的行为，既是int变量的值恰好等于0也不行。<br>在新标准下，推荐使用<code>nullptr</code>，同时尽量避免使用<code>NULL</code>。<br><code>void*</code>指针可以指向任何类型的对象。因此，不应该直接操作<code>void*</code>指针指向的对象，因为该对象的类型是未知的，允许的操作也是未知的。<br>面对一条复杂的指针或引用的声明语句时，从右往左读比较容易。</p>
+<h2 id="20-3-const"><a href="#20-3-const" class="headerlink" title="20.3. const"></a>20.3. const</h2><p><code>const</code>对象一旦创建后其值就不能再改变了，所以<code>const</code>对象必须初始化。<br>当以编译时初始化的方式定义一个对象时：<br><code>const int buf = 512;</code><br>编译器在编译过程中就会将所有用到该变量的地方全部替换成512。凡是使用了<code>const</code>对象的文件都要求能访问到<code>const</code>对象，因此在默认状况下，<code>const</code>对象仅在文件内有效。多个文件中的同名<code>const</code>对象相当于分别定义在不同文件中的独立变量。<br>但是有时，我们需要<code>const</code>变量的初始值不是一个常量表达式，又有必要在文件间共享，则需要避免编译器为每个文件生成独立的变量。解决方法是对于<code>const</code>变量，不管是声明还是定义，都添加<code>extern</code>关键字。</p>
+<h2 id="20-4-const的引用"><a href="#20-4-const的引用" class="headerlink" title="20.4. const的引用"></a>20.4. const的引用</h2><p>“常量引用”指对const的引用。<br>常量引用只对引用做出了限制，并不限制引用的对象本身。即我们无法通过常量引用来修改引用对象，但是引用对象本身可以修改自己。</p>
+<h2 id="20-5-指针和const"><a href="#20-5-指针和const" class="headerlink" title="20.5. 指针和const"></a>20.5. 指针和const</h2><p>指向常量的指针允许指向一个非常量对象。和常量引用一样，所谓的指向常量的引用和指针，只是他们自以为自己指向了常量，限制了自己不去改变本体，但并没有限制本体。<br>把*放在<code>const</code>之前，表示这个指针是一个常量，指这个指针不能改变自己的值，即<strong>不能更换所指的对象</strong>，但是<strong>可以修改所指的对象的值</strong>。</p>
+<h2 id="20-6-顶层const"><a href="#20-6-顶层const" class="headerlink" title="20.6. 顶层const"></a>20.6. 顶层const</h2><p>顶层const：指针本身是一个常量<br>底层const：指针所指的对象是一个常量</p>
+<h2 id="20-7-constexpr和常量表达式"><a href="#20-7-constexpr和常量表达式" class="headerlink" title="20.7. constexpr和常量表达式"></a>20.7. constexpr和常量表达式</h2><p>一个对象（或表达式）是不是常量表达式由它的数据类型和初始值共同决定。在一个复杂系统中，很可能定义了一个const变量， 但是它的值不是一个常量表达式。C++11中，允许将变量声明为<code>constexpr</code>以便由编译器来严重变量是否为一个常量表达式（是否可以在编译阶段就被替换）。<br>推荐写法：如果认定某个变量是常量表达式，那么就把它声明为<code>constexpr</code>类型。</p>
+<h1 id="21-处理类型"><a href="#21-处理类型" class="headerlink" title="21. 处理类型"></a>21. 处理类型</h1><h2 id="21-1-类型别名"><a href="#21-1-类型别名" class="headerlink" title="21.1. 类型别名"></a>21.1. 类型别名</h2><p>传统方法：使用关键字<code>typedef</code><br>新标准：使用别名声明，<code>using alias = original;</code><br>注意，在阅读使用了<code>typedef</code>的代码时，不要把类型别名替换回去，会导致const的层级发生错乱。</p>
+<h2 id="21-2-auto类型说明符"><a href="#21-2-auto类型说明符" class="headerlink" title="21.2. auto类型说明符"></a>21.2. auto类型说明符</h2><p><code>auto</code>能够根据初始值自动推断类型，相应的，auto定义的变量必须有初始值。<br>编译器会适当地改变推断类型，而不是和初始值的类型一模一样：</p>
+<ul>
+<li>用一个引用作为初始值，推断出来的类型不是引用，而是引动的对象的类型。</li>
+<li>auto一般会忽略顶层const，保留底层const。也就是说推断更基于值。<h2 id="21-3-decltype类型指示符"><a href="#21-3-decltype类型指示符" class="headerlink" title="21.3. decltype类型指示符"></a>21.3. decltype类型指示符</h2>C++11中引入<code>decltype</code>，作用是选择并返回操作数的数据类型。<br>与auto不同，如果<code>decltype</code>使用的表达式是一个变量，那么<code>decltype</code>会保留顶层const和引用等类型。<br>如果表达式的内容是解引用，则得到引用类型。<code>decltype(*p)</code>的结果是<code>int&amp;</code>。<br><code>decltype((var))</code>的结果永远是引用（注意<strong>双层括号</strong>）。</li>
+</ul>
+<h1 id="22-函数"><a href="#22-函数" class="headerlink" title="22. 函数"></a>22. 函数</h1><h2 id="22-1-得到实参的顺序"><a href="#22-1-得到实参的顺序" class="headerlink" title="22.1. 得到实参的顺序"></a>22.1. 得到实参的顺序</h2><p>编译器能以任何可行的顺序对实参求值。</p>
+<h2 id="22-2-形参同名问题"><a href="#22-2-形参同名问题" class="headerlink" title="22.2. 形参同名问题"></a>22.2. 形参同名问题</h2><p>任意两个形参不能同名，而且函数最外层作用域中的局部变量也不能和形参同名。<br>由此可见，形参的作用域等同与还是最外层作用域。</p>
+<h2 id="22-3-函数的返回值类型不能是什么？"><a href="#22-3-函数的返回值类型不能是什么？" class="headerlink" title="22.3. 函数的返回值类型不能是什么？"></a>22.3. 函数的返回值类型不能是什么？</h2><p>函数的返回值类型不能是<strong>数组类型</strong>或者<strong>函数类型</strong>，但是可以是**指向数组或函数的指针。</p>
+<h2 id="22-4-局部静态对象"><a href="#22-4-局部静态对象" class="headerlink" title="22.4. 局部静态对象"></a>22.4. 局部静态对象</h2><p>定义在函数体内部的都是局部变量，加上<code>static</code>就是局部静态变量，这种变量在第一次执行时初始化，并直到冲虚终止才销毁。</p>
+<h2 id="22-5-无返回值的函数"><a href="#22-5-无返回值的函数" class="headerlink" title="22.5. 无返回值的函数"></a>22.5. 无返回值的函数</h2><p>返回类型是void的函数，可以直接写return，还可以返回一个返回void的函数。</p>
+<h2 id="22-6-重载与const形参"><a href="#22-6-重载与const形参" class="headerlink" title="22.6. 重载与const形参"></a>22.6. 重载与const形参</h2><p>一个拥有顶层const的形参无法和另一个普通形参区分开来，<del>因为一个普通类型的实参可以隐式转换为const版本</del>，所以这样的重载不可以。  </p>
+<div class="code-wrapper"><pre><code class="hljs">Record lookup(Phone)
+Record lookup(const Phone)
+
+Record lookup(Phone*)
+Record lookup(Phone* const)
+</code></pre></div>
+<p>但是，如果形参是<strong>指针或引用</strong>，那么通过区分其指向的是常量对象，还是说他本身是const但是指向普通对象，可以实现函数重载。  </p>
+<div class="code-wrapper"><pre><code class="hljs">Record lookup(Account&amp;)
+Record lookup(const Account&amp;)
+
+Record lookup(Account*)
+Record lookup(const Account*)
+</code></pre></div>
+<h2 id="22-7-const-cast与重载"><a href="#22-7-const-cast与重载" class="headerlink" title="22.7. const_cast与重载"></a>22.7. const_cast与重载</h2><p>假设我们已经有一个函数，参数和返回值都是const，现在需要一个接收非常量并返回非常量的版本，可以在内部用<code>const_cast</code>做转换，调用常量版本的函数。</p>
+<h2 id="initializer-list"><a href="#initializer-list" class="headerlink" title="initializer_list"></a>initializer_list</h2><p>当函数的参数是若干同类型数据时，可以使用<code>initializer_list</code>作为形参，在调用函数的时候使用花括号即可。</p>
+<h1 id="lambda"><a href="#lambda" class="headerlink" title="lambda"></a>lambda</h1><p><code>lambda</code>会被编译器自动转换为匿名类的匿名对象，并行为如同函数，<code>lambda</code>捕获的局部变量的引用会被直接使用，但是传值捕获的变量会被转化为匿名类的成员。</p>
+<p>函数的签名：<code>返回值类型(参数类型,...)</code>。</p>
+<p>由于每个<code>lambda</code>都是不同的匿名类，所以如果需要用容器来保存<code>lambda</code>时，无法用模板来表示，需要转换为标准库<code>functional</code>中的<code>function</code>。</p>
+<p>有重载函数的时候，在要存入function的地方会有歧义，可以使用函数指针或者<code>lambda</code>。</p>
+<h1 id="24-暂未归类"><a href="#24-暂未归类" class="headerlink" title="24. 暂未归类"></a>24. 暂未归类</h1><h2 id="24-1-lt-lt-运算符的顺序"><a href="#24-1-lt-lt-运算符的顺序" class="headerlink" title="24.1. &lt;&lt;运算符的顺序"></a>24.1. <code>&lt;&lt;</code>运算符的顺序</h2><p><code>&lt;&lt;</code>运算符没有明确规定何时以及如何对运算对象求值。<br><code>cout &lt;&lt; i &lt;&lt; &quot; &quot; &lt;&lt; ++i &lt;&lt; endl</code>这样一行代码是未定义的，编译器不一定先求i的值或者++i的值。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C++</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/STL/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">STL</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/hello-world/">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

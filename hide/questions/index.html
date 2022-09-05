@@ -1,0 +1,1252 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本人在校期间学习认真刻苦，成绩优异，积极参与校内外活动和比赛，能够顺利和同学合作完成软件项目，并在过程中发挥带头作用。 本人热爱游戏行业，从孩童时期就解除过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。 • 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。• 成果描述： – 在 mentor 指点下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="questions">
+<meta property="og:url" content="http://example.com/hide/questions/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="本人在校期间学习认真刻苦，成绩优异，积极参与校内外活动和比赛，能够顺利和同学合作完成软件项目，并在过程中发挥带头作用。 本人热爱游戏行业，从孩童时期就解除过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。 • 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。• 成果描述： – 在 mentor 指点下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg">
+<meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
+<meta property="article:modified_time" content="2022-09-05T15:57:41.163Z">
+<meta property="article:author" content="JackZhu">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
+  
+  
+  <title>questions - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="questions">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-08-09 00:23" pubdate>
+        2022年8月9日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      19k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      163 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">questions</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月5日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>本人在校期间学习认真刻苦，成绩优异，积极参与校内外活动和比赛，能够顺利和同学合作完成软件项目，并在过程中发挥带头作用。</p>
+<p>本人热爱游戏行业，从孩童时期就解除过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。</p>
+<p>• 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。<br>• 成果描述：<br> – 在 mentor 指点下，学习项目所需的 Spring 技术栈、跨模块调用和服务器部署等技能。<br> – 参与智能视频分析平台解决方案项目，完成管理平台部分模块的开发任务，修复若干错误。<br>• 个人收获：学习 Spring 开发技术栈，熟悉项目开发流程，体验真实开发场景。</p>
+<p>智能视频分析平台</p>
+<p>• 应用技术：SpringMVC，SpringBoot，MySQL，Redis，ZooKeeper，Kafka，SeaweedFS<br>• 项目描述：搭建稳定可靠的基础服务“底座”为核心并提供可视化的系统管理工具用于摄像头管理、服务器管理、服务管理等基础管理子系统，在此基础上搭建以寻人为核心能力的视频智能分析系统。<br>• 主要工作：完成用户管理、日志筛选获取、应用管理等模块开发，撰写技术文档和接口文档，通过查询日志定位并修复错误。</p>
+<p>二手房信息平台</p>
+<p>• 应用技术：Python，Vue，Flask，SQLite，ECharts，XGBoost，Nginx，Docker<br>• 项目描述：毕业设计项目，开发二手房信息平台的前后端分离项目，包含功能有登录注册，用户上传房源，房价预测，房源展示和推荐，数据分析展示。<br>• 主要工作：编写 Python 爬虫程序爬取房源信息，使用 Vue+ElementUI 完成前端开发，使用高德地图API 开发前端地图插件，使用 Flask 完成后端开发，通过 docker 完成云服务器环境搭建和部署。</p>
+<h2 id="开放性问题"><a href="#开放性问题" class="headerlink" title="开放性问题"></a>开放性问题</h2><h3 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h3><p>面试官您好，非常感谢能给我这次面试机会（很感谢您这么晚还抽空面试）。我叫XXX，本科就读于北京工业大学，研究生就读于香港科技大学，目前正在每日互动股份有限公司做Java开发的实习工作。</p>
+<p>我过往的经历主要可以分为两部分。第一部分是我的在校经历，我在校期间成绩优秀，本科获得了北工大优秀毕业生和都柏林大学的一等学位。同时我在课余时间也会给自己充电，比如参加竞赛，阅读专业书籍等，也自学了多门语言。第二部分是我的实习经历，我在实习阶段主要学习了Spring相关的技术栈，以及积累了宝贵的真实项目开发经验。</p>
+<p>Hello, thank you very much for giving me this opportunity. My name is XXX. I studied in Beijing University of technology as an undergraduate and in Hong Kong University of science and technology as a postgraduate. I am currently doing an internship in java development in Getui.</p>
+<p>My past experience can be divided into two parts. The first part is my school experience. During my school years, I achieved excellent results. I obtained the outstanding graduate of Beijing University of technology and the first-class degree of Dublin University. At the same time, I will also enrich myself in my spare time, such as participating in competitions, reading professional books, etc. I have also learned many programming languages. The second part is my internship experience. In the internship stage, I mainly learned the spring framework and related technologies and accumulated real  experience in project development.</p>
+<h3 id="项目中遇到的问题"><a href="#项目中遇到的问题" class="headerlink" title="项目中遇到的问题"></a>项目中遇到的问题</h3><p>没遇到难点就诚实的说暂时没遇到什么深刻的难点，然后可以转移话题到做过什么<strong>优化</strong>。</p>
+<p>新需求，过期删除，看英文文档，写demo；手写定时任务；不能直接删除；delete limit，但是末尾怎么办；提前获取要删除的数量，count顺序扫描很快，后台任务不加索引</p>
+<h3 id="最大的优点"><a href="#最大的优点" class="headerlink" title="最大的优点"></a>最大的优点</h3><h3 id="最大的缺点"><a href="#最大的缺点" class="headerlink" title="最大的缺点"></a>最大的缺点</h3><p>团队管理能力</p>
+<h3 id="职业发展规划"><a href="#职业发展规划" class="headerlink" title="职业发展规划"></a>职业发展规划</h3><h3 id="兴趣爱好"><a href="#兴趣爱好" class="headerlink" title="兴趣爱好"></a>兴趣爱好</h3><h2 id="计网"><a href="#计网" class="headerlink" title="计网"></a>计网</h2><h3 id="TPC-x2F-IP五层模型"><a href="#TPC-x2F-IP五层模型" class="headerlink" title="TPC&#x2F;IP五层模型"></a>TPC&#x2F;IP五层模型</h3><ul>
+<li>应用层：HTTP，SMTP，DNS，FTP</li>
+<li>运输层：TCP，UDP</li>
+<li>网络层：ICMP、IGMP、IP（IPv4、IPv6）、ARP、RARP</li>
+<li>数据链路层：两个节点传输数据时，链路层将网络层交下来的数据报组装成帧，在链路上传送帧。每一帧都包括数据和控制信息（同步信息、地址信息、差错控制等）。 </li>
+<li>物理层</li>
+</ul>
+<h3 id="TCP和UDP区别"><a href="#TCP和UDP区别" class="headerlink" title="TCP和UDP区别"></a>TCP和UDP区别</h3><h3 id="三次握手四次挥手"><a href="#三次握手四次挥手" class="headerlink" title="三次握手四次挥手"></a>三次握手四次挥手</h3><h3 id="TCP实现可靠传输"><a href="#TCP实现可靠传输" class="headerlink" title="TCP实现可靠传输"></a>TCP实现可靠传输</h3><p>TCP是通过序列号、检验和、确认应答信号、重发机制、连接管理、窗口控制、流量控制、拥塞控制一起保证TCP传输的可靠性的。</p>
+<ul>
+<li>序列号：TCP给发送的每一个包都进行编号，接收方对数据包进行排序，把有序数据传送给应用层，TCP的接收端会<strong>丢弃重复的数据</strong>。</li>
+<li>检验和：TCP将保持它首部和数据的检验和。这是一个端到端的检验和，目的是检测数据在传输过程中的任何变化。 </li>
+<li>确认应答：如果收到的数据报报文段的检验和没有差错，就确认收到，如果有差错，TCP就丢弃这个报文段和不确认收到此报文段。 </li>
+<li>流量控制：TCP 连接的每一方都有固定大小的缓冲空间，TCP的接收端只允许发送端发送接收端缓冲区能接纳的数据。当接收方来不及处理发送方的数据，能提示发送方降低发送的速率，防止包丢失。TCP 使用的流量控制协议是可变大小的滑动窗口协议。</li>
+<li>拥塞控制：当网络拥塞时，减少数据的发送。 </li>
+<li>停止等待协议：它的基本原理就是每发完一个分组就停止发送，等待对方确认。在收到确认后再发下一个分组。 </li>
+<li>超时重传： 当 TCP 发出一个段后，它启动一个定时器，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段。</li>
+</ul>
+<h3 id="UDP实现可靠传输"><a href="#UDP实现可靠传输" class="headerlink" title="UDP实现可靠传输"></a>UDP实现可靠传输</h3><ul>
+<li>RDT1.0：建立在理想可靠信道上，发送和接收方都只有等待调用状态</li>
+<li>RDT2.0：考虑了翻转错误，发送方增加了等待ACK或NAK状态。</li>
+<li>RDT2.1：考虑了ACK或NAK出错出错的情况。简单重传会导致重复分组，因此引入序列号，发送方給每个分组增加序列号，接收方丢弃重复分组。序列号目前可以只为0或1，说明每次只发送一个包。</li>
+<li>RDT2.2：取消NAK，在ACK中显式加入被确认分组的序列号，这样重复的ACK即代表NAK。</li>
+<li>RDT3.0：考虑了丢失分组，因此加入超时重传。如果ACK只是延迟了也无妨，因为接收端收到了重复的分组会自动丢弃。收到重复ack会忽略，因为包可能还在路上，所以只用管计时器。</li>
+</ul>
+<h3 id="TIME-WAIT"><a href="#TIME-WAIT" class="headerlink" title="TIME_WAIT"></a>TIME_WAIT</h3><p>四次挥手时，主动断连的一方发送最后一个ACK后会进入TIME_WAIT，会等待2MSL（最大报文生存期）才会回到CLOSED。这么做是确保另一方收到这个消息。万一这条消息丢失了，需要花1个MSL的时间，被关闭方会重发FIN，又要1个MSL来接收。</p>
+<h3 id="拥塞控制机制"><a href="#拥塞控制机制" class="headerlink" title="拥塞控制机制"></a>拥塞控制机制</h3><p>慢开始、拥塞避免、快重传、快恢复。</p>
+<h3 id="GET和POST区别"><a href="#GET和POST区别" class="headerlink" title="GET和POST区别"></a>GET和POST区别</h3><ul>
+<li>语义不同：GET获取数据，POST提交数据</li>
+<li>幂等性：GET有幂等性，每次GET的效果相同。POST没有</li>
+<li>长度限制：浏览器一般对GET有长度限制，2048字节。POST无</li>
+<li>参数位置：GET参数在URL中，由？开头，&amp; 连接。POST参数在请求体中，URL上不可见。</li>
+<li>编码：GET只能url编码，POST可以多种编码</li>
+</ul>
+<h3 id="粘包"><a href="#粘包" class="headerlink" title="粘包"></a>粘包</h3><p>TCP基于字节流，无法判断发送方报文段边界。</p>
+<p>多个数据包被连续存储于连续的缓存中，在对数据包进行读取时由于无法确定发生方的发送边界，而采用某一估测值大小来进行数据读出，若发送方发送数据包的长度和接收方在缓存中读取的数据包长度不一致，就会发生粘包，这时候接收端读取的数据中就包括了下一个报文段的头部，造成了粘包。</p>
+<p> 解决粘包的方法： </p>
+<ol>
+<li>发送方关闭Nagle算法，使用TCP_NODELAY选项关闭Nagle功能 </li>
+<li>发送定长的数据包。每个数据包的长度一样，接收方可以很容易区分数据包的边界 </li>
+<li>数据包末尾加上特殊标记</li>
+<li>数据包头部加上数据包的长度。数据包头部定长4字节，可以存储数据包的整体长度 </li>
+<li>应用层自定义规则</li>
+</ol>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><h3 id="URL到内容显示过程"><a href="#URL到内容显示过程" class="headerlink" title="URL到内容显示过程"></a>URL到内容显示过程</h3><p>1、查浏览器缓存，看看有没有已经缓存好的，如果没有</p>
+<p>2 、检查本机host文件，</p>
+<p>3、调用API，Linux下Socket函数 gethostbyname</p>
+<p>4、向DNS服务器发送DNS请求，查询本地DNS服务器，这其中用的是UDP的协议</p>
+<p>5、如果在一个子网内采用ARP地址解析协议进行ARP查询。如果不在一个子网那就需要对默认网关进行DNS查询，如果还找不到会一直向上找根DNS服务器，直到最终拿到IP地址</p>
+<p>6、这时已有服务器IP，http默认是80 https是 443 端口号，会首先尝试http然后调用Socket建立TCP连接。</p>
+<p>7、经过三次握手成功建立连接后，开始传送数据，如果正是http协议的话，就返回就完事了，</p>
+<p>8、如果不是http协议，服务器会返回一个5开头的的重定向消息，告知使用https，也就是IP没变，只是端口变成443了，四次挥手断连</p>
+<p>9、重新对443端口三次握手，还会采用SSL的加密技术来保证传输数据的安全性，保证数据传输过程中不被修改或者替换之类的，</p>
+<p>10、这次依然是三次握手，沟通好双方使用的认证算法，加密和检验算法，在此过程中也会检验对方的CA安全证书。</p>
+<p>11、确认无误后，开始通信，然后服务器就会返回你所要访问的网址的一些数据，在此过程中会将界面进行渲染。</p>
+<h3 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h3><table>
+<thead>
+<tr>
+<th>1**</th>
+<th>信息，服务器收到请求，需要请求者继续执行操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2**</td>
+<td>成功，操作被成功接收并处理</td>
+</tr>
+<tr>
+<td>3**</td>
+<td>重定向，需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td>4**</td>
+<td>客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td>5**</td>
+<td>服务器错误，服务器在处理请求的过程中发生了错误</td>
+</tr>
+</tbody></table>
+<p>200成功；301永久移动；302临时移动；304未修改，使用缓存；400语法错误，服务端无法解析；401未身份验证；403拒绝访问；404找不到资源；405请求方法不对；500服务器内部错误</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>与HTTP区别：</p>
+<ul>
+<li>默认端口号不同：HTTP是80，HTTPS是443</li>
+<li>安全性：HTTP明文，HTTPS密文</li>
+<li>协议：TCP；TLS，TLS基于TCP</li>
+<li>HTTP只需要进行TCP连接；HTTPS建立TCP连接后还需要建立TLS连接</li>
+</ul>
+<p>建立连接过程：</p>
+<ol>
+<li>客户端发送一个<strong>https</strong>的请求到服务端</li>
+<li>服务端申请配置好数字证书，包含公钥和私钥</li>
+<li>服务端将证书传送给客户端，证书中包含了很多信息，比如证书的颁发机构，过期时间，网址，公钥等</li>
+<li>客户端解析证书，由客户端的TLS完成，首先会验证公钥是否有效，比如颁发机构，过期时间等。</li>
+</ol>
+<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><ul>
+<li><p>二进制格式（Binary Format）：HTTP1.x的解析是基于文本，存在天然缺陷。HTTP2.0的协议解析采用二进制格式，实现方便且健壮。</p>
+</li>
+<li><p>多路复用（MultiPlexing）：连接共享，每一个请求都是是用作连接共享机制的。一个请求对应一个id，这样一个连接上可以有多个请求，每个连接的请求可以随机的混杂在一起，接收方可以根据请求的 id将请求再归属到各自不同的服务端请求里面。</p>
+</li>
+<li><p>头部压缩：HTTP1.x的头部带有大量信息，而且每次都要重复发送，HTTP2.0使用encoder来减少需要传输的头部大小，通讯双方各自缓存一份头部表，既避免了重复头部的传输，又减小了需要传输的大小。</p>
+</li>
+<li><p>服务端推送（server push）：如果请求了index.html文件，服务器端会主动将它的依赖文件一起返回。</p>
+</li>
+</ul>
+<h2 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h2><h3 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h3><p>常用：cd, ls, ll, grep, cp, mv, rm, ps, kill, pwd</p>
+<p>查看文件：more, less, cat</p>
+<p>查看系统资源：top：查看操作系统的信息，如进程、CPU占用率、内存信息等（实时)； free：查看内存使用情况</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>必要条件：</p>
+<ul>
+<li>互斥：资源是独占的，排他性使用</li>
+<li>请求保持：进程在已经持有资源的情况下请求新资源，并且在阻塞期间不会释放已经获得的资源</li>
+<li>不可抢占：进程已获得的资源不会被抢占，只能自己释放</li>
+<li>循环等待：形成资源请求链</li>
+</ul>
+<p>如何防止死锁：</p>
+<ul>
+<li>预防：破坏四种必要条件。比如破坏循环等待：给资源编号，请求资源只能按照编号顺序请求。</li>
+<li>检测和恢复：用抢占、回滚、杀进程来恢复。</li>
+<li>避免：银行家算法</li>
+</ul>
+<h3 id="进程和线程区别"><a href="#进程和线程区别" class="headerlink" title="进程和线程区别"></a>进程和线程区别</h3><p>进程和线程的主要差别在于它们是不同的操作系统资源管理方式。 </p>
+<ol>
+<li>进程有独立的地址空间，线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间； </li>
+<li>进程和线程切换时，需要切换进程和线程的上下文，进程的上下文切换时间开销远远大于线程上下文切换时间，耗费资源较大，效率要差一些； </li>
+<li>进程的并发性较低，线程的并发性较高； </li>
+<li>每个独立的进程有一个程序运行的入口、顺序执行序列和程序的出口，但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制； </li>
+<li>系统在运行的时候会为每个进程分配不同的内存空间；而对线程而言，除了 CPU 外，系统不会为线程分配内存（线程所使用的资源来自其所属进程的资源），线程组之间只能共享资源； </li>
+<li>一个进程崩溃后，在保护模式下不会对其他进程产生影响，但是一个线程崩溃整个进程都死掉。所以多进程要比多线程健壮。</li>
+</ol>
+<h3 id="线程和协程的区别"><a href="#线程和协程的区别" class="headerlink" title="线程和协程的区别"></a>线程和协程的区别</h3><ol>
+<li><p>线程是操作系统的资源，线程的创建、切换、停止等都非常消耗资源，而创建协程不需要调用操作系统的功能，编程语言自身就能完成，所以协程也被称为<strong>用户态线程</strong>，协程比线程轻量很多；</p>
+</li>
+<li><p>线程在多核环境下是能做到真正意义上的并行，而协程是为并发而产生的；</p>
+</li>
+<li><p>线程进程都是同步机制，而协程则是异步；</p>
+</li>
+<li><p>线程是抢占式，而协程是非抢占式的，所以需要用户自己释放使用权来切换到其他协程，因此同一时间其实只有一个协程拥有运行权，相当于单线程的能力；</p>
+</li>
+<li><p>操作系统对于线程开辟数量限制在千的级别，而协程可以达到上万的级别。</p>
+</li>
+</ol>
+<h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><p>创建、就绪、执行、阻塞、终止</p>
+<img src="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" />
+
+<h3 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h3><ul>
+<li>先来先服务（FCFS）调度算法</li>
+<li>短作业优先（SJF）调度算法</li>
+<li>优先级调度算法</li>
+<li>高响应比优先调度算法</li>
+<li>时间片轮转调度算法</li>
+<li>多级反馈队列调度算法</li>
+</ul>
+<h3 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h3><ul>
+<li>管道（匿名管道）：UNIX系统IPC最古老形式，本质上是内核中维护的一块内存缓冲区，Linux中通过<code>pipe()</code>创建，会产生两个fd，fd[0]是读端，fd[1]是写端，只能用于<strong>具有亲缘关系</strong>的进程。注意调用一次pipe产生一个管道，只能支持一个进程向另一个进程发送数据，如果需要双向通信需要定义2个管道。</li>
+<li>有名管道（FIFO，命名管道，FIFO文件）：管道由于没有名字因此只能用于亲缘进程，因此提出有名管道，提供一个路径名与管道关联，以FIFO的文件形式存在于文件系统中，打开方式与普通文件一致。</li>
+<li>信号（软件中断）：事件发生时对进程的通知机制，是软件层面对中断机制的一种模拟，是异步通信。</li>
+<li>消息队列：一个消息链表，消息有特定格式和优先级。</li>
+<li>共享内存：多个进程共享同一块物理内存，这一段物理内存会进入进程用户空间，因此这种IPC无需内核介入，数据不需要像管道那样经过内核区，所以更快。<code>shm()</code></li>
+<li>内存映射：将磁盘文件的数据映射到内存，用户通过修改内存就能修改磁盘。<code>mmap()</code></li>
+<li>信号量：主要解决进程和线程同步问题。</li>
+<li>套接字</li>
+</ul>
+<h3 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h3><ul>
+<li>信号：pthread_kill()</li>
+<li>互斥锁：<strong>pthread_mutex_t</strong></li>
+<li>读写锁：pthread_rwlock</li>
+<li>自旋锁：自旋锁不是通过休眠来阻塞，而是一直忙等。因此适用于锁持有时间短，不想在调度上花成本，想要响应快，一个进程单独持有。</li>
+<li>条件变量：<strong>pthread_cond_t</strong></li>
+<li>信号量：<strong>sem_wait</strong>，<strong>sem_post</strong></li>
+</ul>
+<h3 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a>堆和栈的区别</h3><ol>
+<li>管理方式：对于栈来讲，是由编译器自动管理，无需手动控制；对于堆来说，分配和释放都是由程序员控制的。 </li>
+<li>空间大小：一般栈的空间小于堆。堆内存几乎没有限制；但是栈空间一般有限。</li>
+<li>碎片问题：对于堆来讲，由于分配和释放是由程序员控制的（利用new&#x2F;delete 或 malloc&#x2F;free），频繁的操作势必会造成<strong>内存空间的不连续</strong>，从而造成大量的内存碎片，使程序效率降低。对于栈来讲，则不会存在这个问题，因为栈是先进后出的数据结构，在某一数据弹出之前，它之前的所有数据都已经弹出。 </li>
+<li>生长方向：对于堆来讲，生长方向是向上的，也就是沿着内存地址增加的方向，栈相反。</li>
+<li>分配方式：堆都是动态分配的。栈有两种分配方式：静态分配和动态分配，静态分配是编译器完成的，比如局部变量的分配；动态分配由alloca函数进行分配。</li>
+<li>分配效率：栈是机器系统提供的数据结构，计算机会在底层对栈提供支持，分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率很高。堆则是 C&#x2F;C++ 函数提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率要比栈底的多。</li>
+</ol>
+<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>存在意义：物理内存有限，给进程营造内存充足的错觉，便于程序调度；如果直接操作物理内存会不安全</p>
+<h3 id="分段和分页"><a href="#分段和分页" class="headerlink" title="分段和分页"></a>分段和分页</h3><ol>
+<li>分段<br>将用户程序地址空间分成若干个大小不等的段，每段可以定义一组相对完整的逻辑信息。存储分配时，以段为单位，段与段在内存中可以不相邻接，实现了离散分配。分段主要是为了使程序和数据可以被划分为逻辑上独立的地址空间并且有助于共享和保护。</li>
+<li>分页<br>用户程序的地址空间被划分成若干固定大小的区域，称为“页”，相应地，内存空间分成若干个物理块，页和块的大小相等。可将用户程序的任一页放在内存的任一块中，实现了离散分配。分页主要用于实现虚拟内存，从而获得更大的地址空间。</li>
+<li>段页式<br>页式存储管理能有效地提高内存利用率（解决内存碎片），而分段存储管理能反映程序的逻辑结构并有利于段的共享。将这两种存储管理方法结合起来，就形成了段页式存储管理方式。<br>段页式存储管理方式即先将用户程序分成若干个段，再把每个段分成若干个页，并为每一个段赋予一个段名。在段页式系统中，为了实现从逻辑地址到物理地址的转换，系统中需要同时配置段表和页表，利用段表和页表进行从用户地址空间到物理内存空间的映射。</li>
+</ol>
+<p>系统为每一个进程建立一张段表，每个分段有一张页表。段表表项中至少包括段号、页表长度和页表始址，页表表项中至少包括页号和块号。在进行地址转换时，首先通过段表查到页表始址，然后通过页表找到页帧号，最终形成物理地址。</p>
+<h3 id="建立socket连接涉及哪些系统调用"><a href="#建立socket连接涉及哪些系统调用" class="headerlink" title="建立socket连接涉及哪些系统调用"></a>建立socket连接涉及哪些系统调用</h3><ol>
+<li><p>创建socket，返回socket的fd: <code>int socket(int __domain, int __type, int __protocol)</code></p>
+</li>
+<li><p>命名socket，fd上绑定IP：<code>int bind(int __fd, const sockaddr *__addr, socklen_t __len)</code></p>
+</li>
+<li><p>开始监听：<code>int listen(int __fd, int __n)</code></p>
+</li>
+<li><p>发起连接和接受连接</p>
+<ul>
+<li>客户端发起连接：<code>int connect(int __fd, const sockaddr *__addr, socklen_t __len)</code>\</li>
+<li>服务端接受连接，产生一个新的fd表示连接：<code>int accept(int __fd, sockaddr *__restrict__ __addr, socklen_t *__restrict__ __addr_len)</code></li>
+</ul>
+</li>
+<li><p>收发数据（以下是基础的读写，Linux还有一些高级IO函数）</p>
+<ul>
+<li>发送数据：<code>ssize_t send(int __fd, const void *__buf, size_t __n, int __flags)</code></li>
+<li>接受数据：<code>ssize_t recv(int __fd, void *__buf, size_t __n, int __flags)</code></li>
+</ul>
+</li>
+<li><p>关闭连接（监听fd也需要关闭）：<code>int close(int __fd)</code></p>
+</li>
+</ol>
+<h3 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h3><p>传统的多进程并发模型 ：每进来一个新的I&#x2F;O流会分配一个新的进程管理。</p>
+<p>但是这样不适合高并发的场景，因此引入多路IO复用：用单个线程，同时记录跟踪多个I&#x2F;O流(sock)的状态，来同时管理多个I&#x2F;O流。每个IO流（socket）就是一个客户连接。</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">select</th>
+<th align="left">poll</th>
+<th>epoll</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数据结构</td>
+<td align="left">bitmap</td>
+<td align="left">数组</td>
+<td>红黑树</td>
+</tr>
+<tr>
+<td align="left">最大连接数</td>
+<td align="left">1024</td>
+<td align="left">无上限</td>
+<td>无上限</td>
+</tr>
+<tr>
+<td align="left">fd拷贝</td>
+<td align="left">每次调用select拷贝</td>
+<td align="left">每次调用poll拷贝</td>
+<td>fd首次调用epoll_ctl拷贝，每次调用epoll_wait不拷贝</td>
+</tr>
+<tr>
+<td align="left">工作效率</td>
+<td align="left">轮询：O(n)</td>
+<td align="left">轮询：O(n)</td>
+<td>回调：O(1)</td>
+</tr>
+</tbody></table>
+<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><h3 id="MVCC如何实现的"><a href="#MVCC如何实现的" class="headerlink" title="MVCC如何实现的"></a>MVCC如何实现的</h3><p>InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。</p>
+<ul>
+<li><strong>事务版本号</strong>：每开启一个日志，都会从数据库中获得一个事务ID（也称为事务版本号），这个事务 ID 是自增的，通过 ID 大小，可以判断事务的时间顺序。</li>
+<li><strong>行记录的隐藏列</strong><ul>
+<li>row_id :隐藏的行 ID ,用来生成默认的聚集索引。</li>
+<li>trx_id: 操作这个数据事务 ID ，也就是最后一个对数据插入或者更新的事务 ID 。</li>
+<li>roll_ptr:回滚指针，指向这个记录的 Undo Log 信息。</li>
+</ul>
+</li>
+<li><strong>Undo Log</strong>：数据行通过快照记录都通过链表的结构的串联了起来，每个快照都保存了 trx_id 事务ID，如果要找到历史快照，就可以通过遍历回滚指针的方式进行查找。</li>
+</ul>
+<h3 id="缓存击穿、穿透、雪崩"><a href="#缓存击穿、穿透、雪崩" class="headerlink" title="缓存击穿、穿透、雪崩"></a>缓存击穿、穿透、雪崩</h3><p><strong>缓存击穿</strong>：当一份访问量非常大的热点数据缓存失效的瞬间，大量的请求直达存储层，导致服务崩溃。 缓存击穿可以通过热点数据不设置过期时间来解决，这样就不会出现上述的问题，这是“物理”上的永不过期。或者为每个数据设置逻辑过期时间，当发现该数据逻辑过期时，使用单独的线程重建缓存。</p>
+<p><strong>缓存穿透</strong>：缓存穿透说简单点就是大量请求的 key 根本不存在于缓存中，导致请求直接到了数据库上，根本没有经过缓存这一层。举个例子：某个黑客故意制造我们缓存中不存在的 key 发起大量请求，导致大量请求落到数据库。</p>
+<p>解决：</p>
+<ol>
+<li>缓存无效key</li>
+<li>布隆过滤器：<strong>布隆过滤器说某个元素存在，小概率会误判。布隆过滤器说某个元素不在，那么这个元素一定不在。</strong></li>
+</ol>
+<p><strong>缓存雪崩</strong>：实际上，缓存雪崩描述的就是这样一个简单的场景：<strong>缓存在同一时间大面积的失效，后面的请求都直接落到了数据库上，造成数据库短时间内承受大量请求。</strong> 这就好比雪崩一样，摧枯拉朽之势，数据库的压力可想而知，可能直接就被这么多请求弄宕机了。</p>
+<p><strong>针对 Redis 服务不可用的情况：</strong></p>
+<ol>
+<li>采用 Redis 集群，避免单机出现问题整个缓存服务都没办法使用。</li>
+<li>限流，避免同时处理大量的请求。</li>
+</ol>
+<p><strong>针对热点缓存失效的情况：</strong></p>
+<ol>
+<li>设置不同的失效时间比如随机设置缓存的失效时间。</li>
+<li>缓存永不失效。</li>
+</ol>
+<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><ul>
+<li>未提交读：脏读问题。</li>
+<li>已提交读：不可重复读问题。加读写锁解决上一个问题。</li>
+<li>可重复读（InnodDB默认级别）：幻读问题。</li>
+<li>可串行化 ：InnoDB在可重复读的级别下使用Next-Key Lock的锁算法，因此避免了幻读的产生。</li>
+</ul>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><ol>
+<li>主服务器（master）把数据更改记录到二进制日志（binlog）中。 </li>
+<li>从服务器（slave）把主服务器的二进制日志复制到自己的中继日志（relay log）中。 </li>
+<li>从服务器重做中继日志中的日志，把更改应用到自己的数据库上，以达到数据的最终一致性。</li>
+</ol>
+<p>复制的工作原理并不复杂，其实就是一个完全备份加上二进制日志备份的还原。不同的是这个二进制日志的还原操作基本上实时在进行中。这里特别需要注意的是，复制不是完全实时地进行同步，而是异步实时。这中间存在主从服务器之间的执行延时，如果主服务器的压力很大，则可能导致主从服务器延时较大。复制的工作原理如下图所示，其中从服务器有2个线程，一个是I&#x2F;O线程，负责读取主服务器的二进制日志，并将其保存为中继日志；另一个是SQL线程，复制执行中继日志。</p>
+<h3 id="Redis和数据库如何保证双写一致性"><a href="#Redis和数据库如何保证双写一致性" class="headerlink" title="Redis和数据库如何保证双写一致性"></a>Redis和数据库如何保证双写一致性</h3><p>先更新数据库，再删除缓存。首先删除缓存比重写缓存好，因为简单。如果反过来先删缓存的话，这是并发的读请求会从数据库中读到旧数据。先更新数据库，再删除缓存，影响较小。</p>
+<h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><ul>
+<li>静态多态：由<strong>编译器</strong>在<strong>编译期</strong>间完成的，编译器会根据实参类型来选择调用合适的函数。静态多态有函数重载、运算符重载、泛型编程等。</li>
+<li>动态多态：程序运行时根据基类的引用（指针）指向的对象来确定自己具体该调用哪一个类的虚函数。</li>
+</ul>
+<h3 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h3><p>当类中声明虚函数时，编译器会在类中生成一个虚函数表，虚函数表是一个存储类虚函数指针的数据结构。virtual 成员函数会被放入虚函数表中，存在虚函数时，每个对象中都有一个指向虚函数表的指针（vptr 指针）。在多态调用时, vptr 指针就会根据这个对象在对应类的虚函数表中查找被调用的函数，从而找到函数的入口地址。</p>
+<p>在多继承时，派生类会继承所有基类的虚函数表，自己的</p>
+<h3 id="C-11新特性"><a href="#C-11新特性" class="headerlink" title="C++11新特性"></a>C++11新特性</h3><p>static_assert 编译时断言；新增加类型 long long ，unsigned long long，char16_t，char32_t，原始字符串；auto；decltype；委托构造函数；constexpr；模板别名；alignas；alignof；原子操作库；nullptr；显示转换运算符；继承构造函数；变参数模板；列表初始化；右值引用；Lambda 表达式；override、final；unique_ptr、shared_ptr；initializer_list；array、unordered_map、unordered_set；线程支持库</p>
+<h3 id="STL容器"><a href="#STL容器" class="headerlink" title="STL容器"></a>STL容器</h3><ol>
+<li>序列式容器 array、vector、deque、list、forward_list </li>
+<li>关联式容器 map、multimap、set、multiset </li>
+<li>无序关联式容器 unordered_map、unordered_multimap、unordered_set、unordered_multiset </li>
+<li>容器适配器 stack、queue、priority_queue</li>
+</ol>
+<h3 id="new的原理和malloc的区别"><a href="#new的原理和malloc的区别" class="headerlink" title="new的原理和malloc的区别"></a>new的原理和malloc的区别</h3><p>new 的实现原理： 如果是简单类型，则直接调用 operator new()，在 operator new() 函数中会调用 malloc() 函数，如果调用 malloc() 失败会调用 _callnewh()，如果 _callnewh() 返回 0 则抛出 bac_alloc 异常，返回非零则继续分配内存。 如果是复杂类型，先调用 operator new()函数，然后在分配的内存上调用构造函数。</p>
+<p>区别：</p>
+<ul>
+<li><p>new 是操作符，而 malloc 是函数； </p>
+</li>
+<li><p>使用 new 操作符申请内存分配时无须指定内存块的大小，编译器会根据类型信息自行计算，而 malloc 则需要显式地指出所需内存的尺寸；</p>
+</li>
+<li><p>new 分配失败的时候会直接抛出异常，malloc 分配失败会返回 NULL； </p>
+</li>
+<li><p>对于非简单类型，new 在分配内存后，会调用构造函数，而 malloc 不会； </p>
+</li>
+<li><p>new 分配成功后会返回对应类型的指针，而 malloc 分配成功后会返回 void * 类型； </p>
+</li>
+<li><p>malloc 可以分配任意字节，new 只能分配实例所占内存的整数倍数大小；</p>
+</li>
+<li><p>new 可以被重载，而 malloc 不能被重载；</p>
+</li>
+<li><p>使用 malloc 分配的内存后，如果在使用过程中发现内存不足，可以使用 realloc 函数进行内存重新分配实现内存的扩充，new 没有这样直观的配套设施来扩充内存。</p>
+</li>
+<li><p>new 操作符从自由存储区上分配内存空间，而 malloc 从堆上动态分配内存；</p>
+</li>
+</ul>
+<h3 id="指针和引用的区别"><a href="#指针和引用的区别" class="headerlink" title="指针和引用的区别"></a>指针和引用的区别</h3><ol>
+<li>定义和性质不同。指针是一种数据类型，用于保存地址类型的数据，而引用可以看成是变量的别名。指针定义格式为：数据类型 *；而引用的定义格式为：数据类型 &amp;</li>
+<li>引用不可以为空，当被创建的时候必须初始化，而指针变量可以是空值，在任何时候初始化； </li>
+<li>指针可以有多级，但引用只能是一级； </li>
+<li>引用使用时无需解引用（*），指针需要解引用； </li>
+<li>指针变量的值可以是 NULL，而引用的值不可以为 NULL； </li>
+<li>指针的值在初始化后可以改变，即指向其它的存储单元，而引用在进行初始化后就不会再改变了； </li>
+<li>sizeof 引用得到的是所指向的变量（对象）的大小，而 sizeof 指针得到的是指针变量本身的大小； </li>
+<li>指针作为函数参数传递时传递的是指针变量的值，而引用作为函数参数传递时传递的是实参本身，而不是拷贝副本；</li>
+</ol>
+<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h3><ul>
+<li>根节点是黑色的；</li>
+<li>每个叶子节点都是黑色的空节点（NIL），也就是说，叶子节点不存数据；</li>
+<li>任何相邻的节点都不能同时为红色，也就是说，红色节点是被黑色节点隔开的；</li>
+<li>每个节点，从该节点到达其可达的叶子节点是所有路径，都包含相同数目的黑色节点。</li>
+</ul>
+<h3 id="四种类型转换"><a href="#四种类型转换" class="headerlink" title="四种类型转换"></a>四种类型转换</h3><ol>
+<li>static_cast 静态转换：用于类层次结构中基类（父类）和派生类（子类）之间指针或引用的转换。 进行上行转换（把派生类的指针或引用转换成基类表示）是安全的；进行下行转换（把基类指针或引用转换成派生类表示）时，由于没有动态类型检查，所以是不安全的。用于基本数据类型之间的转换，如把 int 转换成 char，把 char 转换成 int。这种转换的安全性也要开发人员来保证 </li>
+<li>dynamic_cast 动态转换：dynamic_cast 主要用于类层次间的上行转换和下行转换 在类层次间进行上行转换时，dynamic_cast 和 static_cast 的效果是一样的 在进行下行转换时，dynamic_cast 具有类型检查的功能，比 static_cast 更安全</li>
+<li>const_cast 常量转换：该运算符用来修改类型的const属性，常量指针被转化成非常量指针，并且仍然指向原来的对象；常量引用被转换成非常量引用，并且仍然指向原来的对象。注意:不能直接对非指针和非引用的变量使用 const_cast 操作符 </li>
+<li>reinterpret_cast 重新解释转换：是最不安全的一种转换机制，最有可能出问。主要用于将一种数据类型从一种类型转换为另一种类型，它可以将一个指针转换成一个整数，也可以将一个整数转换成一个指针</li>
+</ol>
+<h3 id="C-程序的内存分布"><a href="#C-程序的内存分布" class="headerlink" title="C++程序的内存分布"></a>C++程序的内存分布</h3><p>1、栈区（stack）— 地址向下增长，由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的数据结构中的栈，先进后出。</p>
+<p>2、堆区（heap）— 地址向上增长，一般由程序员分配释放，若程序员不释放，程序结束时可能由OS回收。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表。</p>
+<p>3、全局区（静态区）（static）—全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域，未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。 - 程序结束后有系统释放</p>
+<p>4、文字常量区 —常量字符串就是放在这里的。程序结束后由系统释放</p>
+<p>5、程序代码区(text)—存放函数体的二进制代码。</p>
+<h3 id="C-从代码到可执行程序经历了什么"><a href="#C-从代码到可执行程序经历了什么" class="headerlink" title="C++从代码到可执行程序经历了什么"></a>C++从代码到可执行程序经历了什么</h3><ol>
+<li>预编译</li>
+<li>编译</li>
+<li>汇编</li>
+<li>链接</li>
+</ol>
+<h3 id="指针常量和常量指针"><a href="#指针常量和常量指针" class="headerlink" title="指针常量和常量指针"></a>指针常量和常量指针</h3><p><code>int *const p</code>是常量指针，这个指针本身是常量，指向变量后不许改变。</p>
+<p><code>int const *p</code>和<code>const int *p</code>是指针常量，指向一个常量。</p>
+<p>区分就看<code>const</code>在<code>*</code>的左边还是右边。在右边是顶层const，修饰指针；在左边是底层const，修饰底层变量。</p>
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ol>
+<li>抽象类不能被实例化，编译不通过。</li>
+<li>抽象类中不一定包含抽象方法，但是有抽象方法的类必定是抽象类。</li>
+<li>抽象类中的抽象方法只是声明，不包含具体实现。但是接口可以。</li>
+<li>构造方法，类方法（用 static 修饰的方法）不能声明为抽象方法。</li>
+</ol>
+<h3 id="抽象类和接口区别"><a href="#抽象类和接口区别" class="headerlink" title="抽象类和接口区别"></a>抽象类和接口区别</h3><ol>
+<li>抽象类和接口都可以有属性，但接口不可以有构造函数</li>
+<li>抽象方法没有具体实现，1.8后接口函数可以有默认实现，但只能被子类调用而不能被实现。</li>
+</ol>
+<h3 id="泛型的意义"><a href="#泛型的意义" class="headerlink" title="泛型的意义"></a>泛型的意义</h3><ul>
+<li>编译时的强类型检查</li>
+<li>避免类型转换</li>
+<li>实现通用算法</li>
+</ul>
+<h3 id="如何保证线程安全"><a href="#如何保证线程安全" class="headerlink" title="如何保证线程安全"></a>如何保证线程安全</h3><p>常见的三种，按照资源占用由轻到重</p>
+<ol>
+<li><strong>原子类</strong>。JDK1.5开始提供<code>java.util.concurrent.atomic</code>包，提供原子操作类。包中一共17个类，可归纳为4种原子更新方式：原子更新基本类型、引用类型、属性、数组。无论哪种类型，都遵循<strong>比较和替换</strong>原则，即要更新的值是否等于期望值，如果是才更新。即CAS思想：CAS有三个参数，当前内存值V、旧的预期值A、即将更新的值B，当且仅当预期值A和内存值V相同时，将内存值修改为B并返回true，否则什么都不做，并返回false。</li>
+<li><strong>volatile</strong>：volatile是轻量级的synchronized，保证共享变量的可见性。可见性问题由处理器核心的缓存导致，处理器如果从缓存中读取变量，可能获取不到内存中的最新版本。volatile的内存语义为，当写一个volatile变量时，该线程的本地内存会被置为无效，迫使线程从主内存中读取。</li>
+<li><strong>synchronized</strong>：以上两种方式只能保证单个共享变量的安全，但是锁可以保证临界区内多个共享变量。synchronized是早期API，没考虑超时机制、非阻塞形式、多个条件变量等，因此JDK1.5加入了<strong>Lock接口</strong>，支持以上。</li>
+<li>其他：Semaphore，信号量；CountDownLatch，允许一个或多个线程等待其他线程操作完毕；CyclicBarrier，让一组线程在一个地方同步；ThreadLocal本地存储，不使用共享变量。</li>
+</ol>
+<h3 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h3><h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>JDK8之前是数组+链表，之后是数组+链表+红黑树。相同哈希值的元素组成链表，长度超过8会转为红黑树。负载因子达到0.75时扩容。</p>
+<h3 id="JVM内存"><a href="#JVM内存" class="headerlink" title="JVM内存"></a>JVM内存</h3><p>线程私有：程序计数器，Java虚拟机栈（保存局部变量表、操作数栈、常量池引用等，为Java方法服务），本地方法栈（为Native方法服务）</p>
+<p>共享：堆，方法区（永久代，保存已被加载的类信息、常量、静态变量），运行时常量池（方法区的一部分，把保存字面量和符号引用）</p>
+<h3 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h3><p>魔法数字，4字节，确定该文件能否被JVM接受；版本号，4字节，次版本和主版本；常量池，包括计数器和数据区；访问标志，2字节，描述是类还是接口，和访问级别；类名，2字节；父类名称，2字节；接口信息，2字节的计数器；n字节的接口名称索引；字段表；方发表；附加属性表</p>
+<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><ul>
+<li>强引用：不会被垃圾收集器回收。用 new创建</li>
+<li>软引用：只有内存不够时会被回收。用<code>SoftReference&lt;T&gt;(obj)</code>创建</li>
+<li>弱引用：一定会被回收，只能存活到下次垃圾回收发生。<code>WeakReference&lt;T&gt;</code></li>
+<li>虚引用：对象被垃圾回收时能收到一个系统通知。<code>PhantomReference&lt;T&gt;</code></li>
+</ul>
+<h3 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h3><ul>
+<li>标记-清除：原地清理被标记对象，存活对象较多时比价高效，适用于老年代；缺点是容易产生内存碎片</li>
+<li>标记-整理：将存活对象整理到一起。适用于存活对象少，垃圾对象多。用于老年代。</li>
+<li>复制：内存分成2块，每次将存活对象复制到一边，回收另一边。适用于存活对象少。用于新生代。</li>
+<li>分代回收：堆内存分为年轻代和老年代。年轻代使用复制，老年代使用标记清除或标记整理。年轻代中有较大的Eden区和2个Survivor区。每次把Eden和一个Survivor区中的存活对象复制到另一个Survivor，在Survivor中复制次数达到阈值可以升级到老年代。</li>
+</ul>
+<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><img src="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg" srcset="/img/loading.gif" lazyload alt="img" style="zoom:75%;" />
+
+<ul>
+<li><p>串行收集器：Serial；Serial Old（老年代版本）。单线程stop-the-world收集，所有线程进入安全点时，应用线程暂停，串行GC以单线程回收内存。适用于堆内存小，CPU核少的环境，client模式默认收集器。</p>
+</li>
+<li><p>并行收集器：Parallel Scavenge；Parallel Old（老年代版本）。server模式默认收集器，以吞吐量为目标。stop-the-world时<strong>并行</strong>收集，<strong>年轻代采用复制算法，老年代采用标记-整理</strong>。</p>
+</li>
+<li><p>并发标记清除收集器：</p>
+<ul>
+<li><p>CMS（Concurrent Mark Sweep并行<strong>标记清除</strong>）：目标是最短停顿时间。</p>
+<p>  初始标记，仅标记GC Root能关联到的对象，速度快，要停顿；并发标记，GC root tracing，耗时最长，不用停顿；重新标记，停顿，修正并发标记期间改变的标记；并发清除，不停顿。</p>
+</li>
+<li><p>ParNew：Serial 收集器的多线程版本，Server 模式下的虚拟机首选年轻代收集器。</p>
+</li>
+</ul>
+</li>
+<li><p>G1收集器：兼顾吞吐量和停顿时间。Oracle JDK9 以后的默认 GC 收集器。<strong>引入分区概念，弱化分代</strong>。</p>
+<p>  G1 取消了永久代，并把年轻代和老年代划分成多个大小相等的独立区域（Region），年轻代和老年代不再物理隔离。G1 可以直接对年轻代和老年代一起回收。整体是标记整理，局部看region是复制。</p>
+<p>  初始标记，停顿，单线程；并发标记，不停顿，与应用线程并发；最终标记，停顿，并发；筛选回收，根据region的回收价值和成本排序，回收一部分，停顿，并发。</p>
+</li>
+</ul>
+<h3 id="Minor-GC和Full-GC"><a href="#Minor-GC和Full-GC" class="headerlink" title="Minor GC和Full GC"></a>Minor GC和Full GC</h3><p>minor gc发生在年轻代，因为年轻代对象存活时间短，因此频繁执行。Full GC对整个堆内存回收。</p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>创建方法：继承Thread、实现Runnable、实现Callable（有返回值）</p>
+<p>线程通信：wait&#x2F;notify&#x2F;notifyAll、join、管道</p>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>1.7采用分段锁。1.8对每一条数据加锁，CAS + <code>sychronized</code> 操作。</p>
+<h3 id="线程池的意义"><a href="#线程池的意义" class="headerlink" title="线程池的意义"></a>线程池的意义</h3><ol>
+<li>创建&#x2F;销毁线程需要消耗系统资源，线程池可以<strong>复用已创建的线程</strong>。</li>
+<li>控制并发的数量。并发数量过多，可能会导致资源消耗过多，从而造成服务器崩溃。（主要原因）</li>
+<li>可以对线程做统一管理。</li>
+</ol>
+<h3 id="线程池参数"><a href="#线程池参数" class="headerlink" title="线程池参数"></a>线程池参数</h3><ul>
+<li><code>corePoolSize</code> - 核心线程数量。任务提交时，判断的顺序为 <code>corePoolSize</code> &#x3D;&gt; <code>workQueue</code> &#x3D;&gt; <code>maximumPoolSize</code>。都放不下了交给<code>handler</code>处理。</li>
+<li><code>maximumPoolSize</code> - 最大线程数量。</li>
+<li><code>keepAliveTime</code>：线程保持活动的时间。非核心线程的最大空闲时间。</li>
+<li><code>unit</code> - <code>keepAliveTime</code> 的时间单位。</li>
+<li><code>workQueue</code> - 等待执行的任务队列。ArrayBlockingQueue需要指定大小，是有界的。LinkedBlockingQueue默认大小INT_MAX，可以看做无界，会使<code>maximumPoolSize</code> 失效。SynchronousQueue可以看做容量为1。</li>
+<li><code>threadFactory</code> - 线程工厂。</li>
+<li><code>handler</code> - 饱和策略。AbortPolicy丢弃，抛出异常，默认；DiscardPolicy丢弃，不抛异常；DiscardOldest，丢弃队头任务，重复尝试执行；CallerRuns直接调用run并阻塞执行；实现RejectedExecutionHandler自定义。</li>
+</ul>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>在运行状态中，需要代理的地方，根据 Subject 和 RealSubject，动态地创建一个 Proxy，用完之后，就会销毁。</p>
+<p><strong>JDK动态代理</strong>：基于<strong>实现接口</strong>的方式</p>
+<ol>
+<li>获取 RealSubject 上的所有接口列表；</li>
+<li>确定要生成的代理类的类名，默认为：<code>com.sun.proxy.$ProxyXXXX</code>；</li>
+<li>根据需要实现的接口信息，在代码中动态创建 该 Proxy 类的字节码；</li>
+<li>将对应的字节码转换为对应的 class 对象；</li>
+<li>创建 <code>InvocationHandler</code> 实例 handler，用来处理 <code>Proxy</code> 所有方法调用；</li>
+<li>Proxy 的 class 对象 以创建的 handler 对象为参数，实例化一个 proxy 对象。</li>
+</ol>
+<p>代理类与委托类实现同一接口，主要是通过代理类实现 <code>InvocationHandler</code> 并重写 <code>invoke</code> 方法来进行动态代理的，在 <code>invoke</code> 方法中将对方法进行处理。</p>
+<p>JDK 动态代理特点：</p>
+<ul>
+<li>优点：相对于静态代理模式，不需要硬编码接口，代码复用率高。</li>
+<li>缺点：强制要求代理类实现 <code>InvocationHandler</code> 接口。</li>
+</ul>
+<p><strong>CGLIB动态代理</strong></p>
+<p>CGLIB 底层，其实是借助了 ASM 这个强大的 Java 字节码框架去进行字节码增强操作。</p>
+<p>CGLIB 动态代理的工作步骤：</p>
+<ul>
+<li>生成代理类的二进制字节码文件；</li>
+<li>加载二进制字节码，生成 <code>Class</code> 对象( 例如使用 <code>Class.forName()</code> 方法 )；</li>
+<li>通过反射机制获得实例构造，并创建代理类对象。</li>
+</ul>
+<p>CGLIB 动态代理特点：</p>
+<p>优点：使用字节码增强，比 JDK 动态代理方式性能高。可以在运行时对类或者是接口进行增强操作，且委托类无需实现接口。</p>
+<p>缺点：不能对 <code>final</code> 类以及 <code>final</code> 方法进行代理。</p>
+<h3 id="保证并发安全的思路"><a href="#保证并发安全的思路" class="headerlink" title="保证并发安全的思路"></a>保证并发安全的思路</h3><ol>
+<li>互斥同步：悲观策略，synchronized和Lock</li>
+<li>非阻塞同步：乐观并发策略，先操作后检测，Unsafe类的CAS操作（不需要加锁）</li>
+<li>无同步：不涉及共享数据。设计可重入代码，或者使用ThreadLocal。</li>
+</ol>
+<h3 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h3><p>可重入</p>
+<ul>
+<li><code>ReentrantLock</code> 、<code>ReentrantReadWriteLock</code> 是可重入锁。这点，从其命名也不难看出。</li>
+<li><code>synchronized</code> 也是一个可重入锁。</li>
+</ul>
+<p>公平锁与非公平锁</p>
+<ul>
+<li><code>synchronized</code> 只支持非公平锁。</li>
+<li><code>ReentrantLock</code> 、<code>ReentrantReadWriteLock</code>，默认是非公平锁，但支持公平锁。</li>
+</ul>
+<p>独享与共享</p>
+<ul>
+<li><code>synchronized</code> 、<code>ReentrantLock</code> 只支持独享锁。</li>
+<li><code>ReentrantReadWriteLock</code> 其写锁是独享锁，其读锁是共享锁。读锁是共享锁使得并发读是非常高效的，读写，写读 ，写写的过程是互斥的。</li>
+</ul>
+<p>悲观与乐观</p>
+<ul>
+<li><code>synchronized</code> 和<code>Lock</code>是悲观锁</li>
+<li><code>CAS</code>机制是乐观锁</li>
+</ul>
+<p>偏向锁、轻量级、重量级</p>
+<ul>
+<li><strong>偏向锁</strong> - 偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁。降低获取锁的代价。</li>
+<li><strong>轻量级锁</strong> - 是指当锁是偏向锁的时候，被另一个线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，提高性能。</li>
+<li><strong>重量级锁</strong> - 是指当锁为轻量级锁的时候，另一个线程虽然是自旋，但自旋不会一直持续下去，当自旋一定次数的时候，还没有获取到锁，就会进入阻塞，该锁膨胀为重量级锁。重量级锁会让其他申请的线程进入阻塞，性能降低。</li>
+</ul>
+<h3 id="ASQ-原理"><a href="#ASQ-原理" class="headerlink" title="ASQ 原理"></a>ASQ 原理</h3><ul>
+<li>AQS 使用一个整型的 <code>volatile</code> 变量来 <strong>维护同步状态</strong>。状态的意义由子类赋予。</li>
+<li>AQS 维护了一个 FIFO 的双链表，用来存储获取锁失败的线程。</li>
+</ul>
+<h3 id="JVM内存-1"><a href="#JVM内存-1" class="headerlink" title="JVM内存"></a>JVM内存</h3><table>
+<thead>
+<tr>
+<th>内存区域</th>
+<th>内存作用范围</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>程序计数器</td>
+<td>线程私有</td>
+<td>当前线程所执行的字节码的行号指示器。</td>
+</tr>
+<tr>
+<td>Java 虚拟机栈</td>
+<td>线程私有</td>
+<td>每个 Java 方法在执行的同时都会创建一个栈帧（Stack Frame）用于存储 <strong>局部变量表</strong>、<strong>操作数栈</strong>、<strong>常量池引用</strong> 等信息。每个方法的执行都对应一次入栈出栈。</td>
+</tr>
+<tr>
+<td>本地方法栈</td>
+<td>线程私有</td>
+<td>与虚拟机栈的作用相似。区别在于：<strong>虚拟机栈为 Java 方法服务；本地方法栈为 Native 方法服务</strong>。本地方法并不是用 Java 实现的，而是由 C 语言实现的。<code>OutOfMemoryError</code></td>
+</tr>
+<tr>
+<td>Java 堆</td>
+<td>线程共享</td>
+<td>存放对象实例，几乎所有的对象实例都是在这里分配内存。</td>
+</tr>
+<tr>
+<td>方法区</td>
+<td>线程共享</td>
+<td>永久代。方法区用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</td>
+</tr>
+<tr>
+<td>运行时常量池</td>
+<td>线程共享</td>
+<td>用于存放编译器生成的各种字面量和符号引用，会在类加载后被放入这个区域。</td>
+</tr>
+<tr>
+<td>直接内存</td>
+<td>非运行时数据区</td>
+<td>使用 Native 函数库直接分配堆外内存，然后通过一个存储在 Java 堆里的 <code>DirectByteBuffer</code> 对象作为这块内存的引用进行操作。</td>
+</tr>
+</tbody></table>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP状态码-1"><a href="#HTTP状态码-1" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h3><table>
+<thead>
+<tr>
+<th align="left">状态码</th>
+<th align="left">状态码英文名称</th>
+<th align="left">中文描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">100</td>
+<td align="left">Continue</td>
+<td align="left">继续。客户端应继续其请求</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">Switching Protocols</td>
+<td align="left">切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">200</td>
+<td align="left">OK</td>
+<td align="left">请求成功。一般用于GET与POST请求</td>
+</tr>
+<tr>
+<td align="left">201</td>
+<td align="left">Created</td>
+<td align="left">已创建。成功请求并创建了新的资源</td>
+</tr>
+<tr>
+<td align="left">202</td>
+<td align="left">Accepted</td>
+<td align="left">已接受。已经接受请求，但未处理完成</td>
+</tr>
+<tr>
+<td align="left">203</td>
+<td align="left">Non-Authoritative Information</td>
+<td align="left">非授权信息。请求成功。但返回的meta信息不在原始的服务器，而是一个副本</td>
+</tr>
+<tr>
+<td align="left">204</td>
+<td align="left">No Content</td>
+<td align="left">无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档</td>
+</tr>
+<tr>
+<td align="left">205</td>
+<td align="left">Reset Content</td>
+<td align="left">重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域</td>
+</tr>
+<tr>
+<td align="left">206</td>
+<td align="left">Partial Content</td>
+<td align="left">部分内容。服务器成功处理了部分GET请求</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">300</td>
+<td align="left">Multiple Choices</td>
+<td align="left">多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择</td>
+</tr>
+<tr>
+<td align="left">301</td>
+<td align="left">Moved Permanently</td>
+<td align="left">永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替</td>
+</tr>
+<tr>
+<td align="left">302</td>
+<td align="left">Found</td>
+<td align="left">临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI</td>
+</tr>
+<tr>
+<td align="left">303</td>
+<td align="left">See Other</td>
+<td align="left">查看其它地址。与301类似。使用GET和POST请求查看</td>
+</tr>
+<tr>
+<td align="left">304</td>
+<td align="left">Not Modified</td>
+<td align="left">未修改。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。客户端通常会缓存访问过的资源，通过提供一个头信息指出客户端希望只返回在指定日期之后修改的资源</td>
+</tr>
+<tr>
+<td align="left">305</td>
+<td align="left">Use Proxy</td>
+<td align="left">使用代理。所请求的资源必须通过代理访问</td>
+</tr>
+<tr>
+<td align="left">306</td>
+<td align="left">Unused</td>
+<td align="left">已经被废弃的HTTP状态码</td>
+</tr>
+<tr>
+<td align="left">307</td>
+<td align="left">Temporary Redirect</td>
+<td align="left">临时重定向。与302类似。使用GET请求重定向</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">400</td>
+<td align="left">Bad Request</td>
+<td align="left">客户端请求的语法错误，服务器无法理解</td>
+</tr>
+<tr>
+<td align="left">401</td>
+<td align="left">Unauthorized</td>
+<td align="left">请求要求用户的身份认证</td>
+</tr>
+<tr>
+<td align="left">402</td>
+<td align="left">Payment Required</td>
+<td align="left">保留，将来使用</td>
+</tr>
+<tr>
+<td align="left">403</td>
+<td align="left">Forbidden</td>
+<td align="left">服务器理解请求客户端的请求，但是拒绝执行此请求</td>
+</tr>
+<tr>
+<td align="left">404</td>
+<td align="left">Not Found</td>
+<td align="left">服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置”您所请求的资源无法找到”的个性页面</td>
+</tr>
+<tr>
+<td align="left">405</td>
+<td align="left">Method Not Allowed</td>
+<td align="left">客户端请求中的方法被禁止</td>
+</tr>
+<tr>
+<td align="left">406</td>
+<td align="left">Not Acceptable</td>
+<td align="left">服务器无法根据客户端请求的内容特性完成请求</td>
+</tr>
+<tr>
+<td align="left">407</td>
+<td align="left">Proxy Authentication Required</td>
+<td align="left">请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权</td>
+</tr>
+<tr>
+<td align="left">408</td>
+<td align="left">Request Time-out</td>
+<td align="left">服务器等待客户端发送的请求时间过长，超时</td>
+</tr>
+<tr>
+<td align="left">409</td>
+<td align="left">Conflict</td>
+<td align="left">服务器完成客户端的 PUT 请求时可能返回此代码，服务器处理请求时发生了冲突</td>
+</tr>
+<tr>
+<td align="left">410</td>
+<td align="left">Gone</td>
+<td align="left">客户端请求的资源已经不存在。410不同于404，如果资源以前有现在被永久删除了可使用410代码，网站设计人员可通过301代码指定资源的新位置</td>
+</tr>
+<tr>
+<td align="left">411</td>
+<td align="left">Length Required</td>
+<td align="left">服务器无法处理客户端发送的不带Content-Length的请求信息</td>
+</tr>
+<tr>
+<td align="left">412</td>
+<td align="left">Precondition Failed</td>
+<td align="left">客户端请求信息的先决条件错误</td>
+</tr>
+<tr>
+<td align="left">413</td>
+<td align="left">Request Entity Too Large</td>
+<td align="left">由于请求的实体过大，服务器无法处理，因此拒绝请求。为防止客户端的连续请求，服务器可能会关闭连接。如果只是服务器暂时无法处理，则会包含一个Retry-After的响应信息</td>
+</tr>
+<tr>
+<td align="left">414</td>
+<td align="left">Request-URI Too Large</td>
+<td align="left">请求的URI过长（URI通常为网址），服务器无法处理</td>
+</tr>
+<tr>
+<td align="left">415</td>
+<td align="left">Unsupported Media Type</td>
+<td align="left">服务器无法处理请求附带的媒体格式</td>
+</tr>
+<tr>
+<td align="left">416</td>
+<td align="left">Requested range not satisfiable</td>
+<td align="left">客户端请求的范围无效</td>
+</tr>
+<tr>
+<td align="left">417</td>
+<td align="left">Expectation Failed</td>
+<td align="left">服务器无法满足Expect的请求头信息</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">500</td>
+<td align="left">Internal Server Error</td>
+<td align="left">服务器内部错误，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">501</td>
+<td align="left">Not Implemented</td>
+<td align="left">服务器不支持请求的功能，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">502</td>
+<td align="left">Bad Gateway</td>
+<td align="left">作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应</td>
+</tr>
+<tr>
+<td align="left">503</td>
+<td align="left">Service Unavailable</td>
+<td align="left">由于超载或系统维护，服务器暂时的无法处理客户端的请求。延时的长度可包含在服务器的Retry-After头信息中</td>
+</tr>
+<tr>
+<td align="left">504</td>
+<td align="left">Gateway Time-out</td>
+<td align="left">充当网关或代理的服务器，未及时从远端服务器获取请求</td>
+</tr>
+<tr>
+<td align="left">505</td>
+<td align="left">HTTP Version not supported</td>
+<td align="left">服务器不支持请求的HTTP协议的版本，无法完成处理</td>
+</tr>
+</tbody></table>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

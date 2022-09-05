@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="用来记录我面试过程中遇到的问题 3.10 http 2.0 TCP的状态 分布式系统如何解决一致性  3.16IO多路复用是为了解决什么问题传统的多进程并发模型 ：每进来一个新的I&#x2F;O流会分配一个新的进程管理。 但是这样不适合高并发的场景，因此引入多路IO复用：用单个线程，同时记录跟踪多个I&#x2F;O流(sock)的状态，来同时管理多个I&#x2F;O流。每个IO流（socket）就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="interview">
+<meta property="og:url" content="http://example.com/other/interview/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="用来记录我面试过程中遇到的问题 3.10 http 2.0 TCP的状态 分布式系统如何解决一致性  3.16IO多路复用是为了解决什么问题传统的多进程并发模型 ：每进来一个新的I&#x2F;O流会分配一个新的进程管理。 但是这样不适合高并发的场景，因此引入多路IO复用：用单个线程，同时记录跟踪多个I&#x2F;O流(sock)的状态，来同时管理多个I&#x2F;O流。每个IO流（socket）就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/08/AB6B814A-0B09-4863-93D6-1E22D6B07FF8.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/05/qOJkkR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/05/qOJe1K.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/05/qOJKne.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/10/Lkqhrt.png">
+<meta property="article:published_time" content="2022-03-10T07:41:10.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.199Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.runoob.com/wp-content/uploads/2014/08/AB6B814A-0B09-4863-93D6-1E22D6B07FF8.jpg">
+  
+  
+  <title>interview - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="interview">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-10 15:41" pubdate>
+        2022年3月10日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      43 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">interview</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>用来记录我面试过程中遇到的问题</p>
+<h3 id="3-10"><a href="#3-10" class="headerlink" title="3.10"></a>3.10</h3><ul>
+<li>http 2.0</li>
+<li>TCP的状态</li>
+<li>分布式系统如何解决一致性</li>
+</ul>
+<h3 id="3-16"><a href="#3-16" class="headerlink" title="3.16"></a>3.16</h3><h4 id="IO多路复用是为了解决什么问题"><a href="#IO多路复用是为了解决什么问题" class="headerlink" title="IO多路复用是为了解决什么问题"></a>IO多路复用是为了解决什么问题</h4><p>传统的多进程并发模型 ：每进来一个新的I&#x2F;O流会分配一个新的进程管理。</p>
+<p>但是这样不适合高并发的场景，因此引入多路IO复用：用单个线程，同时记录跟踪多个I&#x2F;O流(sock)的状态，来同时管理多个I&#x2F;O流。每个IO流（socket）就是一个客户连接。</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">select</th>
+<th align="left">poll</th>
+<th>epoll</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数据结构</td>
+<td align="left">bitmap</td>
+<td align="left">数组</td>
+<td>红黑树</td>
+</tr>
+<tr>
+<td align="left">最大连接数</td>
+<td align="left">1024</td>
+<td align="left">无上限</td>
+<td>无上限</td>
+</tr>
+<tr>
+<td align="left">fd拷贝</td>
+<td align="left">每次调用select拷贝</td>
+<td align="left">每次调用poll拷贝</td>
+<td>fd首次调用epoll_ctl拷贝，每次调用epoll_wait不拷贝</td>
+</tr>
+<tr>
+<td align="left">工作效率</td>
+<td align="left">轮询：O(n)</td>
+<td align="left">轮询：O(n)</td>
+<td>回调：O(1)</td>
+</tr>
+</tbody></table>
+<h4 id="堆和栈："><a href="#堆和栈：" class="headerlink" title="堆和栈："></a>堆和栈：</h4><ul>
+<li>栈：分配专门的寄存器存放栈的地址，压栈和出栈都有专门的指令执行；编译时决定大小；有OS控制</li>
+<li>堆：由C&#x2F;C++库函数实现，由算法寻找足够大的内存空间，需要调用函数；运行时决定；由程序员控制</li>
+<li>栈直接访问数据；堆先获得指针，再访问数据</li>
+<li>栈被换出内存可能性比堆大</li>
+</ul>
+<h4 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h4><img src="https://www.runoob.com/wp-content/uploads/2014/08/AB6B814A-0B09-4863-93D6-1E22D6B07FF8.jpg" srcset="/img/loading.gif" lazyload alt="工厂模式的 UML 图" style="zoom: 80%;" />
+
+<p>使用时，<code>getShape()</code>根据获得的参数来决定生成Circle、Square还是Rectangle，但一定是满足Shape接口的。</p>
+<h3 id="3-20"><a href="#3-20" class="headerlink" title="3.20"></a>3.20</h3><h4 id="MVCC如何实现的"><a href="#MVCC如何实现的" class="headerlink" title="MVCC如何实现的"></a>MVCC如何实现的</h4><p>InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。</p>
+<ul>
+<li><strong>事务版本号</strong>：每开启一个日志，都会从数据库中获得一个事务ID（也称为事务版本号），这个事务 ID 是自增的，通过 ID 大小，可以判断事务的时间顺序。</li>
+<li><strong>行记录的隐藏列</strong><ul>
+<li>row_id :隐藏的行 ID ,用来生成默认的聚集索引。</li>
+<li>trx_id: 操作这个数据事务 ID ，也就是最后一个对数据插入或者更新的事务 ID 。</li>
+<li>roll_ptr:回滚指针，指向这个记录的 Undo Log 信息。</li>
+</ul>
+</li>
+<li><strong>Undo Log</strong>：数据行通过快照记录都通过链表的结构的串联了起来，每个快照都保存了 trx_id 事务ID，如果要找到历史快照，就可以通过遍历回滚指针的方式进行查找。</li>
+</ul>
+<h4 id="数据原子性"><a href="#数据原子性" class="headerlink" title="数据原子性"></a>数据原子性</h4><p>主要是利用 Innodb 的<strong>undo log</strong>。 <strong>undo log</strong>名为回滚日志，是实现原子性的关键，当事务回滚时能够撤销所有已经成功执行的 SQL语句，他需要记录你要回滚的相应日志信息。</p>
+<h4 id="数据持久性"><a href="#数据持久性" class="headerlink" title="数据持久性"></a>数据持久性</h4><p>主要是利用Innodb的<strong>redo log</strong>。当做数据修改的时候，不仅在内存中操作，还会在<strong>redo log</strong>中记录这次操作。当事务提交的时候，会将<strong>redo log</strong>日志进行刷盘(<strong>redo log</strong>一部分在内存中，一部分在磁盘上)。当数据库宕机重启的时候，会将redo log中的内容恢复到数据库中，再根据<strong>undo log</strong>和<strong>binlog</strong>内容决定回滚数据还是提交数据。</p>
+<h4 id="采用redo-log的好处？"><a href="#采用redo-log的好处？" class="headerlink" title="采用redo log的好处？"></a>采用redo log的好处？</h4><p>其实好处就是将<strong>redo log</strong>进行刷盘比对数据页刷盘效率高，具体表现如下：</p>
+<ul>
+<li><strong>redo log</strong>体积小，毕竟只记录了哪一页修改了啥，因此体积小，刷盘快。</li>
+<li><strong>redo log</strong>是一直往末尾进行追加，属于顺序IO。效率显然比随机IO来的快。</li>
+</ul>
+<h4 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h4><p>MySQL 的二进制日志 binlog 可以说是 MySQL 最重要的日志，它记录了所有的 <strong>DDL</strong> 和 <strong>DML</strong> 语句（除了数据查询语句select、show等），以事件形式记录，还包含语句所执行的消耗的时间，MySQL的二进制日志是事务安全型的。binlog 的主要目的是<strong>复制</strong>和恢复。</p>
+<p>Binlog日志的两个最重要的使用场景</p>
+<ul>
+<li>MySQL主从复制：MySQL Replication在Master端开启binlog，Master把它的二进制日志传递给slaves来达到master-slave数据一致的目的</li>
+<li>数据恢复：通过使用 mysqlbinlog工具来使恢复数据</li>
+</ul>
+<h3 id="3-21"><a href="#3-21" class="headerlink" title="3.21"></a>3.21</h3><ul>
+<li>C&#x2F;C++各自的字符串操作</li>
+</ul>
+<h4 id="文件读取的流程，读进来后在OS内存还是进程内存，如果内存不够了怎么换出"><a href="#文件读取的流程，读进来后在OS内存还是进程内存，如果内存不够了怎么换出" class="headerlink" title="文件读取的流程，读进来后在OS内存还是进程内存，如果内存不够了怎么换出"></a>文件读取的流程，读进来后在OS内存还是进程内存，如果内存不够了怎么换出</h4><p>目前的理解是，先读入内核缓冲区，再读入用户缓冲区。进程发起read的请求，但是用户态无法直接IO，需要切换到内核态。OS不会马上相应IO，而是可能加入队列，一定时间后统一从磁盘读取，先读取到内核缓冲区，用户进程再从内核中获取。</p>
+<h4 id="HTTP，TCP协议的头部内容"><a href="#HTTP，TCP协议的头部内容" class="headerlink" title="HTTP，TCP协议的头部内容"></a>HTTP，TCP协议的头部内容</h4><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qOJkkR"><img src="https://s1.ax1x.com/2022/04/05/qOJkkR.png" srcset="/img/loading.gif" lazyload alt="qOJkkR.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qOJe1K"><img src="https://s1.ax1x.com/2022/04/05/qOJe1K.png" srcset="/img/loading.gif" lazyload alt="qOJe1K.png" style="zoom: 80%;" /></a></p>
+<h4 id="HTTP请求方法"><a href="#HTTP请求方法" class="headerlink" title="HTTP请求方法"></a>HTTP请求方法</h4><p>HTTP1.0 定义了三种请求方法： GET, POST 和 HEAD 方法。</p>
+<p>HTTP1.1 新增了六种请求方法：OPTIONS、PUT、PATCH、DELETE、TRACE 和 CONNECT 方法。</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">GET</td>
+<td align="left">请求指定的页面信息，并返回实体主体。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">HEAD</td>
+<td align="left">类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">POST</td>
+<td align="left">向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立和&#x2F;或已有资源的修改。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">PUT</td>
+<td align="left">从客户端向服务器传送的数据取代指定的文档的内容。</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">DELETE</td>
+<td align="left">请求服务器删除指定的页面。</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">CONNECT</td>
+<td align="left">HTTP&#x2F;1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">OPTIONS</td>
+<td align="left">允许客户端查看服务器的性能。</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">TRACE</td>
+<td align="left">回显服务器收到的请求，主要用于测试或诊断。</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">PATCH</td>
+<td align="left">是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
+</tr>
+</tbody></table>
+<h4 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h4><p><a target="_blank" rel="noopener" href="https://www.runoob.com/http/http-status-codes.html">HTTP 状态码 | 菜鸟教程 (runoob.com)</a></p>
+<h4 id="TCP状态图"><a href="#TCP状态图" class="headerlink" title="TCP状态图"></a>TCP状态图</h4><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/qOJKne"><img src="https://s1.ax1x.com/2022/04/05/qOJKne.png" srcset="/img/loading.gif" lazyload alt="qOJKne.png"></a></p>
+<h3 id="3-24"><a href="#3-24" class="headerlink" title="3.24"></a>3.24</h3><h4 id="用UDP在应用层面实现可靠：RDT"><a href="#用UDP在应用层面实现可靠：RDT" class="headerlink" title="用UDP在应用层面实现可靠：RDT"></a>用UDP在应用层面实现可靠：RDT</h4><ul>
+<li>RDT1.0：建立在理想可靠信道上，发送和接收方都只有等待调用状态</li>
+<li>RDT2.0：考虑了翻转错误，发送方增加了等待ACK或NAK状态。</li>
+<li>RDT2.1：考虑了ACK或NAK出错出错的情况。简单重传会导致重复分组，因此引入序列号，发送方給每个分组增加序列号，接收方丢弃重复分组。序列号目前可以只为0或1，说明每次只发送一个包。</li>
+<li>RDT2.2：取消NAK，在ACK中显式加入被确认分组的序列号，这样重复的ACK即代表NAK。</li>
+<li>RDT3.0：考虑了丢失分组，因此加入超时重传。如果ACK只是延迟了也无妨，因为接收端收到了重复的分组会自动丢弃。收到重复ack会忽略，因为包可能还在路上，所以只用管计时器。</li>
+</ul>
+<h4 id="unique-ptr如何转交，移动语义和右值引用"><a href="#unique-ptr如何转交，移动语义和右值引用" class="headerlink" title="unique_ptr如何转交，移动语义和右值引用"></a>unique_ptr如何转交，移动语义和右值引用</h4><p><code>unique_ptr</code>无法复制，但是可以转移所有权，使用移动语义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::unique_ptr&lt;T&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-keyword">new</span> T())</span></span>;<br>std::unique_ptr&lt;T&gt; p2 = std::<span class="hljs-built_in">move</span>(p1);<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-25"><a href="#3-25" class="headerlink" title="3.25"></a>3.25</h3><h4 id="几种O-N-2-的的排序"><a href="#几种O-N-2-的的排序" class="headerlink" title="几种O(N^2)的的排序"></a>几种O(N^2)的的排序</h4><ul>
+<li>选择排序：每次选择较小的元素放在数组前部<ul>
+<li>没有最坏情况</li>
+</ul>
+</li>
+<li>冒泡排序：通过不断地交换，将较大的数交换到数组末尾。<ul>
+<li>原本逆序时情况最坏</li>
+</ul>
+</li>
+<li>插入排序：数组从左到右扩大有序的范围，将新遍历到的元素插入到有序部分并保持有序，后续元素向后平移</li>
+<li>希尔排序：优化插入排序，先分组排序，这样总体上看“基本有序”，再将整个数组排序。可以有效减少需要向后平移元素的个数。</li>
+</ul>
+<h4 id="Linux脚本编程"><a href="#Linux脚本编程" class="headerlink" title="Linux脚本编程"></a>Linux脚本编程</h4><h3 id="4-2"><a href="#4-2" class="headerlink" title="4.2"></a>4.2</h3><h4 id="协程和进程区别"><a href="#协程和进程区别" class="headerlink" title="协程和进程区别"></a>协程和进程区别</h4><ul>
+<li>创建线程需要OS，程序本身没法创建线程，但是可以创建协程。因为不需要进入内核态创建，因此协程也称为<strong>用户态线程</strong>。</li>
+<li>一个程序有一个主线程，可以管理多个协程。</li>
+<li>线程可以真正的<strong>并行</strong>执行，但是线程只能在线程的基础上<strong>并发</strong>执行。因此才说<strong>线程是程序执行的基本单位</strong>。</li>
+<li>协程适合IO密集的程序。</li>
+</ul>
+<h4 id="core，越界错误，如何检测"><a href="#core，越界错误，如何检测" class="headerlink" title="core，越界错误，如何检测"></a>core，越界错误，如何检测</h4><p>Linux下C程序常常会因为内存访问错误等原因造成segment fault（段错误），此时如果系统core dump功能是打开的，那么将会有内存映像转储到硬盘上来，之后可以用gdb对core文件进行分析，还原系统发生段错误时刻的堆栈情况。这对于我们发现程序bug很有帮助。</p>
+<h4 id="Go中数组和切片的区别"><a href="#Go中数组和切片的区别" class="headerlink" title="Go中数组和切片的区别"></a>Go中数组和切片的区别</h4><p>其实类似于vector和vector内部的data的区别。</p>
+<p>Go中的数组时一种类型，包含了数据类型和长度，一旦定以后就不能更改长度。类似于C++中<code>new</code>一个数组就需要指定类型和大小。</p>
+<p>切片就类似于<code>vector</code>，是对数组的<strong>引用</strong>，自身只保存了大小、容量、引用的数组。</p>
+<h3 id="4-10"><a href="#4-10" class="headerlink" title="4.10"></a>4.10</h3><h4 id="STL-sort"><a href="#STL-sort" class="headerlink" title="STL sort"></a>STL sort</h4><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/Lkqhrt"><img src="https://s1.ax1x.com/2022/04/10/Lkqhrt.png" srcset="/img/loading.gif" lazyload alt="Lkqhrt.png" style="zoom: 33%;" /></a></p>
+<h4 id="智能指针是线程安全的吗"><a href="#智能指针是线程安全的吗" class="headerlink" title="智能指针是线程安全的吗"></a>智能指针是线程安全的吗</h4><p>shared_ptr内部的引用计数是线程安全的，但是对象的读取需要加锁。</p>
+<h4 id="跨站脚本攻击（XSS）"><a href="#跨站脚本攻击（XSS）" class="headerlink" title="跨站脚本攻击（XSS）"></a>跨站脚本攻击（XSS）</h4><p>用户在浏览网站、使用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E8%BD%AF%E4%BB%B6">即时通讯软件</a>、甚至在阅读电子邮件时，通常会点击其中的链接。攻击者通过在链接中插入<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81">恶意代码</a>，就能够盗取用户信息。</p>
+<h4 id="跨域？"><a href="#跨域？" class="headerlink" title="跨域？"></a>跨域？</h4><p>简单来说，就是我在一个站点向另一个站点发送了请求（<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=ajax&spm=1001.2101.3001.7020">ajax</a>或者链接），只要这两个站点HTTP协议、域名或是端口中有一个不一样，说明发送了跨域。</p>
+<h4 id="跨域请求伪造"><a href="#跨域请求伪造" class="headerlink" title="跨域请求伪造"></a>跨域请求伪造</h4><p>CSRF（Cross Site Request Forgery），跨域请求伪造，即是恶意网站引诱用户点击，或直接将恶意代码植入到正常网站中，伪造用户向正常网站的服务器发送伪造的请求。由于请求是从用户的浏览器发出，便能自动带上用户的cookie发送到服务器。</p>
+<h3 id="4-18"><a href="#4-18" class="headerlink" title="4.18"></a>4.18</h3><h4 id="validate关键词"><a href="#validate关键词" class="headerlink" title="validate关键词"></a>validate关键词</h4><p>volatile 关键字是一种类型修饰符，<strong>用它声明的类型变量表示可以被某些编译器未知的因素更改</strong>，比如：操作系统、硬件或者其它线程等。遇到这个关键字声明的变量，编译器对访问该变量的代码就不再进行优化，从而可以提供对特殊地址的稳定访问。</p>
+<p>当要求使用 volatile 声明的变量的值的时候，<strong>系统总是重新从它所在的内存读取数据</strong>，即使它前面的指令刚刚从该处读取过数据。</p>
+<p><strong>volatile定义变量的值是易变的，每次用到这个变量的值的时候都要去重新读取这个变量的值，而不是读寄存器内的备份。多线程中被几个任务共享的变量需要定义为volatile类型。</strong></p>
+<h4 id="智能指针，循环引用"><a href="#智能指针，循环引用" class="headerlink" title="智能指针，循环引用"></a>智能指针，循环引用</h4><p>两个shared_ptr</p>
+<p>一般来讲，解除这种循环引用有下面有三种可行的方法(参考)：</p>
+<ol>
+<li>当只剩下最后一个引用的时候需要手动打破循环引用释放对象。</li>
+<li>当A的生存期超过B的生存期的时候，B改为使用一个普通指针指向A。</li>
+<li>使用弱引用的智能指针打破这种循环引用。<br>虽然这三种方法都可行，但方法1和方法2都需要程序员手动控制，麻烦且容易出错。我们一般使用第三种方法：弱引用的智能指针weak_ptr。</li>
+</ol>
+<h4 id="struct内存对齐"><a href="#struct内存对齐" class="headerlink" title="struct内存对齐"></a>struct内存对齐</h4><ol>
+<li>结构体变量的<strong>起始地址</strong>能够被其最宽的成员大小整除</li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%BB%93%E6%9E%84%E4%BD%93&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:208895189%7D">结构体</a>每个成员相对于<strong>起始地址的偏移</strong>能够被其<strong>自身大小整除</strong>，如果不能则在<strong>前一个成员后面</strong>补充字节</li>
+<li>结构体总体大小能够<strong>被最宽的成员的大小</strong>整除，如不能则在<strong>后面</strong>补充字节</li>
+</ol>
+<h3 id="8-8"><a href="#8-8" class="headerlink" title="8.8"></a>8.8</h3><h4 id="子类和父类的构造和析构顺序"><a href="#子类和父类的构造和析构顺序" class="headerlink" title="子类和父类的构造和析构顺序"></a>子类和父类的构造和析构顺序</h4><p>由于子类包含了父类的功能和属性，不妨将父类看做子类的一个成员，子类依赖于父类，子类是在父类的基础上加上了自己的独有部分。这样看来，构造时一定是从下到上，先构造被依赖的父类，再构造子类。析构时则相反。</p>
+<h4 id="周转时间"><a href="#周转时间" class="headerlink" title="周转时间"></a>周转时间</h4><p>平均周转时间表示，所有进程完成任务所花的所有时间除以进程的个数。因此周转时间要算上进程<strong>等待</strong>时间加上<strong>运行</strong>时间。</p>
+<h4 id="装填因子"><a href="#装填因子" class="headerlink" title="装填因子"></a>装填因子</h4><p>装填因子：a&#x3D;n&#x2F;m  其中n为key个数，m为表长。</p>
+<p>加载因子是表示Hsah表中元素的填满的程度。</p>
+<h4 id="筛选法建堆"><a href="#筛选法建堆" class="headerlink" title="筛选法建堆"></a>筛选法建堆</h4><p>建堆有两种方式：</p>
+<ol>
+<li>插入法：O(NlogN)，是比较熟知的方法，适用于事先不知道元素的个数，可以动态建堆。具体方法为以一个完全二叉树为堆（可以用数组代替），每次新元素加入二叉树的末尾（不破坏完全二叉树），然后与父节点比较进行上浮。</li>
+<li>筛选法：O(N)，适用于元素已知的情况。从下往上，从左往右的第一个非叶子节点（其实就是数组的<code>a[a.size / 2 - 1]</code>）开始，从下往上遍历（从<code>a[a.size / 2 - 1]</code>到<code>a[0]</code>）,维护该节点为堆的根节点。</li>
+</ol>
+<h4 id="哈夫曼树"><a href="#哈夫曼树" class="headerlink" title="哈夫曼树"></a>哈夫曼树</h4><p>给定N个权值作为N个叶子结点，构造一棵二叉树，若该树的带权路径长度达到最小，称这样的二叉树为<code>最优二叉树</code>，也称为<code>哈夫曼树(Huffman Tree)</code>。哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近。</p>
+<p>构造方法：</p>
+<ol>
+<li>起初每个节点看做一个单节点的树，然后全部放入优先队列，按照根节点的权重从小到大。</li>
+<li>每次取出最小的两个，作为左右子节点，求出的和为父节点，重写加入优先队列。</li>
+<li>重复上述过程直至队列只剩一个节点。</li>
+</ol>
+<p><strong>霍夫曼编码</strong>也是类似的原理。字符出现的频率作为权重</p>
+<h4 id="双路归并"><a href="#双路归并" class="headerlink" title="双路归并"></a>双路归并</h4><p>类似于力扣题：合并两个有序链表</p>
+<h3 id="8-9"><a href="#8-9" class="headerlink" title="8.9"></a>8.9</h3><h4 id="红黑树比其他平衡二叉搜索树优越在哪里？"><a href="#红黑树比其他平衡二叉搜索树优越在哪里？" class="headerlink" title="红黑树比其他平衡二叉搜索树优越在哪里？"></a>红黑树比其他平衡二叉搜索树优越在哪里？</h4><p>AVL树高度更低，查询性能更好，但是删除性能差（不稳定）</p>
+<p>红黑树牺牲了平衡性，以及用染色的方式，尽量减少旋转操作。</p>
+<h4 id="B-树与B树"><a href="#B-树与B树" class="headerlink" title="B+树与B树"></a>B+树与B树</h4><p>B树规则：</p>
+<ol>
+<li>每个内部节点有n个关键码，就不能超过n+1个分支。将上限设为m，也称就是<strong>B树的阶次</strong>。那么下限不能少于m&#x2F;2，注意是<strong>向上取整</strong>，因此可以理解为<code>(m+1)/2</code>。由此，不同结构的B树可以用分支的上下限来区分，比如与红黑树有关的<strong>（2,4）树</strong>。</li>
+<li>所有叶节点在同一层</li>
+</ol>
+<p>对于B树而言，高度是对于外部节点，而不是叶节点。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/college/6000O-cloud-computing/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6000O Cloud Computing Note</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/algorithm/binary-search/">
+                        <span class="hidden-mobile">二分查找的细节问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

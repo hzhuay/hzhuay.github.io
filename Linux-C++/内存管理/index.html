@@ -1,0 +1,576 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="内存管理   静态内存：局部静态变量，类静态成员，全局变量 栈内存：函数内局部变量 堆（自由空间）：动态分配的内存（new和delete）  智能指针newnew会返回一个指针，指向动态分配的内存。 如果new后面只跟了类型，如new int，那么对象是default initialized：内置类型和组合类型的值是未定义的，类类型使用默认构造函数。 如果需要value initialized，需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存管理">
+<meta property="og:url" content="http://example.com/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="内存管理   静态内存：局部静态变量，类静态成员，全局变量 栈内存：函数内局部变量 堆（自由空间）：动态分配的内存（new和delete）  智能指针newnew会返回一个指针，指向动态分配的内存。 如果new后面只跟了类型，如new int，那么对象是default initialized：内置类型和组合类型的值是未定义的，类类型使用默认构造函数。 如果需要value initialized，需">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T14:01:18.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.193Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>内存管理 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="内存管理">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-11 22:01" pubdate>
+        2022年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">内存管理</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1>内存管理</h1>
+
+<ul>
+<li>静态内存：局部静态变量，类静态成员，全局变量</li>
+<li>栈内存：函数内局部变量</li>
+<li>堆（自由空间）：动态分配的内存（new和delete）</li>
+</ul>
+<h1 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h1><h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><p><code>new</code>会返回一个指针，指向动态分配的内存。</p>
+<p>如果<code>new</code>后面只跟了类型，如<code>new int</code>，那么对象是<strong>default initialized</strong>：内置类型和组合类型的值是<strong>未定义的</strong>，类类型使用<strong>默认构造函数</strong>。</p>
+<p>如果需要<strong>value initialized</strong>，需要在类型后加上空括号，如<code>new int()</code>。因此，应该<strong>尽量使用</strong>带括号的版本，因为类类型无论如何都会调用默认构造函数，但是让内置类型的值未定义是<strong>危险</strong>的。</p>
+<p>对于const，必须要让对象被初始化过，因此内置类型必须有括号。尽管const对象不能修改，但是其本身是可以销毁的。</p>
+<p>编译器可以用initializer的类型来推断应该new什么类型：<code>auto p = new auto(obj);</code></p>
+<p>如果无法分配内存，new会抛出<code>bad_alloc</code>异常。如果想要忽略异常，可以使用<code>placement new</code>：<code>int *p = new (nothrow) int;</code>。这种表达式相当于传递了参数给<code>new</code>，让其在分配失败时返回一个<code>nullptr</code>。</p>
+<h3 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h3><p>如果想要new很多对象，就要在new时加上中括号：<code>int *p = new int[get_size()];</code>。还可以使用别名：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> arrT[<span class="hljs-number">42</span>];<br><span class="hljs-type">int</span> *p = <span class="hljs-keyword">new</span> arrT;<br></code></pre></td></tr></table></figure>
+
+<p>尽管叫动态数组，但是其实new出来的不是数组类型，仅仅只是指向一块连续内存的头部的指针，而不是像array类型那样，数组大小也是类型的一部分。</p>
+<p>动态数组的初始化情况和new一个对象是一样的，如果不带括号的话，内置类型会是未定义。除了带括号和不带括号两种初始化，还可以用列表初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">int</span> *p = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">10</span>]&#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>当列表内的元素不够时，剩下的元素会值初始化；如果元素过多，则new失败，抛出<code>bad_array_new_length</code>异常。</p>
+<p>动态数组的长度可以为0，不会报错，得到的指针类似于<code>end</code>迭代器，本身不应该解引用。</p>
+<h2 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h2><p>能用来<code>delete</code>的必须是能<code>new</code>出来的东西，也就是指向动态分配内存的指针或者<code>nullptr</code>。<code>delete</code>一个普通的指针，或者把同一个动态分配指针<code>delete</code>2次，都是<strong>未定义</strong>操作，编译器不会察觉。</p>
+<p>返回动态分配指针的函数，相当于把<code>delete</code>的职责交给了调用者。</p>
+<p>对于动态数组的<code>delete</code>，必须要带上<code>delete [] p;</code>，否则只有数组的第一个会被delete。</p>
+<h3 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h3><p>几种常见的使用<code>new</code>的错误：</p>
+<ol>
+<li>忘记<code>delete</code>，也就是俗称的“内存泄漏”</li>
+<li>在<code>delete</code>后仍然使用</li>
+<li><code>delete</code>同一块内存2次。</li>
+</ol>
+<p>这些问题都可以通过使用<strong>智能指针</strong>解决。</p>
+<h3 id="空悬指针"><a href="#空悬指针" class="headerlink" title="空悬指针"></a>空悬指针</h3><p>当<code>delete</code>一个指针后，指针已经失效了，但是在很多机器中，指针仍然保存了地址，哪怕那块地址已经被释放了，这样就成了<strong>空悬指针</strong>，这种指针的隐患等同于为<strong>未初始化</strong>的指针。</p>
+<h3 id="多指针指向同一处的问题"><a href="#多指针指向同一处的问题" class="headerlink" title="多指针指向同一处的问题"></a>多指针指向同一处的问题</h3><p>动态内存的一个基本问题就是多个指针指向相同的内存。任意其中一个<code>delete</code>之后，其他指针都指向了一片非法的内存。</p>
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p><code>shared_ptr</code>的智能之处在于无论是赋值还是复制，每个<code>shared_ptr</code>内部都会有个引用计数（计数器），记录了还有多少个其他<code>shared_ptr</code>指向相同的对象。当一个对象没有被引用时，<code>shared_ptr</code>就会自动销毁该对象（调用该对象的析构函数）。</p>
+<p>当一个局部的<code>shared_ptr</code>离开作用域时就会被销毁，相应的计数器就会减一。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p><code>shared_ptr</code>有三种获得方法：</p>
+<ul>
+<li><code>make_shared&lt;T&gt;(args)</code>会使用参数自动创建一个对象，并返回一个指向它的指针。这是最<strong>安全</strong>的方法。</li>
+<li><code>shared_ptr&lt;T&gt;p(q)</code>用另一个<code>shared_ptr</code>来构造一个指针</li>
+<li><code>p = q</code> 用另一个<code>shared_ptr</code>来赋值</li>
+</ul>
+<p>可以用<code>auto</code>来简化语句。</p>
+<p><code>shared_ptr&lt;T&gt; p1;</code>这样默认初始化得到的智能指针，内部持有的是<code>nullptr</code>。<strong>注意</strong>：智能指针内部持有的是<code>T*</code>的指针。</p>
+<p>与动态内存结合：<code>shared_ptr&lt;int&gt; p(new int(42));</code>。我们不能<strong>隐式</strong>地将普通指针变成智能指针，而是必须用初始化。</p>
+<p>由于智能指针默认用<code>delete</code>来释放管理的对象，因此用来初始化智能指针的指针必须是<strong>动态分配</strong>的。如果我们想要让它指向其他类型的资源，则需要传入自定义的<code>deleter</code>来规定资源如何安全释放。</p>
+<h3 id="不要混用普通指针和智能指针"><a href="#不要混用普通指针和智能指针" class="headerlink" title="不要混用普通指针和智能指针"></a>不要混用普通指针和智能指针</h3><p>以下是我的猜测：智能指针如果使用<code>make_shared</code>方法创建，那么内部是调用了<code>new</code>的。如果是用构造器的话，会判断初始器的类型，从而有不同的操作。</p>
+<p><code>shared_ptr</code>生效的前提是不能让引用计数失效。<code>shared_ptr</code>能够正确地协调对象的析构，仅限于其自身的拷贝。</p>
+<p>之所以推荐使用<code>make_shared</code>而不是先new在初始化，就是因为希望将分配内存和绑定操作合并，这样就可以避免无意中将一块内存绑定到多个<strong>独立创建</strong>（不是拷贝）的<code>shared_ptr</code>上。如果先new了一块内存，再用它来独立创建2个<code>shared_ptr</code>，每个智能指针都有独立的引用计数，且都为1。无论那个先被释放，都会导致第二个非法。</p>
+<p>还有种情况，我们分别给一个普通指针和智能指针用new出来的指针赋值（或初始化），然后加入智能指针先失效，那么就会自动释放动态分配内存，导致普通指针称为空悬指针。当我们把一块内存交个智能指针时，等于我们把内存管理的职责分给了智能指针，那么接下来就不要再使用普通指针指向那块区域了。</p>
+<h3 id="不要用get去创建别的智能指针"><a href="#不要用get去创建别的智能指针" class="headerlink" title="不要用get去创建别的智能指针"></a>不要用get去创建别的智能指针</h3><p><code>get()</code>成员可以得到内置指针，指向智能指针管理的成员。如果我们拿着这个内置指针去创建另一个智能指针，然后这个智能指针销毁了，就会把内存释放，最开始的调用get的智能指针就指向了非法空间了。</p>
+<h3 id="常见错误-1"><a href="#常见错误-1" class="headerlink" title="常见错误"></a>常见错误</h3><ol>
+<li>不要用相同的内置指针初始化（或reset）多个智能指针</li>
+<li>不要<code>delete</code> <code>get()</code>返回的指针</li>
+<li>不要使用<code>get()</code>初始化或<code>reset</code>另一个智能指针</li>
+<li>如果使用<code>get()</code>返回的指针，记住当最后一个对应的智能指针销毁后，你的指针就变得无效了。</li>
+<li>如果你使用智能指针管理的资源不是new分配的内存，记住传递个它一个删除器</li>
+</ol>
+<p>删除器简单来说就是一个函数，所谓初始化参数，规定了该如何释放内存。</p>
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p><code>release</code>会返回<code>unique_ptr</code>保存的指针，并把<code>unique_ptr</code>设为<code>null</code>。注意，返回的指针相当于把内存管理的任务交给了程序员。</p>
+<p>不支持拷贝或赋值，因为要保证唯一性。仅有一个例外：当<code>unique_ptr</code>马上要被销毁时。典型的场景是作为函数的局部变量返回的时候，编译器可以得知这个对象马上就要被销毁了，所以允许拷贝。</p>
+<p><code>auto_ptr</code>是早期标准库的产物，它只包含部分<code>unique_ptr</code>的特性，尤其是无法再容器中保存<code>auto_ptr</code>，也无法作为返回值。因此，尽管它还是标准库的内容，编程时应尽量使用<code>unique_ptr</code>。</p>
+<p>不同于<code>shared_ptr</code>，<code>unique_ptr</code>的删除器不因要作为构造器的参数，还要在尖括号中写出类型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">unique_ptr&lt;objT, delT&gt; <span class="hljs-title">p</span><span class="hljs-params">(<span class="hljs-keyword">new</span> objT, fcn)</span></span>;<br><span class="hljs-function">unique_ptr&lt;connection, <span class="hljs-title">decltype</span><span class="hljs-params">(end_connection)</span>*&gt; <span class="hljs-title">p</span><span class="hljs-params">(&amp;c, end_connection)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>注意，删除器的类型是函数指针，所以还加上*。</p>
+<h3 id="用智能指针管理动态数组"><a href="#用智能指针管理动态数组" class="headerlink" title="用智能指针管理动态数组"></a>用智能指针管理动态数组</h3><p>标准库提供了<code>unique_ptr</code>的版本来管理动态数组，提供了比其他两种智能指针更方便的使用，可以直接用下标访问：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">unique_ptr&lt;<span class="hljs-type">int</span>[]&gt; <span class="hljs-title">up</span><span class="hljs-params">(<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[])</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>其他两种指针需要先解引用，而且必须传入删除器。</p>
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p><code>weak_ptr</code>并不控制对象的声明周期，它只是指向<code>shared_ptr</code>所管理的对象，且不会改变引用计数。因此，<code>weak_ptr</code>在使用时并不知道指向的对象是否还存在，因此在访问时，需要使用<code>lock</code>。如果对象存在，则返回一个<code>shared_ptr</code>，如果不存在则返回一个null的<code>shared_ptr</code>。经典用法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(shared_ptr&lt;<span class="hljs-type">int</span>&gt; np = wp.<span class="hljs-built_in">lock</span>())&#123; ... &#125;<span class="hljs-comment">//如果对象不存在，无法进入if</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="分配器"><a href="#分配器" class="headerlink" title="分配器"></a>分配器</h1><p><code>new</code>以及依赖<code>new</code>的智能指针总是将内存分配和构造对象的操作绑定在一起。这样是很方便，但是在某些情况下会导致浪费。比如我现在申请了一个数组，但是我希望元素在需要时再构造，而不是直接全部构造。</p>
+<p><code>allocator</code>分配的内存是未构造的。它可以按照类型的大小指定内存，并且可以重用析构过的内存，或将内存还给系统。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C++</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">模板与泛型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+                        <span class="hidden-mobile">C++面向对象</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

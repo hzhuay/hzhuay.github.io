@@ -1,0 +1,832 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数据结构字符串在redis中，所有的键一定是字符串。redis虽然是用C语言编写的，但是没有直接使用C语言风格字符串（C-style String），而是实现了一种名为简单动态字符串（simple dynamic string, SDS）作为字符串的默认实现。C-style String只会用于字符串字面量。 1234567struct sdshdr&amp;#123;  &#x2F;&#x2F; 记录字符串长度  int">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis设计与实现">
+<meta property="og:url" content="http://example.com/Spring-family/redis-data/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="数据结构字符串在redis中，所有的键一定是字符串。redis虽然是用C语言编写的，但是没有直接使用C语言风格字符串（C-style String），而是实现了一种名为简单动态字符串（simple dynamic string, SDS）作为字符串的默认实现。C-style String只会用于字符串字面量。 1234567struct sdshdr&amp;#123;  &#x2F;&#x2F; 记录字符串长度  int">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/07/26/jzkNDO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/07/26/jzASR1.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/01/OlL1nE9qBHiP8sv.png">
+<meta property="og:image" content="https://s2.loli.net/2022/08/05/LFdKc2TmiGNUseg.png">
+<meta property="article:published_time" content="2022-07-25T02:03:41.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.194Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/07/26/jzkNDO.png">
+  
+  
+  <title>Redis设计与实现 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Redis设计与实现">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-25 10:03" pubdate>
+        2022年7月25日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      14k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      121 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis设计与实现</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>在redis中，所有的键一定是字符串。redis虽然是用C语言编写的，但是没有直接使用C语言风格字符串（C-style String），而是实现了一种名为<strong>简单动态字符串</strong>（simple dynamic string, SDS）作为字符串的默认实现。C-style String只会用于<strong>字符串字面量</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sdshdr</span>&#123;</span><br>  <span class="hljs-comment">// 记录字符串长度</span><br>  <span class="hljs-type">int</span> len;<br>  <span class="hljs-comment">// 记录buf中未使用的字节数</span><br>  <span class="hljs-type">int</span> <span class="hljs-built_in">free</span>;<br>  <span class="hljs-type">char</span> buf[];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>SDS遵循C-style String的风格，在末尾自动添加<code>\0</code>，也会自动申请额外1字节的空间，这些操作都是SDS自动维护，对用户是透明的，这也使得SDS可以直接使用C语言中的字符串操作函数。</p>
+<p>为什么SDS比C-style String更适合redis：</p>
+<ol>
+<li>常数复杂度获取字符串长度</li>
+<li>杜绝内存溢出，预检查buf空间</li>
+<li>减少修改字符串时带来的内存重新分配次数。小于1MB时预分配和len一样的free空间；超过1MB时每次多分配1MB额外空间。</li>
+<li>C-style String必须符合某种编码，并且只能在末尾出现空字符，使得其只能保存文本数据，不能存储二进制文件。</li>
+<li>可以重用部分<code>string.h</code>中的函数</li>
+</ol>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> *<span class="hljs-title">prev</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> *<span class="hljs-title">next</span>;</span><br>  <span class="hljs-type">void</span> *value;<br>&#125;listNode<br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">list</span> &#123;</span><br>  listNode *head;<br>  listNode *tail;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> len;<br>  <span class="hljs-comment">// 节点值复制函数</span><br>  <span class="hljs-type">void</span> *(*dup) (<span class="hljs-type">void</span> *ptr);<br>  <span class="hljs-type">void</span> (*<span class="hljs-built_in">free</span>) (<span class="hljs-type">void</span> *ptr);<br>  <span class="hljs-type">int</span> (*match) (<span class="hljs-type">void</span> *ptr, <span class="hljs-type">void</span> *key);<br>&#125;<span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><p>redis的字典基于哈希表实现。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dictht</span> &#123;</span><br>  <span class="hljs-comment">// 哈希表数组的指针</span><br>	dictEntry **table;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> sie;<br>  <span class="hljs-comment">// 哈希表大小掩码，用于计算索引值，总是等于size-1</span><br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> sizemask;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> used;<br>&#125; dictht:<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dictEntry</span> &#123;</span><br>  <span class="hljs-type">void</span> *key;<br> 	<span class="hljs-class"><span class="hljs-keyword">union</span>&#123;</span><br>    <span class="hljs-type">void</span> *val;<br>    <span class="hljs-type">uint64_t</span> u64;<br>    <span class="hljs-type">int64_t</span> s64;<br>  &#125; v;<br>  <span class="hljs-comment">// 指向下一个哈希表节点，形成链表</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dictEntry</span> *<span class="hljs-title">next</span>;</span><br>&#125; dictEntry;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dict</span> &#123;</span><br>  dictType *type;<br>  <span class="hljs-type">void</span> *privdadta;<br>  dictht ht[<span class="hljs-number">2</span>];<br>  <span class="hljs-type">int</span> rehashidx;<br>&#125; dict;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dictType</span> &#123;</span><br>  <span class="hljs-type">unsigned</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*hashFunction)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">void</span> *key)</span>;<br>  <span class="hljs-type">void</span> *(*keyDup)(<span class="hljs-type">void</span> *privdata, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *key);<br>  <span class="hljs-type">void</span> *(*valDup)(<span class="hljs-type">void</span> *privdata, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *obj);<br>  <span class="hljs-type">int</span> (*keyCompare)(<span class="hljs-type">void</span> *privdata, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *key1, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *key2);<br>  <span class="hljs-type">void</span> (*keyDestructor)(<span class="hljs-type">void</span> *privdata, <span class="hljs-type">void</span> *key);<br>  <span class="hljs-type">void</span> (*valDestructor)(<span class="hljs-type">void</span> *privdata, <span class="hljs-type">void</span> *obj);<br>&#125; dictType;<br></code></pre></td></tr></table></figure>
+
+<p><code>ht[0]</code>和<code>ht[1]</code>都是哈希表，一般情况下，字典只使用 <code>ht[0]</code>，只有在需要进行rehash的时候才会使用<code>ht[1]</code>。当不进行rehash的时候，<code>rehashidx</code>始终为-1。当负载因子不在合理范围时，需要rehash来调整表大小：</p>
+<ol>
+<li>给<code>ht[1]</code>分配空间，如果是扩展则为<code>ht[0].used*2</code>的下一个2^n^,  如果是收缩则为<code>ht[0].used</code>的下一个2^n^</li>
+<li>将所有的<code>ht[0]</code>rehash到<code>ht[1]</code>上</li>
+<li>全部迁移之后，释放<code>ht[0]</code>，将<code>ht[1]</code>设置为<code>ht[0]</code>，为<code>ht[1]</code>创建一个新的空表。</li>
+</ol>
+<p>如果服务器没有正在执行BGSAVE或者BGREWRITEAOF命令，name负载因子大于等于1时触发。如果正在执行，name大于等于5时触发。考量是在执行以上2种命令时，redis会创建子进程，根据<strong>写时复制</strong>的优化机制，需要尽可能减少对服务器内存IO的压力，因此调大负载因子的阈值。</p>
+<p>注意，rehash是渐进式的，不是一口气完成的。因为如果哈希表很大，服务器需要马上处理完的话可能负担过重，因此是每次对字典执行操作时顺带做一点，每搬运一个Entry就将rehashidx增加1，全部完成后置为-1。在rehash期间，redis会现在<code>ht[0]</code>上查找数据，找不到则在<code>ht[1]</code>上再找。另外，插入操作会在<code>ht[1]</code>上进行，包装<code>ht[0]</code>上的数据只减不增。                                                                         </p>
+<p>type属性和privdata属性是针对不同类型的键值对，为创建多态字典而设置的。每个dictType结构保存了一组用于操作特定类型键值对的函数。</p>
+<p>redis的哈希算法使用MurmurHash2。</p>
+<p>由于dictEntry组成的链表没有尾部节点的指针，所以遇到冲突时，新节点会插入表头位置。</p>
+<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><p>有序数据结构，每个阶段维持多个其他节点的指针，支持平均O(logN)，最坏O(N)的节点查找。</p>
+<p>在redis中跳跃表用的不多，只用于实现有序集合键和在集群节点中作为内部数据结构。</p>
+<h3 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h3><p>当一个集合只包含整数，且数量不多时，就会使用整数集合作为底层实现。<code>contents</code>中的数字从小到大有序，没有重复。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span>  <span class="hljs-title">intset</span> &#123;</span><br>  <span class="hljs-comment">// 编码方式</span><br>	<span class="hljs-type">uint32_t</span> encoding;<br>  <span class="hljs-comment">// 元素数量</span><br>	<span class="hljs-type">uint32_t</span> length;<br>  <span class="hljs-comment">// 保存元素的数组</span><br>	<span class="hljs-type">int8_t</span> contents[];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>虽然<code>contents</code>被声明为<code>int8_t</code>，但是真正的类型取决于<code>encoding</code>如何规定每个整数的位数。</p>
+<p>当新元素的类型比整数集合内所有元素都长时，整数集合需要<strong>升级</strong>：根据新元素的类型，扩展<code>contents</code>的大小，重新分配空间；将原有的元素转换成新类型后，<strong>从后往前</strong>重新添加到<code>contents</code>。</p>
+<p>注意：引发升级的新元素的长度总是比整数集合内所有现有元素长，所以这个新元素要么比现有元素都小，要么都大。因此插入位置只会在<code>contents</code>的开头或者末尾。</p>
+<ol>
+<li>升级机制提升了整数集合的灵活性，为C语言这种静态语言提供了用一个结构保存不同类型整数对的方法。</li>
+<li>节约了内存。</li>
+</ol>
+<p>注意：<strong>不支持降级</strong>操作。</p>
+<h3 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h3><p>列表键和哈希键的底层实现之一。当列表键只包含少量列表项，并且列表项是小整数或短字符串时，就会采用压缩列表。</p>
+<p>压缩列表在内存中由几个连续的组成部分：</p>
+<ol>
+<li>zlbytes：记录压缩列表占用字节数，在重新分配内存和计算zlend时使用</li>
+<li>zltail，记录尾节点距离起始位置的偏移量，可以直接确定尾节点的位置</li>
+<li>zllen：记录节点数量。当这个值等于UINT16_MAX时，说明达到上限，真实数量需要遍历后获得</li>
+<li>entryX：列表节点，长度不定</li>
+<li>zlend：特殊值0xFF，标记压缩列表的末端</li>
+</ol>
+<p>列表节点：</p>
+<ol>
+<li>previous_entry_length：1字节或5字节，取决于前一个节点的字节数是否超过254。有这个就可以得知前一个节点的起始位置，从而实现列表的倒序遍历。</li>
+<li>encoding：记录了content保存数据类型和长度。要么是1、2、5字节长度，以00、01、10开头的字节数组编码（用来表示不同的长度），要么是1字节长度，以11开头的整数编码。</li>
+<li>content</li>
+</ol>
+<p>连锁更新：压缩列表内恰好有多个连续的，长度介意250到253字节的节点，在前面新增节点会导致它们的previous_entry_length不够用1字节，需要扩容，从而导致后续节点连锁反应。</p>
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><p>redis没有用以上数据结构直接实现键值对数据库，而是基于这些数据结构创建了对象系统，包括字符串对象、列表对象、哈希对象、集合对象和有序集合对象。还基于<strong>引用计数</strong>实现<strong>内存回收</strong>机制和<strong>对象共享</strong>。redis对象还带有访问时间记录，在服务器启用maxmemory时，空转较久的键可能被优先删除。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisObject</span> &#123;</span><br>  <span class="hljs-comment">// 类型，5个常量</span><br>	<span class="hljs-type">unsigned</span> type:<span class="hljs-number">4</span>;<br>  <span class="hljs-type">unsigned</span> encoding:<span class="hljs-number">4</span>;<br>  <span class="hljs-comment">// 指向底层实现数据结构的指针</span><br>  <span class="hljs-type">void</span> *ptr;<br>  <span class="hljs-comment">// ...</span><br>&#125; orbj;<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/jzkNDO"><img src="https://s1.ax1x.com/2022/07/26/jzkNDO.png" srcset="/img/loading.gif" lazyload alt="jzkNDO.png" style="zoom:50%;" /></a></p>
+<p>encoding有以上这些类型。每种对象至少基于2中底层实现，见下表：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/jzASR1"><img src="https://s1.ax1x.com/2022/07/26/jzASR1.png" srcset="/img/loading.gif" lazyload alt="jzASR1.png" style="zoom:50%;" /></a></p>
+<h4 id="字符串对象"><a href="#字符串对象" class="headerlink" title="字符串对象"></a>字符串对象</h4><p>字符串对象的编码可以是：</p>
+<ol>
+<li><code>int</code>：如果字符串是整数值并且可以用<code>long</code>类型表示，<code>ptr</code>属性会保存整数值，<code>void*</code>会转成<code>long</code>。</li>
+<li><code>raw</code>：如果是字符串值，且长度大于32字节</li>
+<li><code>embstr</code>：如果是字符串值，且长度≤32字节。这是专门用于保存短字符串的一种优化编码方式。虽然和<code>raw</code>编码一样，需要用<code>redisObject</code>和<code>sdshdr</code>两个结构来表达字符串，但是<code>raw</code>会调用两次内存分配函数，<code>embstr</code>只会调用一次，分配一块连续内存给这2个结构。这样释放内存时也只用调用一次，而且2个结构再内存中紧挨着可以利用缓存优势。</li>
+</ol>
+<p>对于<code>int</code>编码的字符串，如果对这个“整数”进行了属于字符串的操作，则会改变编码为<code>raw</code>。</p>
+<p>redis只实现了对<code>int</code>和<code>raw</code>的修改，因此<code>embstr</code>实际上是只读的，对其的修改都会令编码改变为<code>raw</code>。</p>
+<h4 id="列表对象"><a href="#列表对象" class="headerlink" title="列表对象"></a>列表对象</h4><p>当同时满足以下条件时，列表对象使用<code>ziplist</code>编码：</p>
+<ol>
+<li>保存的所有字符串元素的长度都小于64字节</li>
+<li>元素数量少于512个</li>
+</ol>
+<p>否则使用<code>linkedlist</code>编码。</p>
+<p>注意：这两个上限值都可以在配置文件中修改。</p>
+<h4 id="哈希对象"><a href="#哈希对象" class="headerlink" title="哈希对象"></a>哈希对象</h4><p>底层是<code>ziplist</code>或者<code>hashtable</code>。</p>
+<p>使用压缩列表时，每次插入键值对都是紧挨着插入队尾。</p>
+<p>当同时满足以下条件时，哈希对象使用<code>ziplist</code>编码：</p>
+<ol>
+<li>保存的所有键和值的字符串元素的长度都小于64字节</li>
+<li>元素数量少于512个</li>
+</ol>
+<p>否则使用<code>hashtable</code>编码。</p>
+<h4 id="集合对象"><a href="#集合对象" class="headerlink" title="集合对象"></a>集合对象</h4><p>底层是<code>intset</code>或者<code>hashtable</code>。</p>
+<p>使用<code>intset</code>时，要求所有元素为整数，且不超过512个。</p>
+<p>当使用哈希表时，只使用键，值全部为NULL。</p>
+<h4 id="有序集合对象"><a href="#有序集合对象" class="headerlink" title="有序集合对象"></a>有序集合对象</h4><p>底层是<code>ziplist</code>或者<code>skiplist</code>。</p>
+<p>使用<code>ziplist</code>时，每个元素使用2个紧挨的压缩列表节点来保存，第一个保存元素的成员，的第二个保存元素的分值。</p>
+<p>使用<code>skiplist</code>时，一个<code>zset</code>结构同时包含一个字典和一个跳跃表。跳跃表节点的object属性保存元素的成员，score属性保存分数。通过跳跃表，可以对有序集合进行<strong>范围性操作</strong>。字典创建了成员到分值的映射，可以实现O(1)的分值查询。</p>
+<p>字典和跳跃表在底层是共用元素的成员和分值的，不会产生浪费。</p>
+<p>当元素数量小于128个，所有元素成员的长度小于64字节时，使用<code>ziplist</code>编码。</p>
+<h4 id="类型检查与命令多态"><a href="#类型检查与命令多态" class="headerlink" title="类型检查与命令多态"></a>类型检查与命令多态</h4><p>Redis中有些命令可以对任意类型执行，但是有些只能用于特定类型，说明其中有类型检查的操作。类型检查通过<code>redisObject</code>的<code>type</code>属性实现的。</p>
+<p>同种对象有不同的底层实现，命令需要根据底层实现的不同，或者是作用的键类型不同，选择正确的API来执行，这就是<strong>多态命令</strong>。</p>
+<h4 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisObject</span> &#123;</span><br>  <span class="hljs-comment">// ...</span><br>  <span class="hljs-type">int</span> refcount;<br>&#125; orbj;<br></code></pre></td></tr></table></figure>
+
+<p>C语言本身没有内存回收功能，因此Redis自己实现了基于引用计数的内存回收机制，由<code>redisObject</code>的<code>refcount</code>属性来记录。</p>
+<h4 id="对象共享"><a href="#对象共享" class="headerlink" title="对象共享"></a>对象共享</h4><p>引用计数机制允许实现对象共享，有利于节约内存。Redis在初始化服务器时会创建0到9999共一万个字符串对象，因为它们大概率会被用来共享。</p>
+<p>用<code>object refcount</code>命令可以查看引用计数。</p>
+<p>注意：只支持整数值的共享，字符串对象和包含多个值的对象验证相同的复杂度太高。</p>
+<h4 id="空转时长"><a href="#空转时长" class="headerlink" title="空转时长"></a>空转时长</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisObject</span> &#123;</span><br>  <span class="hljs-comment">// ...</span><br>  <span class="hljs-type">unsigned</span> lru:<span class="hljs-number">22</span>;<br>&#125; orbj;<br></code></pre></td></tr></table></figure>
+
+<p>该属性记录了对象最后一次被命令程序访问的时间。<code>object idletime</code>可以查看给定键的空转时长。这个命令实现是特殊的，在访问键的值对象时，不会修改值对象的lru属性。</p>
+<p>如果服务器开了maxmemory选项，并且服务器的回收内存算法为<code>volatile-lru</code>或者<code>allkeys-lru</code>，那内存超过上限时优先释放空转时长较高的键。</p>
+<h2 id="单机数据库"><a href="#单机数据库" class="headerlink" title="单机数据库"></a>单机数据库</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisServer</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	<span class="hljs-comment">// 保存服务器中所有数据库的数组</span><br>	redisDb *db;<br>	<span class="hljs-comment">// 服务器中数据库数量</span><br>	<span class="hljs-type">int</span> dbnum;<br>	<span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Redis中所有服务器都要保存在服务器状态<code>redis.h/redisServer</code>结构对的db数组中，类型为<code>redis.h/redisDb</code>。<code>dbnum</code>默认为16。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisClient</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	<span class="hljs-comment">// 记录客户端当前正在使用的数据库</span><br>	redisDb *db;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>Redis是键值对数据库，每个数据库的所有键值对都保存在<strong>键空间</strong>里：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisDb</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	<span class="hljs-comment">// 数据库键空间，保存数据库中所有的键值对</span><br>	dict *dict;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>对数据库的读写还会附带一些维护操作：</p>
+<ol>
+<li>更新服务器键空间的命中或不命中次数</li>
+<li>更新LRU</li>
+<li>如果发现键以过期，要删除键后再进行剩余操作</li>
+<li>如果有使用WITCH命令监视该键，则修改后要将键标记为dirty，从而让事务注意到这个键已被修改</li>
+<li>服务器每修改一个劲键，都会对脏键计数器加1，这个计数器会触发服务器的持久化和复制操作</li>
+<li>如果服务器开启了数据库通知功能，那么在对键修改后要按照配置发送相应的数据库通知。</li>
+</ol>
+<p><code>expire</code>命令可以设置某个键的生存时间，在多少秒后删除。</p>
+<p><code>expireat</code>命令可以设置某个键的过期时间，在某个时间戳来临时删除。</p>
+<p><code>ttl</code>命令查看一个键的生存时间或者过期时间。</p>
+<p>以上单位都是秒。<code>pexpire</code>、<code>pexpireat</code>、<code>pttl</code>以毫秒为单位。</p>
+<p>以上的设置命令，最后都会经过转换，然后执行<code>pexpireat</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisDb</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	<span class="hljs-comment">// 过期字典，保存键的过期时间</span><br>	dict *expires;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>过期时间保存在<code>redisDb</code>中的过期字典中。虽然过期字典和键空间内都保存了键，但是指向的键对象是共享的，所以没有浪费内存。</p>
+<p><code>persist</code>命令可以移除一个键的过期时间。</p>
+<p>检查一个键是否过期，有一个函数，大致操作是获取过期时间，和当前UNIX时间戳比较。另一种方法是用<code>ttl</code>或<code>pttl</code>命令查看过期时间是否大于0，但是实际上Redis还是使用与函数操作类似的操作，因为直接访问过期字典比执行一个命令要快。</p>
+<h4 id="过期删除策略"><a href="#过期删除策略" class="headerlink" title="过期删除策略"></a>过期删除策略</h4><h5 id="定时删除"><a href="#定时删除" class="headerlink" title="定时删除"></a>定时删除</h5><p>在设置过期时间的同时创建定时器，到点删除。该策略保证过期的键会被尽快删除。这是对内存最友好，对CPU最不友好的策略。对于内存不紧张但是CPU紧张的服务器来说不合适。</p>
+<p>而且，定时器需要用到时间事件，当前的实现是无序链表，查询一个事件的复杂度是O(N)，不能高效处理大量事件。</p>
+<h5 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h5><p>对过期键放任不管，只有每次从键空间中取键时，都检查是否过期。对CPU最友好，对内存不友好。过期的键可能长期霸占内存，如果永远不被访问的话，几乎可以视作<strong>内存泄漏</strong>。</p>
+<h5 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h5><p>折中方案。难点在于确定删除操作的时长和频率。</p>
+<h4 id="Redis的过期删除策略"><a href="#Redis的过期删除策略" class="headerlink" title="Redis的过期删除策略"></a>Redis的过期删除策略</h4><p>Redis实际采用的是惰性删除和定期删除两种策略配合，说明Redis更看重的是CPU性能。</p>
+<p>惰性删除策略由<code>db.c/expireIfNeeded</code>函数实现，所以读写数据库的命令都会在执行前调用该函数检查键是否过期。因此，由于每个被访问的键都可以在执行具体操作前因过期被函数，所以每个命令的实现函数<strong>必须能处理键不存在的情况</strong>。</p>
+<p>定期删除策略由<code>redis.c/activeExpireCycle</code>函数实现。每当Redis的<strong>周期性操作</strong><code>redis.c/serverCron</code>函数执行时，<code>activeExpireCycle</code>都会被调用，它在<strong>规定时间内分多次</strong>遍历服务器中各数据库，从数据库的<code>expires</code>字典中<strong>随机检查</strong>一部分键对的过期时间。</p>
+<h5 id="对RDB的影响"><a href="#对RDB的影响" class="headerlink" title="对RDB的影响"></a>对RDB的影响</h5><p>执行<code>save</code>和<code>bgsave</code>的命令创建一个新的RDB文件。在创建时，只会保存未过期的键。</p>
+<p>在启动Redis服务器时，如果开启了RDB功能，那么会载入RDB文件：</p>
+<ol>
+<li>如果以主服务器运行，会检查键的过期时间，只载入未过期的键。</li>
+<li>如果以从服务器启动，<strong>无论是否过期的键都会被载入</strong>。在主从服务器进行数据同步的时候，从服务器的数据库会被清空，所以一般来讲不检验也没事。</li>
+</ol>
+<h5 id="对AOF的影响"><a href="#对AOF的影响" class="headerlink" title="对AOF的影响"></a>对AOF的影响</h5><p>当服务器使用AOF持久化时，如果某个键已经过期但还未被删除，不会影响到AOF文件。当它被删除后，AOF会追加一条DEL命令，<strong>显式记录</strong>该键已经删除。</p>
+<p>在执行AOF重写时，已经过期的键不会保存到重写后的AOF文件里。</p>
+<h5 id="对复制的影响"><a href="#对复制的影响" class="headerlink" title="对复制的影响"></a>对复制的影响</h5><p>当服务器运行在复制模式下，从服务器的过期键删除动作由主服务器控制，以此保证<strong>主从一致</strong>。</p>
+<p>主服务器在删除一个过期键后，会显式地向所有从服务器发送一个DEL命令。</p>
+<p>从服务器在执行客户端的读命令时，即使碰到过期键也不会删除，而是当做未过期的处理。只有收到主服务器的DEL命令后才会删除过期键。</p>
+<h4 id="数据库通知"><a href="#数据库通知" class="headerlink" title="数据库通知"></a>数据库通知</h4><p>2.8版本新增功能，可以让客户端通过订阅给定的频道或模式，来获知键的变化和命令执行情况。</p>
+<p>比如<code>subscribe __keyspace@0__:message</code>命令可以订阅0号数据库的message键的执行了什么命令。这类关注<strong>某个键执行了什么命令</strong>的通知称为<strong>键空间通知</strong>。</p>
+<p>比如<code>subscribe __keyspace@0__:del</code>命令可以订阅0号数据库的del命令作用于哪些键。这类关注<strong>某个命令被什么键执行了</strong>的通知称为<strong>键时间通知</strong>。</p>
+<p>服务器配置的<code>notify-keyspace-events</code>选项决定了服务器所发送的通知类型。</p>
+<p>发送通知</p>
+<p>发送通知由<code>notify.c/notifyKeyspaceEvent</code>函数实现。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">notifyKeyspaceEvent</span><span class="hljs-params">(<span class="hljs-type">int</span> type, <span class="hljs-type">char</span> *event, robj *key, <span class="hljs-type">int</span> dbid)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>type：想要发送的通知类型，程序根据这个值判断通知是否为服务器配置<code>notify-keyspace-events</code>选项想要的通知类型，由此决定是否发送通知。</p>
+</li>
+<li><p>event：时间名称</p>
+</li>
+<li><p>keys：产生事件的键</p>
+</li>
+<li><p>dbid：产生事件的数据库号</p>
+</li>
+</ul>
+<p>在函数内部，会通过按位与的方式检查通知类型，是否允许发送键空间通知，是否允许发送键事件通知。</p>
+<h3 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h3><p>RDB既可以手动执行，也可以定时执行。RDB文件是经过压缩的二进制文件。</p>
+<p><code>SAVE</code>命令会阻塞服务器进程，直到RDB文件创建完毕为止。</p>
+<p><code>BGSAVE</code>命令会派生子进程来创建RDB文件，不会阻塞服务器，但是在BGSAVE执行期间，客户端的<code>SAVE</code>和<code>BGSAVE</code>命令会被拒绝。<code>BGSAVE</code>和<code>BGREWRITEAOF</code>也不能同时执行：</p>
+<ul>
+<li>如果<code>BGSAVE</code>正在执行，那么<code>BGREWRITEAOF</code>会被延迟到<code>BGSAVE</code>执行完成后执行。</li>
+<li>如果<code>BGREWRITEAOF</code>正在执行，那么<code>BGSAVE</code>会被拒绝。</li>
+</ul>
+<blockquote>
+<p>复习：fork()在父进程中的返回值是子进程的pid，在子进程的返回值是0</p>
+</blockquote>
+<p>实际创建工作由<code>rdb.c/rdbSave</code>函数完成，SAVE命令和BGSAVE最终都会调用这个函数。</p>
+<p>RDB文件的载入是在服务器启动是自动执行的，因此没有专门的载入命令。只要检测到RDB文件存在，就会自动载入。实际工作由<code>rdb.c/rdbLoad</code>函数完成。载入期间服务器阻塞。</p>
+<p>由于AOF文件的更新频率通常比RDB高，所以如果开启了AOF功能，那么<strong>优先使用</strong>AOF来还原数据。</p>
+<h4 id="自动间隔性保存"><a href="#自动间隔性保存" class="headerlink" title="自动间隔性保存"></a>自动间隔性保存</h4><p><code>BGSAVE</code>允许Redis实现后台自动保存，通过<code>SAVE</code>设置多个规则，只要其中任意一个条件满足，就会触发<code>BGSAVE</code>。比如<code>save 300 10</code>，意思是如果在300秒内对数据库进行至少10次修改。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisServer</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	<span class="hljs-comment">// 记录了保存条件的数组</span><br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">saveparam</span> *<span class="hljs-title">saveparams</span>;</span><br>  <span class="hljs-comment">// 修改计数器</span><br>  <span class="hljs-type">long</span> <span class="hljs-type">long</span> dirty;<br>  <span class="hljs-comment">// 上次保存时间</span><br>  <span class="hljs-type">time_t</span> lastsave;<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">saveparam</span> &#123;</span><br>  <span class="hljs-comment">// 秒数</span><br>  <span class="hljs-type">time_t</span> seconds;<br>  <span class="hljs-comment">// 修改数</span><br>  <span class="hljs-type">int</span> changes;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><code>SAVE</code>设置的保存条件会被保存到<code>redisServer</code>结构的<code>saveparams</code>属性。除了这个数组，服务器还维持dirty计数器和上次修改时间。dirty计数器记录了距离上次成功执行<code>SAVE</code>或者<code>BGSAVE</code>后，服务器对数据库状态（所有数据库）进行多少次修改。<code>lastsave</code>记录上次成功执行<code>SAVE</code>或者<code>BGSAVE</code>的UNIX时间戳。</p>
+<p>Reidis的服务器周期性操作<code>serverCron</code>函数默认每个<strong>100毫秒</strong>执行一次，该函数的工作之一就是检查保存条件是否满足。如果时间超过并且修改次数超过，就触发保存。</p>
+<h4 id="RDB文件结构"><a href="#RDB文件结构" class="headerlink" title="RDB文件结构"></a>RDB文件结构</h4><p>一个完整的RDB包含以下部分</p>
+<ul>
+<li>REDIS：5字节，保存“REDIS“5个字符，程序可以在载入时以此检测是否为RDB文件。</li>
+<li>db_version：4字节，一个用字符串表示的整数，记录RDB的版本号，比如”0006“。该书只介绍第6版的文件结构。</li>
+<li>database：包含0个或多个数据库</li>
+<li>EOF常量：1字节，标志RDB正文结束。</li>
+<li>check_num：8字节的无符号整数，校验和，通过前四部分计算得出。</li>
+</ul>
+<p>每个非空的database可以保存为：</p>
+<ul>
+<li>SELECTDB：1字节常量，程序读到这个值，表示接下来读入的是一个数据库号码</li>
+<li>db_number：数据库号码，根据号码大小不同可以是1&#x2F;2&#x2F;5字节。当读到号码后，服务器会调用<code>SELECT</code>命令切换到对应数据库，使得之后读入的键值对可以载入到对应数据库。</li>
+<li>kay_value_pairs：保存了数据库中所有的键值对。如果键有过期时间，该信息也会保存。如果没有过期信息则没有前两项<ul>
+<li>EXPIRETIME_MS：1字节常量，告知程序接下来要读入的是以毫秒为单位的过期时间。</li>
+<li>ms：8字节的带符号整数，以毫秒为单位的UNIX时间戳，表示过期时间。</li>
+<li>TYPE：1字节，记录value的类型。每一个TYPE常量都对应一种对象类型或者底层编码。决定如何读入和解释value数据。</li>
+<li>key：总是一个字符串的对象，编码方式和<code>REDIS_RDB_TYPE_STRING</code>类型的value一样。</li>
+<li>value：这里书中有大量的详尽分析，这里不赘述。</li>
+</ul>
+</li>
+</ul>
+<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>与RDB记录数据库状态不同，AOF记录的是写命令。AOF保存的命令都是以Redis的命令请求协议格式保存，而Redis的命令请求协议是纯文本格式，所哟AOF是人类可读的。</p>
+<p>AOF持久化的实现分为命令追加、文件写入、文件同步三个步骤。</p>
+<p>当AOF功能开启时，服务器每执行完一个写命令，会以协议格式将命令追加到服务器状态的<code>aof_buf</code>缓冲区末尾。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisServer</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	sds aof_buf;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>Redis的服务器进程就是一个<strong>事件循环</strong>，文件事件负责接收命令和发送命令，时间事件负责执行像<code>serverCron</code>这样的定时运行函数。服务器每结束一个事件循环前，都会调用<code>flushAppendOnlyFile</code>函数，考虑是否需要将<code>aof_buf</code>对的内容写入AOF中。</p>
+<p><code>flushAppendOnlyFile</code>函数的行为由服务器配置的<code>appendfsync</code>决定：</p>
+<ul>
+<li>always：将缓冲区内容写入并同步</li>
+<li>everysec：将缓冲区内容写入，如果距离上次同步超过1秒，那么再次同步，并且同步线程由另一个线程执行。这是<strong>默认选项</strong>。</li>
+<li>no：将缓冲区内容写入，但是不同步，有操作系统决定。</li>
+</ul>
+<blockquote>
+<p>为了提高文件写入效率，现代操作系统中，用户调用write时，操作系统通常将数据暂存到一个内存缓冲区中，等缓冲区被填满、或超过指定时限后，才真正将缓冲区写入到磁盘。这在提高效率的同时也带来安全问题，因此系统还提供了fsync和fdatasync两个同步函数，可以强制让操作系统将缓冲区写入硬盘，确保数据安全。</p>
+</blockquote>
+<p>因此，always是安全性最高，但是效率最差的配置，即使出现停机故障，也最多地都市一个事件循环中产生的命令数据。everysec足够快，并且最多丢失1秒的数据，因此作为默认项。no的写入速度最快，但是由于会在系统缓存中累计一段时间的写入数据，所以单词同步时长是最长的，故障时丢失上次同步后的所有数据。</p>
+<h4 id="载入和还原"><a href="#载入和还原" class="headerlink" title="载入和还原"></a>载入和还原</h4><ol>
+<li>创建一个不带网络连接对的伪客户端，因为Redis的命令只能在客户端的上下文中执行。</li>
+<li>从AOF文件中分析并读取一条写命令</li>
+<li>使用伪客户端执行写命令</li>
+<li>重复2、3步骤，直到所有写命令被处理完</li>
+</ol>
+<h4 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h4><p>随着时间流逝，AOF文件中内容会增多，文件体积变大。比如分别使用多次RPUSH命令向列表添加1个元素，其实效果和一次添加多个元素效果是一样的，这里就有改进空间。为了解决AOF体积膨胀问题，Redis提供了<strong>AOF文件重写</strong>功能，可以生成一个效果一样的新AOF文件，同时体积更小。</p>
+<p>AOF重写不需要对现有的AOF进行任何读取、分析或写入操作，而是通过<strong>读取数据库状态</strong>实现的。比如用了多条命令对一个列表进行增删改，其实等价于一条插入命令来描述其最终状态。</p>
+<p>为了避免执行命令时造成客户端输入缓冲区溢出，在重写列表、哈希表、集合、有序集合这四种可能带有多个元素的键时，会先检查键锁包含的元素数量，如果超过了<code>redis.h/REDIS_AOF_REWRITE_ITEMS_PER_CMD</code>常量，则会使用多条命令来记录键。此书版本中为64。</p>
+<p>但是，AOF重写需要的大量的写入，如果要阻塞服务器的话就无法处理请求，因此Redis将AOF重写放到子进程执行。这样父进程可以继续处理请求，而且子进程带有服务器进程的数据副本（子进程会复制父进程的内存空间），使用子进程而不是线程，可以在不使用锁的情况下保证数据安全。</p>
+<p>为了解决在子进程进行AOF重写的过程中，父进程处理请求使数据库状态更新，导致的数据不一致问题，服务器设置了一个<strong>AOF重写缓冲区</strong>。该缓冲区在创建子进程后开始使用，Redis每执行完一个写命令，就会同时发送给AOF缓冲区和AOF重写缓冲区。</p>
+<p>当子进程完成重写后，会向父进程发送一个信号，父进程接到后会调用信号处理函数，进行如下操作：</p>
+<ol>
+<li>将AOF重写缓冲区的内从写入新AOF文件中，此时新AOF文件所描述的数据库状态与服务器的达成一致。</li>
+<li>对新AOF文件进行改名，<strong>原子</strong>地覆盖旧AOF文件。</li>
+</ol>
+<p>整个AOF后台重写过程中，只有<strong>信号处理函数</strong>执行时会阻塞服务器进程，大大降低了AOF重写对性能的影响。</p>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p>Redis中的事件分2种类型：文件事件和时间事件。</p>
+<h4 id="文件事件"><a href="#文件事件" class="headerlink" title="文件事件"></a>文件事件</h4><p>基于Reactor模式开发的网络事件处理器。</p>
+<p>文件事件处理器使用<strong>I&#x2F;O多路复用</strong>来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同对的事件处理器。当被监听的套接字准备好执行连接（accept）、读取（read）、写入（write）、关闭（close）等操作时，对应的文件事件就会产生，此时文件事件处理器会调用关联好的事件处理器来处理这些事件。</p>
+<p>虽然文件事件处理器以<strong>单线程</strong>运行，但是通过使用I&#x2F;O多路复用同时监听多个套接字，既实现了高性能对的网络通信模型，又很好地与Redis服务器中其他同样以单线程运行的模块进行对接，保持Redis内部单线程设计的简单性。</p>
+<img src="https://s2.loli.net/2022/08/01/OlL1nE9qBHiP8sv.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" />
+
+<p>文件事件处理器由这四部分组成。文件事件是对套接字操作的抽象。文件事件可能会并发的出现，但是事件会被放在队列里，以有序的、同步的、每次一个套接字传送到分派器。处理器就是一个个函数，分派器会调用根据事件类型调用它们。</p>
+<p>Redis中的I&#x2F;O多路复用的功能来自于包装常见的select、epoll、evport、kqueue这些I&#x2F;O多路复用函数库实现的，每个在源码中对应一个文件，都实现了相同的API，所以多路复用的底层实现是可以<strong>互换</strong>的。在源码中有<code>#include</code>宏定义了相关规则，程序在编译是自动选择系统中性能最高的函数库作为底层实现。</p>
+<p>从代码来看，evport &gt; epoll &gt; kqueue &gt; select。select是Linux系统中一定会有的，性能也最差，作为最后选择。</p>
+<p>事件分<code>AE_READABLE</code>和<code>AE_WRITABLE</code>两种。</p>
+<ol>
+<li>连接应答处理器：<code>networking.c/acceptTcpHandler</code>函数对连接服务器监听套接字的客户端进行应答，具体实现为<code>sys/socket.h/connect</code>的包装。绑定了服务端socket的读事件。</li>
+<li>命令请求处理器：<code>networking.c/readQueryFromClient</code>函数包装了<code>unistd.h/read</code>，客户端连接成功后，服务器就会将客户端套接字的读事件与该处理器关联。</li>
+<li>命令回复处理器：<code>networking.c/sendReplyToClient</code>包装了<code>unistd.h/write</code>，关联了写事件。</li>
+</ol>
+<h4 id="时间事件"><a href="#时间事件" class="headerlink" title="时间事件"></a>时间事件</h4><p>一个时间事件主要有三个属性：</p>
+<ul>
+<li>id：全局唯一，自增，新事件的id比老事件大</li>
+<li>when：毫秒精度的UNIX时间戳，记录事件的到达事件</li>
+<li>timeProc：时间事件处理器，一个函数。</li>
+</ul>
+<p>时间事件分为定时事件和周期事件。具体取决于时间事件处理器的返回值：如果返回<code>ae.h/AE_NOMORE</code>则为定时事件，如果是其他整数值，则为周期事件，返回值是对<code>when</code>属性的更新。</p>
+<p>服务器中所有时间事件都在一个<strong>无序链表</strong>中，新的事件总是插在表头。</p>
+<p>在本书版本中，正常模式下Redis只使用<code>serverCron</code>一个时间事件，链表几乎退化为指针。在事件不多的情况下对性能没有影响。</p>
+<p>在调度上，会循环调用事件处理函数，但是在函数内部会先计算最近到期的事件，然后根据该时长设置最大阻塞时间，这样既可以避免服务器频繁轮训，也可以确保<code>aeApiPoll</code>不会阻塞过长时间。服务器总是先等待和处理文件事件，再检查时间事件。由于时间事件总是在文件事件之后，因此时间事件看起来会“迟到”。</p>
+<p><img src="https://s2.loli.net/2022/08/05/LFdKc2TmiGNUseg.png" srcset="/img/loading.gif" lazyload alt="截屏2022-08-05 17.03.47"></p>
+<p>对文件事件和时间事件的处理都是同步、有序、原子的。事件不会主动抢占，而是会为了减少总体阻塞时间适当让出执行权。</p>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>在服务器端，每个客户状态表达为<code>redis.h/redisClient</code>的结构。在服务器状态结构里，这些客户端状态被保存在一个链表中。</p>
+<p>客户端结构中包含以下属性：</p>
+<ul>
+<li>fd：套接字描述符。伪客户端的fd为-1。</li>
+<li>name：名字，默认情况下没有。</li>
+<li>flags：角色，以及客户端所处的状态。</li>
+<li>querybuf：输入缓冲区用于保存客户端发送的命令</li>
+<li>argc, **argv：命令参数和参数数量。argv[0]是命令，之后的是参数。命令保存到缓冲区后，服务器会解析命令，命令参数和个数保存到这里。</li>
+<li>struct redisCommand *cmd：服务器根据argv[0]一个字典中找到这个命令对应的实现函数，交给cmd指针。这个结构保存了命令的实现函数、标志、传参个数、总执行次数等信息。</li>
+<li>输出缓冲区：<ul>
+<li>bufpos和buf[]：固定大小缓冲区。用于保存长度较小的回复。bufpos记录已经使用缓冲字节数。buf数组默认16KB。</li>
+<li>list *reply：固定缓冲区用尽或者太小时会启用可变大小缓冲区。是一个链表，可以保存各种类型的对象。</li>
+</ul>
+</li>
+<li>authenticated：用0或1表达是否通过认证</li>
+<li>ctime：客户端创建时间，可以用来计算客户端已经与服务器连接了多少秒。</li>
+<li>lastinteraction：客户端最后一次与服务器进行互动的时间。可以计算客户端空转时间。，记录在<code>CLIENT list</code>命令的idle域。</li>
+<li>obuf_soft_limit_reached_time：输出缓冲区第一次到达软限制的时间。</li>
+</ul>
+<p>有一种客户端关闭的情况是输出缓冲区过大。如果超过硬性限制会直接关闭；如果超过软限制，会先记录时间，如果缓冲区大小一直超过软限制，并且持续一段时间（时长可以配置），那么会关闭。一段时间内不再超过，则不关闭，并且计时器清零。</p>
+<ul>
+<li>lua_client：服务器在初始化时创建负责执行Lua脚本的伪客户端。</li>
+<li>载入AOF文件时创建的伪客户端。</li>
+</ul>
+<h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><p>命令请求的执行过程：</p>
+<ol>
+<li>用户端将用户输入的命令转换成协议格式，发送给服务器</li>
+<li>套接字因为客户端的写动作而变得可读，服务器读取命令后保存到输入缓冲区，解析提取命令和参数保存到argv和argc，然后调用命令执行器<ol>
+<li>现根据<code>argv[0]</code>保存的命令，在<strong>命令表</strong>中查找，保存到客户端的cmd属性。每个命令是一个<code>redisCommand</code>结构，其中比较重要的属性有：proc，函数指针，指向该命令对应的执行函数；arity，命令参数的个数，如果是负数则表示参数数量大于等于该值的正数；flags，通过一系列bit表达命令的属性，比如是读还是写，是否需要内存检查等。</li>
+<li>执行预备操作，进行各种检查：检查cmd是否为空指针，检查参数个数，检查身份验证，如果打开了maxmenory则要检查内存占用情况。。。书中还列举的很多。</li>
+<li>执行命令</li>
+<li>后续工作</li>
+</ol>
+</li>
+<li>发送回客户端</li>
+</ol>
+<h4 id="serverCron函数"><a href="#serverCron函数" class="headerlink" title="serverCron函数"></a>serverCron函数</h4><ol>
+<li>Redis中需要经常获取系统当前时间，因此<code>unixtime</code>和<code>mstime</code>这redisServer的属性会被缓存，每100毫秒更新，因此精度不高，只会用于对精度要求不高的任务。</li>
+<li><code>lruclock</code>默认每10秒更新一次，当服务器要计算一个数据库键的空转时间时，就会用<code>lruclock</code>减去对象的<code>lru</code>属性。</li>
+<li><code>trackOperationsPerSecond</code>函数会每100毫秒执行一次，以抽样计算的方式估算并记录服务器在最近一秒处理多大的请求数量。</li>
+<li><code>stat_peak_memory</code>属性记录服务器的内存峰值大小。每次serverCron执行时都会更新。</li>
+<li>处理SIGTERM信号。Redis收到信号不会立刻结束，而是要先拦截下来，做好关闭前的准备动作（比如持久化）然后再关闭。</li>
+<li>管理客户端：调用<code>clientsCron</code>函数，做两个检查：连接超时和输入缓冲区。</li>
+<li>管理数据库：<code>databasesCron</code>函数，对一部分数据库检查，删除过期键，必要时收缩字典。</li>
+<li>执行被延迟的<code>BGREWRITEAOF</code>命令。在执行<code>BGSAVE</code>是收到的<code>BGREWRITEAOF</code>会被延迟执行。</li>
+<li>检查持久化操作的运行状态。服务器状态用<code>rdb_child_pid</code>和<code>aof_child_pid</code>属性记录执行BGSAVE和BGREWRITEAOF的子进程pid，用这两个属性可以检查命令是否正在执行。</li>
+<li>将AOF缓冲区的内容写入AOF文件</li>
+<li>关闭异步客户端：关闭输出缓冲区大小超出限制对的客户端</li>
+<li>增加<code>cronloops</code>计数器，这个属性记录了该函数执行次数。目前唯一的作用是在复制模块中实现没执行<code>serverCron</code>函数N次就执行一次指定代码的功能。</li>
+</ol>
+<h4 id="初始化服务器"><a href="#初始化服务器" class="headerlink" title="初始化服务器"></a>初始化服务器</h4><ol>
+<li>创建一个<code>redisServer</code>类型的实例server作为服务器的状态。设置一些默认值，以整数、浮点数、字符串属性为主。</li>
+<li>载入配置选项</li>
+<li>初始化服务器数据结构</li>
+<li>还原数据库状态</li>
+<li>执行事件循环</li>
+</ol>
+<h2 id="多机服务器实现"><a href="#多机服务器实现" class="headerlink" title="多机服务器实现"></a>多机服务器实现</h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Spring/">Spring</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Java-Spring/redis-data/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis设计与实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/other/daily-report/">
+                        <span class="hidden-mobile">daily_report</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

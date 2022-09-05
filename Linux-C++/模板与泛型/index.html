@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="函数模板模板定义以关键词template开始，后跟一个模板参数列表，由若干个用逗号分隔的模板参数组成。编译器会推断模板参数的类型，为不同的类型实例化出不同的版本。 类型参数前必须使用关键词class或typename。在模板参数列表中这两者等价，typename更加贴切模板参数的含义（并且不暗示类型必须是类），是在class之后引入的。 模板中还可以定义非类型参数，表示一个特定类型的参数，因此模板">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模板与泛型">
+<meta property="og:url" content="http://example.com/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="函数模板模板定义以关键词template开始，后跟一个模板参数列表，由若干个用逗号分隔的模板参数组成。编译器会推断模板参数的类型，为不同的类型实例化出不同的版本。 类型参数前必须使用关键词class或typename。在模板参数列表中这两者等价，typename更加贴切模板参数的含义（并且不暗示类型必须是类），是在class之后引入的。 模板中还可以定义非类型参数，表示一个特定类型的参数，因此模板">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T14:01:25.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.193Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>模板与泛型 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="模板与泛型">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-11 22:01" pubdate>
+        2022年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">模板与泛型</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>模板定义以关键词<code>template</code>开始，后跟一个<strong>模板参数列表</strong>，由若干个用逗号分隔的<strong>模板参数</strong>组成。编译器会推断模板参数的类型，为不同的类型实例化出不同的版本。</p>
+<p><strong>类型参数</strong>前必须使用关键词<code>class</code>或<code>typename</code>。在模板参数列表中这两者等价，<code>typename</code>更加贴切模板参数的含义（并且不暗示类型必须是类），是在<code>class</code>之后引入的。</p>
+<p>模板中还可以定义<strong>非类型参数</strong>，表示一个特定类型的参数，因此模板中应该用类型名而非<code>typename</code>。这些值必须是<strong>常量表达式</strong>，因为在编译阶段就需要被替换，来源为用户指定或编译器推断。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">unsigned</span> N, <span class="hljs-type">unsigned</span> M&gt;</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> (&amp;p1)[N], <span class="hljs-type">const</span> <span class="hljs-type">char</span> (&amp;p2)[M])</span></span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">strcmp</span>(p1, p2);<br>&#125;<br><span class="hljs-built_in">compare</span>(<span class="hljs-string">&quot;hi&quot;</span>, <span class="hljs-string">&quot;mom&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>在调用时，编译器会使用<strong>字面值常量</strong>的大小来代替N和M。    </p>
+<p>在<strong>模板参数列表</strong>后可以加<code>inline</code>或<code>constexpr</code>。</p>
+<p>从上述例子中可以看到2个编写泛型代码的重要原则：</p>
+<ul>
+<li>模板中的函数参数是<code>const</code>引用：这样可以同时支持允许拷贝和不允许拷贝的版本，而且避免拷贝可以减少浪费。</li>
+<li>函数体中的判断条件仅使用<code>&lt;</code>运算：因为模板是<strong>类型无关的</strong>，只对参数的所支持的操作由要求。这一点比较接近Python的鸭子类型或者Go的接口设计，他们想传达的想法都是用类的行为来区分类型，而不是类的名字和继承结构。限制模板使用的运算类型，是为了让该模板支持更多的类型。&#x3D;&#x3D;模板程序应该尽量减少对实参类型的要求。&#x3D;&#x3D;</li>
+</ul>
+<h4 id="模板编译"><a href="#模板编译" class="headerlink" title="模板编译"></a>模板编译</h4><p>在调用函数时，编译器只需要知道函数的声明；使用类类型的对象时，类定义是可用的，但是函数成员的定义可以不用。因此，我们将类定义和函数声明放在<strong>头文件</strong>，普通函数和类成员函数的定义放在<strong>源文件</strong>。</p>
+<p>但是模板不同，编译器需要掌握函数模板或类模板成员函数的定义，才能生成一个实例化版本。因此模板的头文件中通常既包括声明也包括定义。</p>
+<p>编译器可能会在模板编译的三个阶段报错：</p>
+<ul>
+<li>编译模板本身：只能检查语法错误，如忘记分号、变量名拼错</li>
+<li>编译器遇到模板使用：对于函数模板调用，可以检查实参类型是否正确，参数类型是否匹配；对于类模板，检查模板实参的数量。总之查错有限。</li>
+<li>模板实例化：直到该阶段才能发现类型相关的错误。</li>
+</ul>
+<p>由于模板是类型无关的，因此编译器会检查实参是否支持模板要求的操作，但是这些都只能等实例化后才能发现。</p>
+<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>与函数模板不同，编译器不能为类模板推断模板参数类型。需要用户在模板名后的尖括号中提供额外信息，也就是<strong>显式模板实参</strong>，他们会被绑定到模板参数。类似于使用容器时指定的元素类型。</p>
+<p>默认情况下，对于一个实例化的类模板，其成员只有在使用时才被实例化。</p>
+<p>在类模板的作用域内，可以省略模板类型，<code>A&amp;</code>等同于<code>A&lt;T&gt;&amp;</code>，因为在该作用域内编译器可以自动替换。可以直接使用模板名<code>T</code>而不必指定实参。<br>如果是在类模板之外，则一定要提供模板实参，才能进入对应模板的作用域。</p>
+<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3><p>类模板可以和另一个类模板，普通类，模板实参成为友元。可以和特定类型的类模板做友元，或者类模板的任何实例为友元。</p>
+<h3 id="模板类型别名"><a href="#模板类型别名" class="headerlink" title="模板类型别名"></a>模板类型别名</h3><p>给定了模板实参的类模板会被实例化为一个类，可以用<code>typedef</code>来指定别名，但是<code>typedef</code>无法为模板创建别名。需要使用<code>using</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">using</span> twin = pair&lt;T, T&gt;<br></code></pre></td></tr></table></figure>
+
+<p>接下来，<code>twin&lt;T&gt;</code>就等同于<code>pair&lt;T,T&gt;</code>。</p>
+<p>在使用模板类型别名时，可以固定某些模板参数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">using</span> partNo = pair&lt;T, <span class="hljs-type">unsigned</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="类模板的static成员"><a href="#类模板的static成员" class="headerlink" title="类模板的static成员"></a>类模板的static成员</h3><p>对于每一个T来说，模板都会生成一个不同的类。类模板的每个static成员必须<strong>有且仅有</strong>一个定义，但是类模板的每个实例（对于每个T）都有一个独有的static成员。在访问时，必须指定它所在的域。</p>
+<h2 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h2><p>模板参数会覆盖外层的同名变量，并且不允许重用（重新定义），也不允许在同一个模板参数列表中重复出现。</p>
+<p>和函数声明类似，模板声明不在乎模板参数的名字，只在乎数量和种类（类型或非类型）。</p>
+<p>一个特定文件所需要的所有模板的声明通常一起放置在文件开始位置，出现于任何使用这些模板的代码之前。</p>
+<p>模板参数可以有默认值，如果全都使用默认值，使用模板时也需要加上空的尖括号。</p>
+<h3 id="类的类型成员"><a href="#类的类型成员" class="headerlink" title="类的类型成员"></a>类的类型成员</h3><p>对于一个类而言，使用作用域运算符<code>::</code>可以访问其static成员和类型成员，因为编译器知道该类的明确定义，知道访问的是一个数据成员还是类型。但是对于模板而言，如果遇到<code>T::size_type *p</code>的代码，编译器不知道是用T类型中的size_type类型定义一个指针，还是说用T中的size_type成员与p相乘。</p>
+<p>因此，默认情况下C++假定通过<code>::</code>访问的是名字而不是类型。如果是类型，需要用<code>typename</code>显式指定，而且必须是<code>typename</code>而不能是<code>class</code>。<code>typename T::value_type</code>可以获取类型。</p>
+<h2 id="成员模板"><a href="#成员模板" class="headerlink" title="成员模板"></a>成员模板</h2><p>一个类可以包含函数模板，这样的成员称为<strong>成员模板</strong>。不能是虚函数。</p>
+<p>对于模板类的成员模板，需要给定模板类的模板参数，成员模板的参数通过参数类型推断。</p>
+<h2 id="模板实参推断"><a href="#模板实参推断" class="headerlink" title="模板实参推断"></a>模板实参推断</h2><p>将实参传递给带模板类型的函数形参时，能够自动应用的类型转换只有<code>const</code>转换和数组或函数到指针的转换。如果参数类型不是模板参数，则实参可以进行正常的类型转换。</p>
+<p>对于函数模板而言，一般不需要用尖括号，因为可以通过实参类型来推断模板参数。但是有时我们需要用模板参数指定返回值类型，这时就无从推断了，需要提供<strong>显式模板实参</strong>，调用这样的函数需要尖括号。</p>
+<p>有时返回值类型只能在运行时决定，比如一个模板函数传入一个容器的迭代器，返回容器内的元素的类型，只能在运行时通过<code>decltype</code>得知类型，那么就在返回值类型处先写<code>auto</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">f</span><span class="hljs-params">(T a)</span> -&gt; <span class="hljs-title">decltype</span><span class="hljs-params">(*p)</span></span>&#123;  <br>  <span class="hljs-keyword">return</span> *p;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="函数指针和实参推断"><a href="#函数指针和实参推断" class="headerlink" title="函数指针和实参推断"></a>函数指针和实参推断</h3><p>用函数模板初始化一个函数指针，或者为函数指针赋值时，编译器用指针的类型来推断模板实参。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp;, <span class="hljs-type">const</span> T&amp;)</span></span>;<br><span class="hljs-comment">// pf1指向实例int compare(const int&amp;, const int&amp;)</span><br><span class="hljs-built_in">int</span> (*pf1)(<span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp;, <span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp;) = compare;<br></code></pre></td></tr></table></figure>
+
+<p>如果一些重载函数可以接收同个函数模板的不同实例，那么传入模板时需要用尖括号指定模板实参，否则编译器无法推断。</p>
+<h3 id="引用折叠和右值引用参数"><a href="#引用折叠和右值引用参数" class="headerlink" title="引用折叠和右值引用参数"></a>引用折叠和右值引用参数</h3><p>将一个左值（例如<code>int i</code>）传递给函数的右值引用参数，且此右值引用指向模板类型参数（如<code>T&amp;&amp;</code>）时，编译器推断模板类型参数为实参的<strong>左值引用类型</strong>。</p>
+<p>中间跳过一大段解释</p>
+<p>如果一个函数参数是指向模板参数类型的右值引用（如<code>T&amp;&amp;</code>），则可以传递给它任意类型的实参。如果将一个左值传递进去，则函数参数被实例化为一个普通的左值引用（<code>T&amp;</code>）。</p>
+<p>![image-20211230194339414](&#x2F;Users&#x2F;jackzhu&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20211230194339414.png)</p>
+<p>16.2.5 非常难</p>
+<h3 id="转发"><a href="#转发" class="headerlink" title="转发"></a>转发</h3><p>16.2.7跳过</p>
+<p>关于<code>std::forward</code>，用来保持实参的细节。</p>
+<h2 id="重载与模板"><a href="#重载与模板" class="headerlink" title="重载与模板"></a>重载与模板</h2><h2 id="可变参数模板"><a href="#可变参数模板" class="headerlink" title="可变参数模板"></a>可变参数模板</h2><p>出现在模板参数内的叫<strong>模板参数包</strong>，函数参数内的叫<strong>函数参数包</strong>。用<code>...</code>来表示</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Args&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;t, <span class="hljs-type">const</span> Args&amp; ... rest)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>用<code>sizeof</code>运算符可以知道参数数量，<code>sizeof...(Args)</code>。</p>
+<p>与<code>initializer_list</code>只能接收相同类型的参数不同，可变参数可以接收不同类型的参数。</p>
+<p>可变参数函数通常是递归的，每次递归处理一个参数，然后用剩余实参调用自身。为了能终止递归，还需要定义一个非可变参数的版本。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C++</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/IO%E5%A4%8D%E7%94%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">IO复用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+                        <span class="hidden-mobile">内存管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

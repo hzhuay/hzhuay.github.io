@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="面向对象   复制控制一般来说，需要析构函数的场景会比需要拷贝构造或拷贝赋值运算符更容易识别。如果一个类需要析构函数，那么它大概率需要拷贝赋值运算符和拷贝构造函数。 如果一个类需要拷贝构造，那么它大概率需要拷贝赋值运算符。反之亦然。 构造函数默认构造函数只有当类没有声明任何构造函数时，编译器才会自动生成一个默认构造函数，其初始化类成员的规则：  优先使用类内初始值  没有初始值的成员将被默认初始化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++面向对象">
+<meta property="og:url" content="http://example.com/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="面向对象   复制控制一般来说，需要析构函数的场景会比需要拷贝构造或拷贝赋值运算符更容易识别。如果一个类需要析构函数，那么它大概率需要拷贝赋值运算符和拷贝构造函数。 如果一个类需要拷贝构造，那么它大概率需要拷贝赋值运算符。反之亦然。 构造函数默认构造函数只有当类没有声明任何构造函数时，编译器才会自动生成一个默认构造函数，其初始化类成员的规则：  优先使用类内初始值  没有初始值的成员将被默认初始化">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T14:00:46.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.192Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>C++面向对象 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="C++面向对象">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-11 22:00" pubdate>
+        2022年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      10k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      85 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++面向对象</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1>面向对象</h1>
+
+
+<h1 id="复制控制"><a href="#复制控制" class="headerlink" title="复制控制"></a>复制控制</h1><p>一般来说，需要析构函数的场景会比需要拷贝构造或拷贝赋值运算符更容易识别。如果一个类需要析构函数，那么它大概率需要拷贝赋值运算符和拷贝构造函数。</p>
+<p>如果一个类需要拷贝构造，那么它大概率需要拷贝赋值运算符。反之亦然。</p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><h3 id="默认构造函数"><a href="#默认构造函数" class="headerlink" title="默认构造函数"></a>默认构造函数</h3><p>只有当类没有声明<strong>任何</strong>构造函数时，编译器才会自动生成一个<strong>默认构造函数</strong>，其初始化类成员的规则：</p>
+<ul>
+<li>优先使用类内初始值</li>
+<li></li>
+<li>没有初始值的成员将被默认初始化（undefined）。这样很危险。</li>
+</ul>
+<p><code>= default</code>加在函数列表后，可以要求编译器生成默认构造函数。</p>
+<h3 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h3><p>一个委托构造函数使用它所属类的其他构造函数执行它自己的初始化过程，或者说把它的一些职责委托给了其他构造函数。</p>
+<h3 id="转换构造函数"><a href="#转换构造函数" class="headerlink" title="转换构造函数"></a>转换构造函数</h3><p>如果构造函数只接收一个实参，则它实际上定义了转换为此类类型的隐式转换机制。</p>
+<h3 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h3><p>一般第一个参数是该类型的const引用，以及一些有默认值的参数，总之保证这个构造函数只需要一个同类对象就可以调用。</p>
+<p>由于需要被隐式调用，所以<strong>不能是</strong><code>explicit</code>。</p>
+<p><code>string s1(s2);</code>也属于<strong>直接初始化</strong>，即让编译器根据参数类型匹配构造函数。使用赋值符号才是拷贝初始化。<br>编译器可以（但不是必须）略过拷贝&#x2F;移动构造函数，直接创建对象（使用直接初始化），但是在这个程序点上，拷贝&#x2F;移动构造函数必须存在且可以访问。</p>
+<p>拷贝初始化发生的时机：</p>
+<ul>
+<li><p>用<code>=</code>定义变量</p>
+</li>
+<li><p>将一个对象作为实参传递给一个非引用类型的形参。</p>
+</li>
+<li><p>从一个返回类型为非引用类型的函数返回一个对象</p>
+</li>
+<li><p>用花括号列表初始化一个数组中的元素，或一个聚合类中的成员</p>
+</li>
+<li><p>容器初始化，<code>push</code>，<code>insert</code>时</p>
+</li>
+</ul>
+<h3 id="默认拷贝构造函数"><a href="#默认拷贝构造函数" class="headerlink" title="默认拷贝构造函数"></a>默认拷贝构造函数</h3><p>与默认构造函数不同，哪怕有其他构造函数，编译器还是会默认生成一份默认拷贝构造。其作用是将对象的成员悉数拷贝。</p>
+<p>具体拷贝操作取决的成员的类型：</p>
+<ul>
+<li>对于<code>class</code>成员，调用其拷贝构造函数。</li>
+<li>内置类型直接拷贝</li>
+<li>数组：逐一拷贝元素</li>
+</ul>
+<h3 id="拷贝赋值符号"><a href="#拷贝赋值符号" class="headerlink" title="拷贝赋值符号"></a>拷贝赋值符号</h3><p>重载<code>=</code>符号，左操作符隐式传为<code>this</code>，一般要求返回一个左操作符的引用。</p>
+<p>默认生成的拷贝赋值符号，会将所有non-static成员复制，数组成员会被全部复制。</p>
+<p>在重载拷贝赋值时，一定要注意处理的顺序，避免在对象自我赋值的时候出错。要先将右操作符复制一份，再释放左操作数。</p>
+<h3 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h3><p>如果一个类有自己的·swap·时，调用std::swap可能会出错。</p>
+<p>自定义的·swap·可以帮助重载拷贝赋值。将右操作数设置为传值，这样形参会被复制，然后再赋值给左操作符。这样做会很安全，如果在形参复制阶段出现问题，一定发生在swap之前。</p>
+<h3 id="避免拷贝，-x3D-delete"><a href="#避免拷贝，-x3D-delete" class="headerlink" title="避免拷贝，&#x3D;delete"></a>避免拷贝，&#x3D;delete</h3><p>大部分的类需要显式的或者隐式的默认构造，拷贝构造和拷贝赋值运算。但是有一些类，必须被定义为无法拷贝或者赋值，比如<code>iostream</code>类。如果需要避免生成默认的以上函数，可以使用<code>=delete</code>。</p>
+<p><code>=default</code>可以用在类内或者类外，在类外再次使用可以让默认函数不是<code>inline</code>。但是<code>=delete</code>不同，只能用在首次定义的时候。</p>
+<p><code>=default</code>只能用在编译器可以生成默认版本的函数上，但是&#x3D;delete可以用在任何函数上。</p>
+<p>注意：不应该删除析构函数，因为编译器不允许创建一个无法销毁的对象。在第631页有许多关于<code>=delete</code>的使用规则，但他们的原则都是基于这个。</p>
+<p>早期C++用<code>private</code>控制可见性来达到类似效果。</p>
+<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><p>在构造函数中，在参数列表和函数体中间有一块初始化部分。构造函数会先执行成员的初始化，再执行构造函数体。析构函数则是相反，先执行函数体，再将所有成员析构，后一步是隐式的。</p>
+<p>由于释放成员的原理是调用成员的析构函数，因此析构行为取决于成员的类型和他们的析构函数。比如一个内置指针就只会释放本身，不会将指向的内存空间一并释放。</p>
+<p>一般来说，一个对象离开了作用域就会被析构，但是对象的指针或者引用失效不会导致本身被析构。</p>
+<h3 id="默认析构函数"><a href="#默认析构函数" class="headerlink" title="默认析构函数"></a>默认析构函数</h3><p>默认析构函数的函数体是<strong>空的</strong>，相当于是直接调用成员的析构，而不做更多操作。</p>
+<h2 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h2><p>当我们在使用拷贝赋值时，会先把数据复制一份，然后再拷贝，但是这个复制其实是多余的。赋值可以将右操作符的内存直接搬到左操作符上。标准库引入了两种机制，为了避免<strong>不必要的拷贝</strong>。</p>
+<ol>
+<li>移动构造函数：具体实现未公开，作用是将资源从给定对象<strong>移动</strong>而不是拷贝到正在创建的对象。标准库保证<strong>移后源</strong>仍是有效的，可析构的状态。目前可以理解为拷贝了指针，而不是拷贝的整块内存。</li>
+<li><code>move</code>标准库函数：在<code>utility</code>头中，在用<code>allocator</code>的<code>construct</code>时必须调用<code>move</code>来表示希望使用移动构造函数，如果漏掉了就会变回拷贝构造函数。其次，通常不会为<code>move</code>提供一个<code>using</code>声明，<strong>原因待补充</strong>，因此调用时应该使用<code>std::move</code>。</li>
+</ol>
+<p>在编写自定义的移动构造函数时，要在形参列表和函数体之间加上<code>noexcept</code>，因为移动操作不分配新内存，所以不应该抛出异常（移动赋值运算符同理）。如果我们不声明，编译器会为了可能存在的异常做额外的工作。同时，允许函数抛出异常说明如果异常发生时，我希望调用者的状态恢复到调用前的状态，而不是被改变。比如<code>vector</code>的<code>push_back</code>操作，如果分配新的空间失败，会抛出异常，旧元素还在原地没变，只需要将申请的内存释放即可。但是移动操作会改变对象本身的状态，如果在操作到中途时发生问题，无法回到最初的状态。因此，除非<code>vector</code>知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存时就不该使用移动构造函数。如果希望它使用，则必须显式地告诉编译器，我们的移动构造函数是安全的。</p>
+<p>移后源对象在函数体中应该将成员指针都设为<code>nullptr</code>，否则之后在析构的时候，会把所指向的内存（现在已经被移动到被赋值对象中）也析构掉。</p>
+<h3 id="默认的移动操作"><a href="#默认的移动操作" class="headerlink" title="默认的移动操作"></a>默认的移动操作</h3><p>编译器不会为已经有自己的拷贝构造等大三样的类合成移动操作。只有当一个类没有定义任何<strong>自定义</strong>的拷贝控制成员，且类的美和<strong>非static</strong>成员都<strong>可以移动</strong>时，才会为它合成默认的移动构造函数或移动赋值运算符。<code>build-in</code>类型<strong>默认可以移动</strong>。</p>
+<p>与拷贝操作不同，移动操作<strong>不会</strong>隐式定义为<code>delete</code>。但是，如果显式地要求生成<code>=default</code>的移动操作，且编译器不能移动所有成员时，移动操作会被定义为<code>=delete</code>。</p>
+<p><strong>注意</strong>：定义了一个移动构造函数或移动赋值运算符的类，必须也定义自己的拷贝操作，否则这些成员默认被定义为是<code>=delete</code>的。</p>
+<h3 id="函数匹配"><a href="#函数匹配" class="headerlink" title="函数匹配"></a>函数匹配</h3><p>一个类如果既有拷贝构造又有移动构造，那么具体调用那么符合函数匹配原则，匹配参数最接近的。</p>
+<p>如果类仅有拷贝构造，但是试图调用move，由于<code>Type&amp;&amp;</code>可以转换为<code>const Type&amp;</code>，因此还是会调用拷贝构造函数。一般情况下，拷贝构造代替移动构造是安全的。</p>
+<p>成员函数也可以同时定义拷贝和移动两种版本，从而提升性能：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> &amp;X)</span></span>;	<span class="hljs-comment">//拷贝版本：绑定到任意类型的X</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(X&amp;&amp;;)</span>			<span class="hljs-comment">//移动版本：只能绑定到类型X的可修改的右值</span></span><br></code></pre></td></tr></table></figure>
+
+<p>右值引用会精确匹配到第二种函数上，如果无法匹配才会使用第一种性能较差的成员。</p>
+<h3 id="移动迭代器"><a href="#移动迭代器" class="headerlink" title="移动迭代器"></a>移动迭代器</h3><p>这是一种适配器，改变给定迭代器的<strong>解引用运算符</strong>的行为来适配，让解引用得到右值引用。通过标准库的<code>move_move_iterator</code>将一个普通迭代器转换为移动迭代器。</p>
+<p>注意：一定要在确定原容器的元素不再使用的前提下使用。</p>
+<h3 id="引用限定符"><a href="#引用限定符" class="headerlink" title="引用限定符"></a>引用限定符</h3><p>参数列表后面可以放引用限定符<code>&amp;</code>或<code>&amp;&amp;</code>，表示该方法或者运算符只能由左值或者右值来调用（<code>this</code>必须是左值还是右值）。</p>
+<p>引用限定符只能出现在<code>const</code>之后。</p>
+<p>一个成员函数是否有const是两个不同的重载函数，有无引用限定也是类似。</p>
+<p>如果一个函数有引用限定符，那么所有具有相同参数列表的重载版本都要有引用限定符。</p>
+<h2 id="move语义"><a href="#move语义" class="headerlink" title="move语义"></a>move语义</h2><p>有些时候，对象在被复制后就马上被销毁了，这种情况下，<strong>移动</strong>它会有更好的性能。还有些情况下，对象不应该被复制，比如IO。</p>
+<p>容器，<code>string</code>，<code>shared_ptr</code>支持复制和移动；IO和<code>unique_ptr</code>只支持移动。</p>
+<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>右值引用必须绑定在右值上，使用的符号是<code>&amp;&amp;</code>而不是<code>&amp;</code>。由于右值是马上要被销毁的，所以可以<strong>移动</strong>右值引用。</p>
+<p>左值表示的是对象的<strong>身份</strong>，右值表示对象的<strong>值</strong>。左值拥有持久的状态，而右值要么是字面值常量，要么是表达式求值过程中创建的临时对象。</p>
+<p>之前学的常规引用可以看做<strong>左值引用</strong>，我们不能把左值引用绑定到要求转换的表达式，字面常量或返回右值的表达式。右值引用则相反，可以绑定到这些表达式上，但是不能直接绑定到左值上。</p>
+<ul>
+<li><p>返回左值的表达式：返回左值引用的函数，赋值、下标、解引用和前置递增、递减运算符。</p>
+</li>
+<li><p>返回右值的表达式：返回非引用类型的函数，算术、关系、位以及后置递增、递减运算符。</p>
+</li>
+</ul>
+<p>左值引用不能直接绑定在右值上，但是可以将一个<code>const</code>的左值引用绑定到右值上。</p>
+<p>由于右值引用只能绑定到临时对象上，可以得出：</p>
+<ul>
+<li>引用对象马上要销毁</li>
+<li>该对象没有其他用户</li>
+</ul>
+<p>这两个特性意味着：使用右值引用的代码可以自由地接管所引用对象的资源。</p>
+<p>单独的变量作为表达式时，是左值，因此右值引用不能绑定到变量上，也不能绑定到一个右值引用类型的变量上。</p>
+<p>注意：右值引用只是说绑定的对象是右值，绑定完后就会消失，但是右值引用本身是一种<strong>左值</strong>，因为它本身不会马上消失，在作用域内可以继续使用。</p>
+<h3 id="std-move"><a href="#std-move" class="headerlink" title="std::move"></a>std::move</h3><p>右值引用不能直接绑定在左值上，但是可以使用<code>utility</code>中的<code>move</code>函数，告诉编译器：我有一个左值，但是我希望像一个右值一样处理它。这相当于成果：除了对该变量的赋值和销毁它之外，我将不再使用它，但是它必须是<strong>可析构</strong>，<strong>有效的</strong> 的状态。该变量在移动过后，可以对它赋值，或者销毁它，但是不能使用它，因为它的值已经不确定了。</p>
+<p>标准库中move的定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">typename</span> remove_reference&lt;T&gt;::<span class="hljs-function">type&amp;&amp; <span class="hljs-title">move</span><span class="hljs-params">(T&amp;&amp; t)</span></span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">typename</span> remove_reference&lt;T&gt;::type&amp;&amp;&gt;(t);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>move()的参数<code>T&amp;&amp;</code>是一个指向模板类型参数的<strong>右值引用</strong>，通过<strong>引用折叠</strong>，此参数可以与任何类型的实参匹配。</p>
+<h4 id="用右值调用move"><a href="#用右值调用move" class="headerlink" title="用右值调用move"></a>用右值调用move</h4><p>如果move()的参数是一个<strong>右值</strong>，如<code>std::move(string(&quot;Hello&quot;));</code>，那么函数运行如下：</p>
+<ul>
+<li><p>推断出T的类型为<code>string</code></p>
+</li>
+<li><p>因此，<code>remove_reference</code>用<code>string</code>进行实例化</p>
+</li>
+<li><p><code>remove_reference&lt;string&gt;::type</code>是<code>string</code></p>
+</li>
+<li><p><code>move</code>的返回类型是<code>string&amp;&amp;</code></p>
+</li>
+<li><p><code>move</code>的函数参数<code>t</code>类型为<code>string&amp;&amp;</code></p>
+</li>
+</ul>
+<p>因此，相当于这个调用实例化<code>move&lt;string&gt;</code>，即函数<code>string&amp;&amp; move(string &amp;&amp;t)</code>。由于t的类型和<code>static_cast</code>的类型一直，所以<code>static_cast</code>不需要做什么。</p>
+<h4 id="用左值调用move"><a href="#用左值调用move" class="headerlink" title="用左值调用move"></a>用左值调用move</h4><p>如果move()的参数是一个<strong>左值</strong>，如<code>std::move(str));</code>，那么函数运行如下：</p>
+<ul>
+<li><p>推断出T的类型为<code>string&amp;</code></p>
+</li>
+<li><p>因此，<code>remove_reference</code>用<code>string&amp;</code>进行实例化</p>
+</li>
+<li><p><code>remove_reference&lt;string&amp;&gt;::type</code>是<code>string</code></p>
+</li>
+<li><p><code>move</code>的返回类型是<code>string&amp;&amp;</code></p>
+</li>
+<li><p><code>move</code>的函数参数<code>t</code>类型为<code>string&amp; &amp;&amp;</code>，会折叠为<code>string&amp;</code></p>
+</li>
+</ul>
+<p>因此，这个调用实例化<code>move&lt;string&amp;&gt;</code>，即函数<code>string&amp;&amp; move(string &amp;t)</code>。这正是我们想要的结果，将一个左值转换为右值，用<code>static_case&lt;string&amp;&amp;&gt;(t)</code>将<code>string&amp;</code>转换为<code>string&amp;&amp;</code>。</p>
+<p>通常<code>static_cast</code>只能用于其他合法的类型转换，但是允许将左值显式地转换为右值引用是<code>static_cast</code>的一个特例。一方面因为这种转换是安全的，另一方面C++通过强制使用<code>static_cast</code>来阻止意外地进行这种转换。</p>
+<h2 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h2><h3 id="class和struct的区别"><a href="#class和struct的区别" class="headerlink" title="class和struct的区别"></a>class和struct的区别</h3><p>唯一区别就是默认的访问权限：class默认public，struct默认private。</p>
+<h3 id="用户的身份"><a href="#用户的身份" class="headerlink" title="用户的身份"></a>用户的身份</h3><p>在面向对象和继承的场景下，应该考虑2种用户：</p>
+<ul>
+<li>普通用户：使用类的对象，只能访问类的公有成员。</li>
+<li>实现者：编写类的成员和友元，这两者能同时访问类的公有和私有部分。</li>
+<li>派生类：基类把它希望派生类能够使用的部分声明成<code>protect</code>的，普通用户不能访问<code>protect</code>成员，派生类及其友元<strong>不能访问私有成员</strong>。</li>
+</ul>
+<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3><p>类可以允许其他类或函数访问它的非<code>public</code>成员，只要另其它类或函数成为它的<strong>友元</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">friend</span> return_type <span class="hljs-title">namespace::func</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>友元只能出现在类定义的内部，但是在类内的具体位置不限。一般来说，最好在类定义开始或结束前的位置集中声明友元，并且一般把友元的声明和类本身放置在同一个头文件中。</p>
+<p>友元的声明仅仅指定了访问权限，并不是函数声明。</p>
+<h4 id="友元和继承"><a href="#友元和继承" class="headerlink" title="友元和继承"></a>友元和继承</h4><p>友元的关系没有传递性，朋友的朋友不是朋友。重载函数必须分别声明友元。</p>
+<p>基类的友元在访问派生类时没有特权，反过来，派生类友元也不能随意访问基类成员。但是<strong>每个类负责自己成员的访问权限</strong>，基类的友元哪怕是访问子类中的基类成员，也是可以的。</p>
+<h3 id="派生访问说明符"><a href="#派生访问说明符" class="headerlink" title="派生访问说明符"></a>派生访问说明符</h3><p>派生访问说明符对<strong>派生类的成员</strong>（及友元）能否访问其直接基类的成员没什么影响。对基类成员的访问权限只与<strong>基类中的访问说明符有关</strong>。</p>
+<p>派生访问说明符的目的是控制派生类用户（包括子类的子类）对<strong>基类成员</strong>的访问权限。</p>
+<ul>
+<li>派生访问说明符影响：子类的对象能否使用父类的成员</li>
+<li>基类中的访问说明符：子类的成员能否使用父类的成员</li>
+</ul>
+<p>可以这么理解，如果派生访问说明符是<code>private</code>，那么在代码中可能这样展示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Priv_Derv</span> : <span class="hljs-keyword">private</span> Base&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样的意思就是，在子类中如果需要调用父类的成员，那么是通过<code>Base.member</code>来调用，但是这时的<code>Base</code>是<code>private</code>，所以不允许。</p>
+<h3 id="对自身的访问说明符"><a href="#对自身的访问说明符" class="headerlink" title="对自身的访问说明符"></a>对自身的访问说明符</h3><p>基类应该将接口成员声明为<code>public</code>，将属于其实现的部分分为2组：</p>
+<ul>
+<li>可供派生类访问的：应声明为<code>protect</code>。</li>
+<li>只能由基类和基类友元访问的：声明为<code>private</code>。</li>
+</ul>
+<p>在对自身成员的访问说明符中，<code>protect</code>的级别介于<code>public</code>和<code>private</code>之间，用于希望与派生类分享，但是不给其他公共访问的成员。注意这是一个单向的关系，只是父类分享<strong>自己的</strong>成员给子类，子类自己的<code>protect</code>成员基类无法访问。</p>
+<h3 id="派生类向基类转换的可访问性"><a href="#派生类向基类转换的可访问性" class="headerlink" title="派生类向基类转换的可访问性"></a>派生类向基类转换的可访问性</h3><p>派生类向基类的转换能否成功，由使用该转换的代码决定，同时派生类的派生访问说明符也会有影响。假设D继承自B：</p>
+<ul>
+<li>只有当D<code>public</code>继承B时，<strong>用户代码</strong>才能使用转换；如果D继承B的方式是<code>protect</code>或<code>private</code>，则用户代码不能使用。</li>
+<li>不管D以什么方式继承B，D的<strong>成员函数和友元</strong>都能使用转换；派生类向其<strong>直接基类</strong>的类型转换对于派生类的<strong>成员函数和友元</strong>来说<strong>永远</strong>可访问。</li>
+<li>如果D继承B的方式是<code>public</code>或<code>protect</code>，D的派生类的<strong>成员和友元</strong>可以使用转换；如果是<code>private</code>则不行。</li>
+</ul>
+<p>总体上将，对于代码中某个给定节点来说，如果基类的公有成员是可访问的，则派生类想基类的类型转换也是可访问的；反之不行。</p>
+<h1 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h1><p>重载的运算符本质是具有<strong>特殊名字</strong>的函数，名字有关键字<code>operator</code>和后面的符号组成。如果重载运算符时成员函数的话，第一个（左侧）运算对象会<strong>隐式</strong>绑定为<code>this</code>指针。</p>
+<p>作用与内置类型的运算符无法重载。</p>
+<p>由于重载运算符本质上是函数调用，所以会是去原有的运算优先级，比如<code>&amp;&amp;</code>和<code>||</code>会是去<strong>短路</strong>的性质，所以一般来说，不应该重载逗号，取地址，逻辑与和逻辑或运算符。</p>
+<p>除了一些别无选择的情况，运算符必须是成员，其他情况下运算符作为普通函数更好：</p>
+<ul>
+<li>赋值<code>=</code>，下标<code>[]</code>，调用<code>()</code>，和成员访问箭头<code>-&gt;</code><strong>必须是</strong>成员。</li>
+<li>复合运算符一般来说是成员，不必须。</li>
+<li>改变对象状态的运算符，或者与给定类型密切相关的运算符，如迭代器的递增，递减和解引用，一般是成员。</li>
+<li>具有<strong>对称性</strong>的运算符可能转换任意一端的运算对象，如算术、相等性、关系和位运算符，通常是非成员函数。</li>
+</ul>
+<p>通常输出运算符应该负责<strong>打印</strong>而非<strong>控制格式</strong>，不应该打印换行符。</p>
+<p>输入运算符必须要处理可能出现的输入异常，但是输出不用。<br>在数据读入过程中，可能在一步步初始化对象，如果中途出现了输入异常，必须要有相应的处理机制，避免出现<code>undefined</code>，比如把剩余的变量值初始化。</p>
+<p>如果类同时定义了算术运算符，和对应的复合赋值运算符，通常应该用复合运算符来实现算术运算符。用<code>+=</code>来实现<code>+</code>。</p>
+<p>如果存在唯一一种逻辑合理的<code>&lt;</code>，则应该考虑为这个类定义<code>&lt;</code>。如果类同时还有<code>==</code>，当且仅当<code>&lt;</code>的定义和<code>==</code>不冲突时才定义。</p>
+<p>赋值运算符必须是成员函数，复合赋值运算符通常应该是成员函数，都应该返回左侧运算类型的引用。</p>
+<p>下标运算符必须是成员函数。如果一个类应该有下标运算符，那么应该定义2种版本：返回常量引用和非常量引用。</p>
+<p>递增和递减运算符必须是成员函数。必须同时定义前置和后置版本。为了区分，后置版本接受额外的（不适用）的<code>int</code>形参，没有变量名，编译器会提供一个0作为实参。如果要显式调用，则要自己传入0。</p>
+<p>成员访问箭头必须是成员函数，解引用不强制但一般是成员函数。重载箭头时，箭头获取成员一定会发生。</p>
+<p>函数调用符<code>()</code>必须是成员函数。函数对象可以有自己的成员，以此作为自定义。经常用来作为泛型算法的参数。</p>
+<h2 id="类型转换运算符"><a href="#类型转换运算符" class="headerlink" title="类型转换运算符"></a>类型转换运算符</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>一个类型转换函数必须是成员函数，没有返回类型，形参列表为空，函数类型通常为<code>const</code>，函数名即为想要转换成为的类型。</p>
+<p>在实践中，类很少提供转换运算符。在隐式转换发生时，用户往往觉得奇怪而不是被帮助了。尤其是对于内置算术类型的转化，因为内置算术类型之间有很丰富的转换，容易让人迷惑。比如在早期标准中对一个cin使用<code>cin &lt;&lt; 42</code>，cin会被转换成<code>bool</code>然后执行左移。</p>
+<p>为了解决上述问题，引入了<code>explicit</code>，需要用<code>static_cast</code>或者构造转换进行显式转换。<code>bool</code>是一个例外，因为经常需要那里作为判断条件，所以还是会隐式转换。</p>
+<h2 id="歧义"><a href="#歧义" class="headerlink" title="歧义"></a>歧义</h2><ol>
+<li>A中有接收B类型的转换构造函数，B中有转换为A的转换运算符。</li>
+<li>定义了多个转换规则，这些转化涉及到的类型本身可以通过其他类型转换联系起来。最典型的就是算术转换符，对于一个给定的类，最好只定义最多一个与算术类型有关的转换规则。</li>
+</ol>
+<p>注意：无法使用强制类型转换来解决二义性问题，因为强制类型转换本身也面临二义性。</p>
+<p>函数接收参数的时候可以有一次转换，如果2个重载函数的参数要求的都不是参数传入的，且参数转换的级别一致，也会有二义性。</p>
+<p>对于一个运算符来说，成员函数、非成员函数、内置运算符，都有可能被调用。</p>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><p>子类可以隐式转换成父类，因为子类其实包含了父类完整的功能。因此，子类对象或引用可以用在需要<strong>父类引用</strong>的地方，子类对象的指针可以用在需要<strong>父类指针</strong>的地方。</p>
+<p>注意，对象本身的静态类型<strong>不能改变</strong>，只有<strong>指针</strong>和<strong>引用</strong>才有隐式转换。如果基类中含有虚函数，可以使用<code>dynamic_cast</code>请求类型转换，检查安全后执行。如果确定转换是安全的，可以使用<code>static_cast</code>来强制覆盖编译器的检查工作。</p>
+<p>用一个子类对象作为父类对象初始化或赋值时，只有该子类对象中的基类部分会被拷贝、移动或赋值，子类部分会被忽略。因为这些本质上都是<strong>函数调用</strong>，传入的隐式参数&#96;this的类型决定了调用的是谁的函数，如果参数要求的父类，那么只会调用父类的函数。</p>
+<p>总结：</p>
+<ol>
+<li>从派生类向基类的类型转换只对指针或者引用有效。</li>
+<li>基类向派生类不存在隐式类型转换。</li>
+<li>和任何其他成员一样，派生类向基类的类型转换也可能会由于访问受限而不可行。</li>
+</ol>
+<p>父类希望每个子类有自己的专属的实现方式。</p>
+<p>派生类列表：<code>class Type: public Base&#123;&#125;</code>。格式为在类名后面有一个冒号，冒号之后是所有的基类，基类前可以有访问说明符。用上了<code>public</code>之后，子类可以完全代替父类。但是注意，派生类声明的时候<strong>不需要</strong>冒号后面的东西。</p>
+<p>作为基类，必须已经被定义，不能只是声明。因为子类中需要包含父类，需要知道父类有什么数据和功能。</p>
+<p>如果不希望被继承，需要在冒号前加<code>final</code>关键字。</p>
+<p>每个子类只能初始化他们的直接基类，间接基类由他们对应的直接基类来负责，在构造时行程一个链。</p>
+<h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><p>子类必须在内部对所有重新定义的虚函数进行声明。</p>
+<p>与虚函数一起发挥作用的是<strong>动态绑定</strong>，指被调用的虚函数时与绑定到<strong>指针或引用</strong>上的对象的<strong>动态类型</strong>想匹配的那个。强调，运行时决定；只对指针和引用生效，也只有在这种情况下， 对象的动态类型<strong>才有可能</strong>和静态类型不同。为了保持多态性，只有虚函数的返回值是自身类型的指针或者引用时，返回值也具有多态性（只要允许隐式转换）。</p>
+<h3 id="虚函数的覆盖"><a href="#虚函数的覆盖" class="headerlink" title="虚函数的覆盖"></a>虚函数的覆盖</h3><p>继承的虚函数天然就是<code>virtual</code>的。派生类可以在它覆盖的函数前也使用<code>virtual</code>，表示这个派生类仍然可能被继承，函数可能会被覆盖。</p>
+<p>覆盖要求子类的函数与要覆盖的父类虚函数不仅函数名一致，形参列表也要一致，如果不一致就会被编译器认为是一个新的函数。典型错误就是以为覆盖了虚函数，但实际上因参数不一致而并没有覆盖。</p>
+<p>C++11允许派生类显式注明它使用某个成员函数覆盖了它继承的虚函数，要在形参列表、<code>const</code>关键词、引用限定符<code>&amp;或&amp;&amp;</code>后面加上关键词<code>override</code>。这样可以增加可读性，方便查错，如果该函数无法覆盖已存在的虚函数，编译器就会报错。</p>
+<p>如果把一个函数设为<code>final</code>则可以避免被覆盖。</p>
+<p>虚函数也可以有默认实参，并且实参的版本取决于多态性，因此实践中尽量基类和派生类中的默认实参一致。</p>
+<h3 id="虚函数的回避"><a href="#虚函数的回避" class="headerlink" title="虚函数的回避"></a>虚函数的回避</h3><p>如果需要指定某个版本的虚函数，则要在函数名前带着类名和<code>::</code>。</p>
+<p>通常情况下，只有成员函数（或友元）中的代码才需要用作用域运算符来会比虚函数的机制。</p>
+<p>最典型的场景：基类虚函数中进行了一些前置操作，子类虚函数需要先调用父类的虚函数（类似于Java中调用<code>super</code>的方法），在其基础上完成自己进一步的操作。如果不回避虚函数机制，则因多态性不会调用到基类的方法，而是调用子类的方法，导致<strong>无限递归</strong>。</p>
+<h3 id="纯虚函数和抽象基类"><a href="#纯虚函数和抽象基类" class="headerlink" title="纯虚函数和抽象基类"></a>纯虚函数和抽象基类</h3><p>在函数体的位置写<code>=0</code>即可声明为纯虚函数，不需要定义，表示这个函数没有意思，必须要覆盖才可以调用。</p>
+<p>含有纯虚函数的类是<strong>抽象基类</strong>，该类型无法实例化，类似于Java中的<code>interface</code>。</p>
+<h2 id="虚析构函数"><a href="#虚析构函数" class="headerlink" title="虚析构函数"></a>虚析构函数</h2><p>每个基类都应该有虚析构函数。</p>
+<p>一个类如果定义了析构函数，即使是编译器生成的默认版本，编译器也不会为这个类合成移动操作。移动操作会去使用默认的拷贝构造。</p>
+<h2 id="改变个别成员的可访问性"><a href="#改变个别成员的可访问性" class="headerlink" title="改变个别成员的可访问性"></a>改变个别成员的可访问性</h2><p>如果一个派生类是<code>private</code>继承，那么所有基类成员到他这里就都变成了私有成员，他的派生类无法访问。可以使用<code>using</code>来改变可访问性，用法是将基类的成员再声明一遍：<code>using Base:: x;</code>，但是注意，派生类只能这样声明他本身能访问到的基类成员。</p>
+<h2 id="删除的拷贝控制"><a href="#删除的拷贝控制" class="headerlink" title="删除的拷贝控制"></a>删除的拷贝控制</h2><p>如果基类有删除的或者无法访问的拷贝控制函数，那么子类的相关函数（需要调用父类的）会被设置为<code>delete</code>。也就是说编译器不会为已经删除的函数再合成，也不会让子类只完成部分的操作。</p>
+<p>实际编程中，如果基类没有默认、拷贝或移动构造函数，一般派生类也不会定义。</p>
+<h2 id="继承构造函数"><a href="#继承构造函数" class="headerlink" title="继承构造函数"></a>继承构造函数</h2><p>类不能继承默认、拷贝和移动构造函数，只能由编译器自动生成。</p>
+<p>如果想要继承，需要用<code>using</code>声明语句，让编译器来给派生类生成与基类一样的构造函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">derived</span>(parms) : <span class="hljs-built_in">base</span>(args)&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>using</code>生成的构造函数不会改变访问级别；不能改变<code>explicit</code>和<code>constexpr</code>；不能继承默认实参，而是会获得多个版本的构造函数，每个构造函数分别省略一个含有默认实参的形参。</p>
+<p>继承的构造函数不会作为用户自定义的构造函数，所以编译器还是会生成合成函数。</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="成员函数与inline"><a href="#成员函数与inline" class="headerlink" title="成员函数与inline"></a>成员函数与inline</h2><p>所有的成员函数会被自动标记为<code>inline</code>，但是<code>inline</code>只是一种建议，最终决定权在于编译器。</p>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><p>类似于Python中成员函数的第一个参数必须是<code>self</code>那样，任何对成员函数的调用都会将对象隐式传入为<code>this</code>，并且在成员函数内部使用成员变量时，也隐式使用了<code>this</code>。<code>this</code>是一个const指针。</p>
+<h2 id="重载和覆盖"><a href="#重载和覆盖" class="headerlink" title="重载和覆盖"></a>重载和覆盖</h2><p>重载是对于在同一作用域声明的函数而言的。内部作用域声明的成员，会直接覆盖而不是重载外部的成员，既是形参列表不一致。</p>
+<p>因为在较小的作用域中查找时，编译器能直接找到同名的函数，并认为这就是自己想要的，不再继续向更外层的作用域查找。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C++</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">内存管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/STL/">
+                        <span class="hidden-mobile">STL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

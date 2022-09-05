@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="abstractTwitter等在线社交网络（ONS）已成为非常有用的信息传播工具。然而，它们也成为虚假信息传播的沃土，特别是关于正在进行的2019年新冠病毒（COVID-19）大流行的虚假信息。2019冠状病毒疾病的最佳描述，现在比以往任何时候都更需要科学的事实检查和错误信息检测这些工具所带来的危险，关于COVID-19。本文推特分析了T2019冠状病毒疾病信息共享的可信度。在我们的分析中，我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper">
+<meta property="og:url" content="http://example.com/hide/paper/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="abstractTwitter等在线社交网络（ONS）已成为非常有用的信息传播工具。然而，它们也成为虚假信息传播的沃土，特别是关于正在进行的2019年新冠病毒（COVID-19）大流行的虚假信息。2019冠状病毒疾病的最佳描述，现在比以往任何时候都更需要科学的事实检查和错误信息检测这些工具所带来的危险，关于COVID-19。本文推特分析了T2019冠状病毒疾病信息共享的可信度。在我们的分析中，我们">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-18T06:22:05.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.197Z">
+<meta property="article:author" content="JackZhu">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>paper - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="paper">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-18 14:22" pubdate>
+        2022年3月18日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      12k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      104 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">paper</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h2 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h2><p>Twitter等在线社交网络（ONS）已成为非常有用的信息传播工具。然而，它们也成为虚假信息传播的沃土，特别是关于正在进行的2019年新冠病毒（COVID-19）大流行的虚假信息。2019冠状病毒疾病的最佳描述，现在比以往任何时候都更需要科学的事实检查和错误信息检测这些工具所带来的危险，关于COVID-19。本文推特分析了T2019冠状病毒疾病信息共享的可信度。在我们的分析中，我们提出了一个基于集成学习的框架，用于验证大量推文的可信度。特别是，我们2019冠状病毒疾病的信息传输的分析。在我们的方法中，我们将信息分为两类：可信或不可信。我们对推特可信度的分类基于各种功能，包括推特和用户级功能。我们在收集和标记的数据集上进行了多次实验。2019冠状病毒疾病检测结果表明，该方法检测出可信的和不可信的含有COVID-19信息的微博信息具有较高的准确性。</p>
+<h2 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h2><p>最近几个月，2019年新冠病毒病（COVID-19）在世界各地的传播率非常高[1]–[3]对大多数人来说，这是当今前所未有的全球大流行。这些观点得到了世界卫生组织（WHO）总干事特德罗斯·阿达诺姆·盖布雷耶苏斯[4]的响应。在2020年2月15日举行的慕尼黑安全理事会会议上，他表示，世界正在进行一场战争，不仅是为了抗击大流行，也是为了抗击信息危机。各种来源已经表明，COVID-19的传播已经被传播的信息种类加速，或者确实是错误信息，被传播[ 3 ]，[ 4 ]。这是因为个人根据从不同来源获得的信息采取行动，保护自己不感染疾病。国际事实核查网络（IFCN）在一份报告中提供了一个例子，说明了有关大流行的虚假信息的传播程度。ICFN汇集了100多个基本上进行事实核查的组织。到2020年4月，他们发现关于大流行的虚假声明已经传播了4000多起[7]。不幸的是，误报有一大堆与之相关的不良结果：它可以增加人们对流行病的恐惧（8），并且它会误导人们正确的医疗实践，因为一些人可能会遵循错误的关于如何保护自己免受COVID-19的建议，这可能导致健康不佳甚至死亡（9），[ 10 ]。</p>
+<p>传播错误信息的方式之一是通过Twitter等在线社交网络（OSN）[11]。最近的其他流行病也出现了虚假信息的传播，如埃博拉[12]、黄热病[13]和寨卡[14]。这无疑是一个令人担忧的趋势，因为许多个人可能会接受错误信息作为正确信息。为了遏制这种“错误信息挑战”，世卫组织建立了Mythbusters平台，它试图揭开关于COVID-19流行病的虚假信息。</p>
+<p>这些努力得到了个别事实核查组织的补充，这些组织在IFCN下联合起来，加大了打击当前信息危机的力度[15]。</p>
+<p>OSN总是与错误信息的传播联系在一起，许多观点似乎忽视了其帖子中的科学证据和材料[16]。一个基本的例子说明了关于疫苗和治疗COVID-19的无数对话。许多人传播了关于COVID-19治疗的假信息，并倾向于接受它。图1展示了促进虚假COVID-19治疗的示例推特，并鼓励人们购买它。另一个明目张胆的例子是美国总统唐纳德·J·特朗普的推文，该推文指出，将氢氯喹和阿奇霉素联合使用是“医学史上最大的游戏改变者”[17]。随后，医疗机构和医学研究机构站出来为这一错误主张揭开神秘面纱，要求医生在治疗患者时不要遵循这些信息。不管是有意还是无意，错误的信息都会带来恐惧和错误的医疗处方。它还导致违反有关预防措施的医学准则，如社交距离和个人卫生。这是大量错误信息的直接结果[18]。</p>
+<p>作为一个非常流行的OSN平台，推特已经成为传播关于COVID-19（19）的错误信息的工具，这导致了精神痛苦、焦虑和自我伤害的增加。一个令人担忧的因素是，错误信息传播的速度超过了物理距离，因此对流行病的恐惧蔓延得惊人迅速，而且似乎比实际的COVID-19（20）更具传染性。因此，患者和非患者在精神和身体上都受到影响。因此，有必要调查和检测围绕快速移动的COVID-19大流行的错误信息，尤其是通过OSNs的镜头。</p>
+<p>针对当前的信息，这项工作着眼于开发一个有效的错误信息检测框架，关于COVID-19，特别是针对推特。我们在这一领域的主要贡献，以及拟议技术的主要特点总结如下：</p>
+<ul>
+<li>我们开发了一个新的框架，用于检测Twitter平台上的错误信息。在这个框架中，我们将六种机器学习算法与集成学习相结合。此外，我们还利用集成堆叠模型和选定的机器学习模型来增强模型。这导致了更高的精度和更广义的模型。</li>
+<li>我们收集了一个与COVID-19大流行相关的大数据集，通过Twitter的流应用程序接口（API）推特推特发布于1月15日至4月15日，2020，旨在探索的特点，在Twitter上检测错误信息。</li>
+<li>数据集由人类注释员进行评估和标记。之后，我们提取了与COVID-19相关的特征，并在构建我们的框架时自动地应用它们来自动测量所考虑的推特的可信度。</li>
+</ul>
+<p>本文的其余部分组织如下，第二节介绍了一些与OSN上的错误信息及其传播有关的作品。在第三节中，我们描述了我们的方法论和框架。第四节介绍了结果和绩效评估。第五节提供了更多关于结果、经验教训和开放方向的讨论。最后，我们在第六节结束我们的工作。</p>
+<h2 id="related-work"><a href="#related-work" class="headerlink" title="related work"></a>related work</h2><p>错误信息可定义为故意或以其他方式传播的不准确和虚假信息[21]。虚假信息的传播是由改进的通信技术引起的，该技术允许许多人以负担得起的成本共享信息[22]。传播错误信息可能会对个人及其生活的社会产生负面影响；它可以向人们灌输恐惧，并大体上影响他们对选举和自然灾害等事件的行为反应[23]。其中一个例子是，令人震惊的统计数据显示，在2016年美国大选之前的几个月里，假新闻在美国传播的频率很高[20]，[21]。另一个例子是有关疫苗接种的不准确信息的传播，这已被证明会在许多家长中诱发恐惧症。因此，一些有年幼子女的父母违反医疗准则，拒绝为子女接种疫苗或免疫[26]。这导致本来可以预防的疾病空前增加。</p>
+<p>在社会层面，2013年世界经济论坛将错误信息列为影响各国财务状况和关系的因素[27]。错误信息的传播已经上升到更高的水平，因此研究人员和学者对理解错误信息是如何传播的产生了浓厚的兴趣。他们还试图发现促使人们分享有关各种事件（如新冠疫情或政治情景）的虚假信息的驱动力[28]。例如，Oh等人[29]对从Twitter上获得的有关2010年海地地震的信息进行了分析。他们发现，与信息有关的不确定性和焦虑是决定虚假信息传播方式的基本因素。他们指出，遏制虚假信息传播的最佳方式是引用可靠来源的可信信息。多梅尼科等人[30]还试图确定科学错误信息是如何传播的。<strong>他们得出的结论是，当朋友们经常发推特时，大多数人认为信息是可信的。</strong></p>
+<p>在[31]中，作者研究了从非结构化文本中实时提取信息，这是一个具有挑战性的过程。他们的工作基于一种从非结构化文本语料库中进行信息检索的嵌入方法。作者将2014年埃博拉和2016年寨卡疫情作为使用案例，从Twitter和PubMed的学术摘要中收集相关数据。他们的研究通过与预先训练的泛型词向量进行比较，验证了特定领域词向量模型的稳健性。在另一项研究[32]中，作者提出了四个指标来定量评估社交网络分析技术的当前成熟度：模式与知识发现、信息融合与集成、可扩展性和可视化。</p>
+<p>Vosoughi等人[33]对假新闻传播进行了更近期的研究，他们发现Twitter上的错误信息比可信新闻更为普遍。这一现象与虚假新闻包含未经过滤的情绪有关，比如恐惧，甚至厌恶，这与许多人都有关联，促使他们与推特好友分享新闻。另一种可能的解释是人们喜欢分享新信息[33]。赵等人[34]对中国媒体如何传播错误信息进行了研究。他们得出的结论是，当一场影响许多人的危机发生时，社交媒体上会有大量发布和转发错误信息。为了遏制假新闻的传播，该研究确定人们的可接受规范和他们对分享假新闻的态度是关键因素。</p>
+<p>在之前的大多数研究中，研究社交媒体上错误信息的性质和传播[35]，重点是政治新闻和科学错误信息。然而，很少有研究专门关注与新冠病毒相关的错误信息的传播，这使得它成为一个关键的研究领域。</p>
+<h2 id="methodology"><a href="#methodology" class="headerlink" title="methodology"></a>methodology</h2><p>图2展示了拟议框架的系统架构，从使用Twitter的流式API收集原始数据，到性能评估和比较。我们将COVID19错误信息问题建模为二元分类问题。我们的方法基于一个由人类专家收集和注释的大型数据集。这项工作中使用的方法的假设是，使用的每条推文都有特定的功能。在以下小节中，我们将介绍从Twitter收集和标记Covid19相关数据的步骤。然后，我们描述了用于评估每条推文内容可信度的不同特征类别。</p>
+<h3 id="data-collection"><a href="#data-collection" class="headerlink" title="data collection"></a>data collection</h3><p>为了进行实验，我们创建了一个推特数据集，该数据集使用推特的流式API收集，时间跨度为三个月，从2020年1月15日到4月15日。我们在搜索中使用了与COVID19相关的标签和关键字。<strong>表1列出了收集新冠肺炎相关推文的所有相关关键词。</strong>根据推文类型对推文进行识别、注释和分类。在这项工作中，我们将可信的新冠肺炎推文定义为一条经过验证且相关的推文，包含新冠肺炎新闻、疫苗接种、药物、保护方式等，其来源已得到确认、可靠，如世卫组织、IFCN、事实核查平台或官方卫生机构。不可信推文被定义为在推特上传播的关于新冠肺炎的未经证实或虚假推文的集合。对于从新闻片段收集的推文，进行了详细研究，以确定它们是否包含真实信息。如果我们的注释者确定某条推文包含虚假信息，它将自动归入“不可信任”类别。</p>
+<p>此外，为了提高推文分类的准确性，注释者会相互征求意见。最终，我们收集了98万条推文。在删除重复和不相关的推文后，最终数据集包含40多万条推文。</p>
+<p>图3显示了收集到的推文的实际数量。这些推文被注释并分类为121950条可信推文和287534条不可信推文。该数据集构成了我们工作中后续实验的主要基础。</p>
+<h3 id="data-annotation-and-reliability"><a href="#data-annotation-and-reliability" class="headerlink" title="data annotation and reliability"></a>data annotation and reliability</h3><p>我们工作中使用的创建的数据集由十名人工注释员手动注释。所有的注释员都是计算机和信息科学专业的研究生。其中两名为博士生，四名为硕士生，其余为学士生。所有注释者都熟悉OSN内容的注释过程。注释者同意在注释过程中以最高的精度执行。他们做兼职工作，三个月的工作得到了报酬。平均每天注释推文的数量约为每个注释者450条。除了收集到的关于新冠肺炎的推文，我们还与团队进行了一次简短的初始会议，描述了所需的数据集，给出了注释指南，并提供了注释者可以调查每条推文可信度的来源。</p>
+<p>为了确保注释者不会偏向具有高收藏率和转发率的帐户，我们将数据集实例传递给注释者，其中忽略了用户配置文件的可见特征。之所以这样做，是因为人们相信拥有最多粉丝的Twitter用户可能会避免传播错误信息[36]。</p>
+<p>为了评估注释过程中的一致程度，并检查注释者分类之间的一致性，我们构建了一个包含20条推文的小数据集，然后邀请10条注释者来决定所选推文是否可信。然后，我们将贝叶斯广义线性混合模型（GLMM）应用于他们的结果，该模型非常适合测量二元分类结果的多个注释者之间的一致性[37]。一致性测量值为0.74，表明具有良好的可靠性。我们认为，这种强有力的机会纠正协议是由于注释过程的明确指导方针，以及为检查正在研究的新冠肺炎推文的可信度而提供的可靠来源。</p>
+<h3 id="feature-extraction"><a href="#feature-extraction" class="headerlink" title="feature extraction"></a>feature extraction</h3><p>提议的架构利用了26种手工制作的通用功能（如表2所述），这些功能可分为<strong>“tweetlevel”和“userlevel”</strong>。关于错误信息检测的早期工作采用了监督学习技术，该技术已被广泛用于研究与内容、用户和网络相关的手动策划的特征，以寻求在线可信度的显著特征[38]。这些研究表明，这些特征有可能区分可信信息和不可信信息。</p>
+<h4 id="user-level-features"><a href="#user-level-features" class="headerlink" title="user-level features"></a>user-level features</h4><p>用户级功能表示与用户配置文件相关的功能，例如推文数量、关注者数量、关注者数量等。值得一提的是，这些特征中的一些是潜在的，而另一些则是显式的。例如，收藏率是一个潜在特性，而关注者的数量在用户配置文件中明确显示。这些功能指向推文的内容、用户和网络。一些作品[34]–[36]证明，人工策划的推文功能能够区分可信推文和不可信推文。</p>
+<h4 id="tweet-level-features"><a href="#tweet-level-features" class="headerlink" title="tweet-level features"></a>tweet-level features</h4><p>在我们对推文的手动分析中，我们将重点放在了内容特性上。我们查看了带有URL和嵌入式多媒体的推文。Twitter用户使用URL的目的是利用有限的推文空间[40]。研究人员已经表明，许多用户可能会分享比没有URL的推文更广泛的内容[42]。URL也会增加推文的可信度[43]。值得注意的是，据透露，包含URL的推文比不包含URL的推文更容易传播病毒[44]。</p>
+<h3 id="ensemble-learning-based-model"><a href="#ensemble-learning-based-model" class="headerlink" title="ensemble-learning-based model"></a>ensemble-learning-based model</h3><p>集成学习主要涉及训练一组多个单机学习模型（即weaklearners），然后将结果与集成方案结合起来[45]。这增强了模型的泛化能力，也提高了精度水平。因此，我们在可用的机器学习模型中选择了一个性能最高的模型。</p>
+<p>我们基于数据集对每个模型进行了深入分析，并增强了其参数调整。除了比较他们的表现外，我们还选择了六个模型中的四个类别来代表弱学习者。这四类模型包括：（1）朴素贝叶斯（NB）和贝叶斯网络（BN）模型，（2）knearest邻居（kNN）模型，（3）主要由C4组成的决策树（DT）。5.随机森林（RF）模型；（4）支持向量机（SVM）。我们确定了四个类别中每一个类别检测错误信息的能力，然后我们选择了一个集合，除了集成学习的元模型之外，还包括weaklearner。</p>
+<p>整体学习存在于多种策略中。第一种是基于Voting的模型[45]。在这里，该模型计算不同的弱势群体的结果，然后选择投票最多的群体。对于一个基于baggingbased的模型[45]，一组弱学习者获得相同的权重。第二，对于增强模型，学习者有基于错误分类的数据进行训练的权重，这是在一系列训练模型上完成的。如图4所示，使用不同的单机学习模型构建了两级堆叠模型。</p>
+<p>在这项工作中，我们使用了常用的机器学习技术来创建一个基于堆栈的集成学习模型。在构建集成模型时，我们进行了各种实验。对于0级weaklearner，我们使用SVM+RF模型，而对于1级weaklearner，我们使用C4模型。5模型作为元模型。在调整最终模型以提高性能时，我们根据相关性、熵和释放度应用了nfold交叉验证。</p>
+<h2 id="experimental-results"><a href="#experimental-results" class="headerlink" title="experimental results"></a>experimental results</h2><h3 id="evaluation-of-single-weak-learners"><a href="#evaluation-of-single-weak-learners" class="headerlink" title="evaluation of single weak-learners"></a>evaluation of single weak-learners</h3><p>在实验阶段，我们测试了六个机器学习模型作为候选的weaklearner：RF、C4.5、朴素贝叶斯、贝叶斯网络、支持向量机和kNN模型。每个模型都基于10倍交叉验证模型进行训练，该模型将整个集合分成10个相等的子集。每个类别被分配九个训练子集和一个测试子集测试。</p>
+<p>交叉验证模型使用相同的整体集进行训练和测试。我们取每个模型的平均精度，以及标准偏差，作为1sigma误差，如图5所示。很明显，C4。5比其他所有型号都好。C4交叉验证模型的平均精度。5的准确率高达98%，其次是RF，其平均准确率为97.4%。</p>
+<p>朴素贝叶斯算法的性能最差，平均准确率为85.5%。交叉验证模型和测试集的平均精度结果如图5所示。标准偏差（误差条）表示所选模型的稳定性。</p>
+<p>与交叉验证模型相比，测试集模型的精确度略有下降，如图5所示。例如，kNN和Naïve Bayes的准确度显著下降（分别下降4.2%和4.05%），尽管他们在训练中表现最好。这表明，当涉及训练集时，这些模型存在过度拟合问题。C4的准确性。5只下降了2%，因此达到了最高的准确度。</p>
+<p>综上所述，<strong>当应用于新的数据集时，单一的机器学习模型可能效率最低。</strong>这部分是通过应用学习计划确定的，也可以通过所用数据集的质量来确定。</p>
+<h3 id="stacking-based-model"><a href="#stacking-based-model" class="headerlink" title="stacking-based model"></a>stacking-based model</h3><p>在上一节中，我们分析了所选单机学习模型的结果。值得注意的是，当受到测试集的影响时，所有模型的性能都会下降。我们承认，集成学习可以通过将多个机器学习模型集成在一起，将单个机器学习模型转化为一个健壮的方案[40]，[41]。然而，集成学习的一个基本问题是可解释性损失[46]。此外，发现大型模型中有大量参数[47]，因此增加了过度拟合问题。因此，需要一个叠加方案来获得一个可接受的大小，这也会影响给定集合模型的性能，并指导集合过程。因此，我们在执行堆叠时组合了level0模型等模型。我们还用元模型替换了投票模块。在这一步中，堆叠模型用于基于level0模型的给定可用值训练元模型。</p>
+<h3 id="selecting-the-appropriate-meta-model"><a href="#selecting-the-appropriate-meta-model" class="headerlink" title="selecting the appropriate meta-model"></a>selecting the appropriate meta-model</h3><p>堆叠模型设计和工作流程如图4所示。在该模型中，通过使用nfold交叉验证为元模型训练生成了二级数据集。特别是，我们使用了10倍交叉验证。</p>
+<p>元数据的结果对最终结果至关重要。我们选择使用从C4.5，SVM和kNN中选定的元（1级）模型。我们的选择是考虑到它们在处理新输入时的稳定性能，如图5所示，其中六个给定模型中的每一个都作为0级模型应用。这样做是为了衡量不同模型组合的性能。在这里，训练和测试集与图5所示的测试实验中使用的类似。表3给出了这一特定实验的结果，表明当应用于新的测试集时，三个叠加模型的性能比最佳单基模型具有更高的平均精度。</p>
+<p>kappa统计量[48]还与平均精度一起考虑，平均精度通常用于测量给定数据集的观测值和预测值之间的一致程度。kappa统计量在公式1中定义，其中p是所选模型的精度，pr是随机分类器的精度：</p>
+<p>kappa统计量被认为比简单的准确度更好。也已经证实，较高的kappa统计量表明较高的准确性[49]。这里还考虑了根相对平方误差（RRSE），如公式2所示，其中pi是第i类（即可信或不可信）中训练模型预测的值，ai是第i类的实际目标率，a’是训练集的平均值。在这项工作中，我们计算了总的平方误差，然后将其除以训练集的总平方误差进行归一化。</p>
+<p>真阳性（TP）、真阴性（TN）和假阴性（FN）用于根据以下等式计算模型精度、召回率和Fscore：</p>
+<p>加权接收机工作特性（ROC）面积是一条概率曲线，通常称为ROC（AUROC）曲线下的面积。AUROC使用加权TP速率和FP速率值。如表4所示，当应用SVM+RF组合时，集合模型在所有给定测量中都取得了更好的结果。</p>
+<h3 id="selection-of-weak-learners"><a href="#selection-of-weak-learners" class="headerlink" title="selection  of weak learners"></a>selection  of weak learners</h3><p>如前所述，我们的目标之一是降低模型的复杂性。因此，我们试图确定以高精度链接所有模型所需的最小基本模型集，同时保持简单的结构。补体第四成份。5被选为上一小节中的首选元模型，并考虑了以下七种基本模型组合：C4。5+RF，SVM+RF，C4。5+kNN，SVM+kNN，SVM+BayesNet+kNN，C4。5+贝叶斯网络+kNN，最后将所有模型放在一起。我们使用10倍交叉验证模型作为叠加模型。我们的目标是使用给定元模型的初始训练集创建训练集和测试集，并使用测试集测试完整的集成模型。</p>
+<p>图6显示了上述七种不同基础模型组合的精度，表4显示了每种模型组合的性能。很明显，SVM+RF组合比C4具有更好的准确性（97.8%）。5款（96%），尽管在剩下的三项测量中，它的性能较低。与All模型相比，SVM+RF组合模型具有更高的精度。这表明，在创建集成模型时，不需要组合多个模型，因为较弱的模型可能会降低整体性能。因此，一个明智地选择的元模型与较小基础模型的适当组合可能比所有基础模型加在一起表现更好。</p>
+<h3 id="select-top-features"><a href="#select-top-features" class="headerlink" title="select top features"></a>select top features</h3><p>为了研究特征重要性对模型预测的影响，考虑到我们总共有26个特征（9个tweetlevel特征和17个userlevel特征），我们应用了两种排序技术：基于熵的排序和基于相关性的排序。基于Entropy-based的排序应用于获得的对称数据的计算，而基于correlation-based的排序应用于根据所需特征与给定类别的相关性对其进行排序。图7显示了26个级别特征中每一个的计算值。可以注意到，排名前五位的功能按以下顺序排列：IsV（ui）、NoRT（ui）、NoHash（TI）、NoMen（TI）和FlwR（ui）。我们可以得出结论，账户是否经过验证是最重要的特征，其次是转发次数、标签数量、提及次数，最后是以下比率。</p>
+<h2 id="discussion"><a href="#discussion" class="headerlink" title="discussion"></a>discussion</h2><p>在本节中，我们将讨论通过开展这项工作所学到的一些经验教训。然后，我们提供一个开放性问题列表。最后，我们将讨论在这场持续的危机中我们想与读者分享的一些最后想法。</p>
+<h3 id="learned-lesson"><a href="#learned-lesson" class="headerlink" title="learned lesson"></a>learned lesson</h3><p>这项研究揭示了在持续危机期间监控错误信息传播问题时，Twitter数据使用的几个关键问题。我们希望与科学界的成员就这个话题展开讨论。首先，我们意识到Twitter API限制了研究错误信息传播的范围。此外，Twitter API不允许快速检索数据。由于事实核查机构需要一段时间才能证实或否认某一特定信息，因此要找到公众对某一推特的最初反应就成了一项挑战。我们还注意到，Twitter为研究目的开放了COVID29数据[73]。然而，这一举措并不能解决数据检索限制的问题。</p>
+<h3 id="open-directions"><a href="#open-directions" class="headerlink" title="open directions"></a>open directions</h3><p>通过社交媒体传播错误信息并不是什么新鲜事，但当前的新冠疫情突显了OSN对人类构成的危险。这就是为什么在解决这一日益严重的问题所需的战略和方法方面仍有大量工作需要完成。事实上，在这里发现的结果不可避免地导致了一些关键的研究问题，需要在未来加以解决。我们强调了以下四个主要的开放研究方向。</p>
+<p>首先，需要改进与社交媒体分析相关的工具和理论。这可能以部分或完全自动化的方式来评估错误信息。这包括找到错误信息的来源、传播网络、传播方式、识别方式和时间，以及此类信息可能产生的影响。</p>
+<p>此外，由于我们希望以一种整体的方式来解决这个问题，因此了解我们的工作成果以及未来的其他成果如何在Twitter之外的其他社交媒体平台上实现也是至关重要的。<strong>推特网络模式使其容易传播错误信息，但其他OSN也应该加以研究。</strong>事实上，有关新冠肺炎的错误信息的传播不一定仅限于Twitter，因为它可以从一个平台传播到另一个平台。常见的情况是，事实核查平台没有引用任何推文，即使在推文上也有声明的情况下也是如此。尤其是在一个特定的声明来源于另一个数字平台的情况下，但其来源可以追溯到Twitter，人们可能在Twitter上嵌入了来自前OSN的链接。在这种情况下，可能会有一个有趣的方面，那就是封闭的群体和信息。</p>
+<p>假新闻和错误信息的社会影响也是一个需要更多研究工作的领域。一般来说，假新闻的传播对社会产生了负面影响，应该进行研究以了解影响的程度。我们应该回答这样的问题，比如影响在多大程度上发生？它们会影响谁？如何在线下控制错误信息的传播？还必须更深入地调查与新冠肺炎大流行有关的错误信息在不同地方的传播情况。</p>
+<p>最后但并非最不重要的一点是，有必要在社交媒体分析和危机管理领域研究这一问题。在这种情况下，社交媒体分析可以借鉴管理者和研究人员在危机管理方面的专业知识。这可以帮助他们改进他们的发现，优化他们的研究工作。另一方面，危机管理专家可以利用有关错误信息传播的新发现以及现有模型，为危机中信息传播的方式提供整体方法。</p>
+<h3 id="final-thought"><a href="#final-thought" class="headerlink" title="final thought"></a>final thought</h3><p>多年来，错误信息的传播已成为互联网上的一种普遍恶习。新冠肺炎疫情再次加剧了这一日益严重的问题带来的风险。特别是，OSN已被用作连接和跟踪与大流行有关的信息的一种方式。然而，随着世界继续与最新的大流行作斗争，错误信息的传播仍然是一个重大问题。</p>
+<p>世卫组织和联合国教科文组织等主要国际机构正在竭力遏制与新冠疫情有关的错误信息的传播。例如，世卫组织分配了一部分冠状病毒网络平台Mythbusters，以应对假新闻。然而，我们正处在一个信息瞬息万变的时代。这就引出了一个问题，我们怎样才能遏制虚假信息和假新闻的传播？毫无疑问，找到解决方案说起来容易做起来难。我们正在应对一场信息危机，它迫使高层组织和政府制定政策，遏制假新闻和错误信息的传播。</p>
+<p>学术界已经做了很多工作来打击错误信息，但OSN也加入了这项工作。顶级社交媒体平台精心设计了旨在解决这一问题的工具、系统和政策。然而，大多数人尚未找到切实的解决办法。Twitter和Instagram等平台不得不做出改变，以处理用户中的新冠病毒错误信息。许多其他的OSN已经求助于提供他们自己的验证更新来解决这个问题。Facebook还通过创建新工具和做出政策改变，改变了对假新闻和虚假信息的立场。根据这些新政策，“有害信息”一词是指任何可能导致“即将发生的身体伤害”的错误信息。这项政策是对传播虚假治疗信息和社交距离等虚假信息等问题的回应。</p>
+<p>在这样一个世界面临大流行的时代，人们可能会对自己传播的信息更加负责。现在，公民必须遵守政府政策，而不是直接或甚至间接地传播不必要的恐慌。与新冠肺炎有关的未经证实的信息正在使情况变得更糟，我们建议采取以下措施来应对这一问题：</p>
+<ol>
+<li>用户应该尝试交叉检查他们收到的信息，以确定可信度。他们应该检查和核实信息来源：理想情况下，他们应该从世界卫生组织等知名数字平台和其他渠道获取信息。</li>
+<li>如果一个人可能会遇到任何形式的错误信息，那么控制传播的最佳方式就是避免任何形式的接触。在这方面，用户应避免评论和分享此类内容。这是阻止他们人气增长的唯一途径。</li>
+<li>如果任何形式的错误信息在社交媒体上被分享，那么报道内容也很好。在这种情况下，如果信息是私下共享的，您可以与发件人联系，告知他们共享的内容可能是错误信息。在这样一场全球危机中，你可以解释与这些内容相关的风险。</li>
+<li>你还可以在网上分享来自知名来源的可信内容。使用已知可靠的网站和平台传递有关新冠肺炎的信息。</li>
+</ol>
+<h2 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h2><p>正在进行的新冠肺炎大流行对人类构成威胁。与全球变暖等其他全球挑战不同，遏制和战胜新冠肺炎在很大程度上取决于人们共享信息的质量和可信度。然而，研究表明，有关大流行的错误信息在OSN上迅速传播。</p>
+<p>在这项工作中，我们使用来自Twitter社交网络的真实数据进行了一项综合实验。结果表明，所提出的集成学习模型比基于单机学习的模型具有更好的性能。我们通过评估元模型和WeakLearner来增强堆叠模型的性能。我们得出的结论是，最终的模型大小可以包含较少的特征，并且它的性能略好于原始模型。到目前为止，我们的模型设计用于检测两类推特可信度：可信或不可信。我们承认有改进的余地，其中部分应包括以下内容。首先是包含新闻和情感内容的复杂推文。此外，我们还将考虑其他有助于增强数据集的OSN。其次，我们将寻找更新的集成技术和机器学习方法来增强当前模型。</p>
+<p>Hello everyone, our team is glad to deliver this presentation to introduce our project. The topic is advanced spatial keyword search.</p>
+<p>Many applications need to find the object nearest to a specified location that contains a set of keywords.This kind of search is spatial keyword search.<br>Spatial keyword search has been widely studied and plays an essential role in personalized route recommendation and geo-textual information retrieval.<br>This project is to study the recent progress of spatial keyword queries. Specifically, to research newly proposed methods that improve the previous query from different perspectives.</p>
+<p>Different kinds of users also have various kinds of requirements. Here we give some examples and corresponding solutions that we studied in this project.</p>
+<p>To address the convenience problem, this paper proposed a way to efficiently search for a subset of tuples in the database at each round that can learn the users’ preferences based on their choice. The interactive framework contains three phases.<br>In the first phase, the system defines a candidate subset that contains all potential candidates. It significantly reduces the size of search space in the following phases.<br>In the second phase, there are three strategies and a greedy algorithm to maximize the expected benefit and learn user preferences quickly.<br>In the third phase, the system can terminate the learning phase automatically and estimate preferences.</p>
+<p>As for the performance, the experiments show that the advantage is significant when the dataset is large. The accuracy of using three strategies is better than treating each keyword equally.</p>
+<p>There are some papers about the interactive query and speculating user preferences from feedback. However, the interactive query we studied in this project only asks users to choose the favorite tuple, while related work asks for users’ evaluation of the presented results.</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/hide/">hide</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

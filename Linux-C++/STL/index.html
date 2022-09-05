@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="C++ STL    模板本身不是类或函数，而是为编译器生成类或函数而编写的说明书。 1. 顺序容器1.1. 共通的知识1.1.1. assign和赋值的区别用等号赋值的时候，左右两边的类型要完全一致（包括容器的类型和元素的类型）。   用assign的时候，允许元素类型隐式转换，是拷贝并替换到被赋值的容器中。 1.1.2. swap的本质swap(con1, con2)可以交换两个容器的内容。注">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL">
+<meta property="og:url" content="http://example.com/Linux-C++/STL/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="C++ STL    模板本身不是类或函数，而是为编译器生成类或函数而编写的说明书。 1. 顺序容器1.1. 共通的知识1.1.1. assign和赋值的区别用等号赋值的时候，左右两边的类型要完全一致（包括容器的类型和元素的类型）。   用assign的时候，允许元素类型隐式转换，是拷贝并替换到被赋值的容器中。 1.1.2. swap的本质swap(con1, con2)可以交换两个容器的内容。注">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T14:00:20.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.192Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>STL - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="STL">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-11 22:00" pubdate>
+        2022年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      39 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">STL</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1>C++ STL</h1>  
+
+<p>模板本身不是类或函数，而是为编译器生成类或函数而编写的说明书。</p>
+<h1 id="1-顺序容器"><a href="#1-顺序容器" class="headerlink" title="1. 顺序容器"></a>1. 顺序容器</h1><h2 id="1-1-共通的知识"><a href="#1-1-共通的知识" class="headerlink" title="1.1. 共通的知识"></a>1.1. 共通的知识</h2><h3 id="1-1-1-assign和赋值的区别"><a href="#1-1-1-assign和赋值的区别" class="headerlink" title="1.1.1. assign和赋值的区别"></a>1.1.1. assign和赋值的区别</h3><p>用等号赋值的时候，左右两边的类型要完全一致（包括容器的类型和元素的类型）。  </p>
+<p>用<code>assign</code>的时候，允许元素类型隐式转换，是<strong>拷贝并替换</strong>到被赋值的容器中。</p>
+<h3 id="1-1-2-swap的本质"><a href="#1-1-2-swap的本质" class="headerlink" title="1.1.2. swap的本质"></a>1.1.2. swap的本质</h3><p><code>swap(con1, con2)</code>可以交换两个容器的内容。注意，<code>swap</code>的速度<strong>很快</strong>，因为不是交换容器内的所有元素，而是直接交换容器内部的数据结构。  </p>
+<p>除了<code>array</code>，<code>swap</code>并不复制&#x2F;删除&#x2F;插入任何元素,并保证会在常数时间内完成。 <code>array</code>的<code>swap</code>确实会交换元素，运行时间和元素数量成正比。 <code>swap</code>之后，迭代器&#x2F;引用&#x2F;指针还指向原来的元素，但是元素的值已经变了。  </p>
+<p>由于元素本身的位置并未移动，因此除了<code>string</code>，容器的迭代器&#x2F;引用&#x2F;指针不会失效。但是，在<code>swap</code>之后，所有元素已经在对方容器中了。</p>
+<p>早期版本只有成员版本的<code>swap</code>， 但是现代C++应该尽量使用<strong>非成员</strong>版本的<code>swap</code>。</p>
+<h3 id="1-1-3-容器的比较"><a href="#1-1-3-容器的比较" class="headerlink" title="1.1.3. 容器的比较"></a>1.1.3. 容器的比较</h3><p>容器之间也可以用<code>&lt;</code>和<code>=</code>等关系符进行大小比较，但是仅限于容器和元素类型都一致的情况下。</p>
+<h3 id="1-1-4-容器元素是拷贝"><a href="#1-1-4-容器元素是拷贝" class="headerlink" title="1.1.4. 容器元素是拷贝"></a>1.1.4. 容器元素是拷贝</h3><p>用来初始化和插入容易的元素，都是实参的拷贝，完成后就和实参无关了。</p>
+<h3 id="1-1-5-insert操作"><a href="#1-1-5-insert操作" class="headerlink" title="1.1.5. insert操作"></a>1.1.5. insert操作</h3><p><code>insert</code>操作在指定位置前插入，返回插入元素的迭代器。</p>
+<p>容器在插入操作后，容量如果达到一定程度，会触发扩容机制，届时内部数据结构会搬到一块新的内存，原来定义的迭代器就失效了。 对于<code>remove</code>也是类似，在进行任何可能导致迭代器失效的操作之后，都需要注意及时更新迭代器。</p>
+<p>在C++11标准下，接收元素个数或范围的<code>insert</code>版本会返回指向第一个新加入元素的迭代器。（在旧版本中，返回的是<code>void</code>。）利用这个机制，可以在容器中的一个特定位置反复插入元素。</p>
+<h3 id="1-1-6-emplace"><a href="#1-1-6-emplace" class="headerlink" title="1.1.6. emplace"></a>1.1.6. emplace</h3><p>在C++中，<code>push</code>都有对应版本的<code>emplace</code>，元素类型对应的构造器所需的参数被传入，<code>emplace</code>利用这些参数在插入位置直接构造出一个元素，因此性能会比<code>push</code>一个临时对象略好，因为后者多了一步拷贝构造。</p>
+<h3 id="1-1-7-用index还是at"><a href="#1-1-7-用index还是at" class="headerlink" title="1.1.7. 用index还是at?"></a>1.1.7. 用index还是at?</h3><p>程序需要保证下标是合法的，<code>[]</code>本身不会检查是否下标越界。如果想要更安全，可以使用<code>at</code>成员，在下标越界时会抛出异常。</p>
+<h3 id="1-1-8-resize"><a href="#1-1-8-resize" class="headerlink" title="1.1.8. resize"></a>1.1.8. resize</h3><p>调用<code>resize()</code>时，如果当前大小大于要求大小，那么多余部分被截断；如果当前大小小于要求，那么会填充默认元素或者指定元素。</p>
+<h3 id="1-1-9-容器的容量"><a href="#1-1-9-容器的容量" class="headerlink" title="1.1.9. 容器的容量"></a>1.1.9. 容器的容量</h3><p><code>capacity</code>返回容器的容量。</p>
+<p><code>reserve</code>可以指定容器的容量，只在指定的容量大于当前容量的时候才会生效，而且注意指定的容量表示的是容器<strong>最低容量</strong>，实际上编译器可能会分配<strong>多于要求</strong>的容量。</p>
+<p>在C++11中，<code>shrink_to_fit</code>可以让<code>deque</code>, <code>vecotr</code>, <code>string</code>归还用不到的容量，但是具体要不要归还，归还多少，都取决于编译器。</p>
+<h3 id="1-1-10-顺序容器的依赖关系"><a href="#1-1-10-顺序容器的依赖关系" class="headerlink" title="1.1.10. 顺序容器的依赖关系"></a>1.1.10. 顺序容器的依赖关系</h3><p>顺序容器中，有些容器时基于其他容器的操作接口实现的，是一种适配器模式。</p>
+<p>默认情况下，<code>stack</code>和<code>queue</code>由<code>deque</code>实现。这两种数据结构都只会在头尾处增减元素，用<code>deque</code>这样的在两端都可以用O(1)增减元素的结构来实现，<code>vector</code>在插头时很慢。</p>
+<p><code>priority_queue</code>由<code>vector</code>实现。理由是因为<code>priority_queue</code>基于<code>heap</code>，堆是一种完全二叉树，可以用数组来代替树结构，这样的话<code>vector</code>就很合适。</p>
+<h2 id="1-2-数组"><a href="#1-2-数组" class="headerlink" title="1.2. 数组"></a>1.2. 数组</h2><h3 id="1-2-1-数组维度是类型的一部分"><a href="#1-2-1-数组维度是类型的一部分" class="headerlink" title="1.2.1. 数组维度是类型的一部分"></a>1.2.1. 数组维度是类型的一部分</h3><p>数组的维度必须是常量表达式。维度是数组类型的一部分，用<code>decltype</code>推断数组会得到数组的大小。  </p>
+<p>数组类型可以用来定义形参的类型，但是由于维度也是类型的一部分，所以这会限制函数的可用性。</p>
+<h3 id="1-2-2-其他"><a href="#1-2-2-其他" class="headerlink" title="1.2.2. 其他"></a>1.2.2. 其他</h3><p>不能将数组的内容拷贝给其他数组作为初始值，也不能用数组为其他数组赋值。  </p>
+<p>数组会被<code>auto</code>推断为指针，而非数组。</p>
+<p>C++11引入了<code>begin()</code>和<code>end()</code>函数，可以得到数组的首尾指针。  </p>
+<p>标准库限定了下标必须是无符号类型，但是内置数组的下标没有这个限制。 </p>
+<h3 id="1-2-3-多维数组"><a href="#1-2-3-多维数组" class="headerlink" title="1.2.3. 多维数组"></a>1.2.3. 多维数组</h3><p>列表初始化多维数组时，内部的花括号可有可无。</p>
+<p>使用for-each遍历多维数组时，除了最内层的循环之外，其他循环的控制变量都应该是引用类型。</p>
+<h3 id="1-2-4-链表"><a href="#1-2-4-链表" class="headerlink" title="1.2.4. 链表"></a>1.2.4. 链表</h3><p><code>list</code>和<code>forward_list</code>有很多为链表专用的成员函数，建议使用这些而不是公用算法。</p>
+<p>这些链表专用操作，与公用算法不同，是会改变底层容器的。比如<code>unique</code>会把重复元素删除，而不是推到容器尾部。</p>
+<h2 id="1-3-vector"><a href="#1-3-vector" class="headerlink" title="1.3. vector"></a>1.3. vector</h2><h3 id="1-3-1-vector初始化选择？"><a href="#1-3-1-vector初始化选择？" class="headerlink" title="1.3.1. vector初始化选择？"></a>1.3.1. vector初始化选择？</h3><p>C++要求vector能在运行时高效地添加元素，因此除非需要初始化一个有大量重复值的vector，否则尽量先定义一个空的vector，再在运行时添加元素。</p>
+<h3 id="1-3-2-扩容策略"><a href="#1-3-2-扩容策略" class="headerlink" title="1.3.2. 扩容策略"></a>1.3.2. 扩容策略</h3><p>每种<code>vector</code>的实现可以选择自己的扩容策略，但是原则是只有在必须的时候才扩容。</p>
+<h1 id="2-关联容器"><a href="#2-关联容器" class="headerlink" title="2. 关联容器"></a>2. 关联容器</h1><h2 id="2-1-Ordered版本"><a href="#2-1-Ordered版本" class="headerlink" title="2.1. Ordered版本"></a>2.1. Ordered版本</h2><p>关联容器默认版本基于红黑树，内部是有序的。<code>unordered</code>前缀表示基于哈希表，内部是无序的。如果有<code>multi</code>则表示允许重复的key。注意，无论是<code>set</code>还是<code>map</code>，本质上可以看做同一种东西：<code>set</code>就是只有key没有value的<code>map</code>。</p>
+<p>默认情况下，关联容器要求元素重载小于号，以此来定义其他的比较运算，并且能排序。如果不想用重载运算符，可以传入比较函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">multiset&lt;Sales_data, <span class="hljs-title">decltype</span><span class="hljs-params">(compareIsbn)</span>*&gt; <span class="hljs-title">bookstore</span><span class="hljs-params">(compareIsbn)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>map保存的键值对是用<code>pair</code>，内部有两个公共成员<code>first</code>和<code>second</code>。<code>pair</code>是map的<code>value_type</code>，key的类型是<code>key_type</code>，值的类型是<code>mapped_type</code>。迭代器得到的pair，<code>key</code>是const的，不允许改变。在C++11中，创建<code>pair</code>不用字使用<code>make_pair</code>或者<code>pair&lt;T1, T2&gt;(v1, v2)</code>这样的方式，而是直接用列表初始化<code>&#123;v1, v2&#125;</code>就可以代表一个匿名的<code>pair</code>。</p>
+<p>注意，对map的迭代器解引用得到的是<code>pair</code>，用下标得到的是<code>value</code>。</p>
+<p>由于key是const，所以一般不对关联容器使用泛型算法。由于关联容器的内部结构特殊，导致他的成员函数性能一般会比泛型算法好。实践中，我们一般把关联容器用作数据源或者目的地。</p>
+<p><strong>inset</strong></p>
+<p>在向普通关联容器插入元素时，我们需要知道这个key是否已经存在，insert是否成功。<code>insert</code>和<code>emplace</code>都会返回一个<code>pair</code>，<code>first</code>是指向新插入的元素的迭代器，<code>second</code>是一个bool值，表示插入是否成功。</p>
+<p><strong>erase</strong></p>
+<p><code>erase</code> return s a count of how many elements were removed.</p>
+<p><strong>equal_range</strong></p>
+<p><code>equal_range</code>得到的是一个pair，<code>first</code>是<code>lower_bound</code>的值，<code>second</code>是<code>upper_bound</code>的值，这样正好凑成了一个范围可以用来迭代，遍历所有key等于特定值的范围。一个常用的写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> pos = authors.<span class="hljs-built_in">equal_range</span>(search_item); pos.first!=pos.second; ++pos.first)<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-2-Unordered"><a href="#2-2-Unordered" class="headerlink" title="2.2. Unordered"></a>2.2. Unordered</h2><p>unordered版本基于哈希表，拥有更快的查找的插入性能，要求元素重载<code>==</code>运算符和拥有哈希函数。如果Key值类型是无序的，或者性能测试说明哈希表可以更好，那么可以使用unordered版本。</p>
+<p>哈希表的结构是一系列桶，每个桶对应一个链表。相同哈希值的元素会被分配到同一个桶里，相当于是哈希碰撞了，要在链表里顺序查找，这是就需要重载的<code>==</code>来判断是否相同了。因此，哈希函数的设计会直接影响性能。</p>
+<p>内置类型一般都有设计好的哈希函数，对于自定义类型，我们一般有两种方法提供自定义的哈希函数：</p>
+<ol>
+<li>用对象中的某些unique的属性作为哈希值，类似于用数据表中的主键或者多个属性组合成一个主键。</li>
+<li>另外设计一种。</li>
+</ol>
+<h1 id="3-迭代器"><a href="#3-迭代器" class="headerlink" title="3. 迭代器"></a>3. 迭代器</h1><p>需要解引用迭代器并调用所指对象的成员时，形式必须是<code>(*it).method()</code>，括号必不可少，因为解引用的优先级很低。为了方便使用，C++增加了箭头运算符<code>-&gt;</code>。</p>
+<h2 id="3-1-尽量使用const迭代器"><a href="#3-1-尽量使用const迭代器" class="headerlink" title="3.1. 尽量使用const迭代器"></a>3.1. 尽量使用const迭代器</h2><p>就和形参和变量类型要求尽量使用const那样，迭代器也应遵循类似原则。要尽量避免不经意的修改。</p>
+<h1 id="4-算法"><a href="#4-算法" class="headerlink" title="4. 算法"></a>4. 算法</h1><p>根据STL的设计原则，算法不直接操作容器，而是通过迭代器作为中介和接口。算法不会<strong>调用容器的成员函数</strong>，更不会改变<strong>容器的容量</strong>。</p>
+<h2 id="4-1-算法的已经接口"><a href="#4-1-算法的已经接口" class="headerlink" title="4.1. 算法的已经接口"></a>4.1. 算法的已经接口</h2><p>STL中的算法大致有几种接口</p>
+<ul>
+<li>接收一对范围和一个目的地迭代器</li>
+<li>接收两对范围：</li>
+<li>接收一对范围和另一个起点迭代器</li>
+</ul>
+<p>他们都有基本的假设：程序员给定的范围是可靠的，容量是足够的。</p>
+<p>带有后缀<code>_if</code>的算法一般可以接受一个<code>predicate</code>，来处理符合特定条件的元素。</p>
+<p>带有后缀<code>_copy</code>的算法是不改变原容器的，而是会多接收一个目的地迭代器，把改变后的值写到那里。</p>
+<h2 id="4-2-lambda"><a href="#4-2-lambda" class="headerlink" title="4.2. lambda"></a>4.2. lambda</h2><p>基本形式<code>[capture lsit] (parameter list) -&gt; return type &#123; function body &#125;</code></p>
+<p>参数列表和返回值类型可以省略，但是捕获列表和函数体必须有，也就是最简形式为<code>auto f = [] &#123; return 0; &#125;;</code></p>
+<p>如果函数体里只有一个<code>return</code>语句的话，可以不用写返回值类型，会自动推断返回值类型。但是如果不止一条语句，并不指定返回值类型时，默认<code>return void</code>。</p>
+<p>当我们定义了一个lambda时，编译器自动生成了一个匿名的类来表示。和类一样，在lambda对象被创建时，需要捕获的局部变量就像成员变量一样被初始化。</p>
+<h3 id="4-2-1-捕获列表"><a href="#4-2-1-捕获列表" class="headerlink" title="4.2.1. 捕获列表"></a>4.2.1. 捕获列表</h3><p>如果lambda想要使用所调用函数内的非静态局部变量，那么必须在捕获列表中指出。<code>local static</code>变量和函数体外的变量可以直接使用。</p>
+<p>捕获的局部变量可以是by-value或者by-reference。但是和函数参数不同的时，捕获变量的值是在lambda被<strong>创建</strong>的时候复制，而不是在<strong>调用</strong>的时候。</p>
+<p>如果是传引用，我们需要保证在lambda执行的时候，捕获的局部变量<strong>还存在</strong>。</p>
+<ul>
+<li>捕获列表默认传值</li>
+<li><code>[=]</code>: 捕获列表都以传值的方式</li>
+<li><code>[&amp;]</code>: 捕获列表都以传引用的方式</li>
+<li><code>[=, &amp;a, &amp;b]</code>: 除了指定的变量用传引用，其他都是传值</li>
+<li><code>[&amp;, a, b]</code>: 除了指定的变量用传值，其他都是传引用</li>
+</ul>
+<h3 id="4-2-2-mutable"><a href="#4-2-2-mutable" class="headerlink" title="4.2.2. mutable"></a>4.2.2. mutable</h3><p>默认情况下，lambda不匀速改变捕获变量的值，如果一定要改变的话，需要加上<code>mutable</code>关键字。</p>
+<h3 id="4-2-3-与bind结合"><a href="#4-2-3-与bind结合" class="headerlink" title="4.2.3. 与bind结合"></a>4.2.3. 与bind结合</h3><p><code>bind</code>可以给函数绑定参数，构造出一种新的函数。</p>
+<h2 id="4-3-一些具体算法"><a href="#4-3-一些具体算法" class="headerlink" title="4.3. 一些具体算法"></a>4.3. 一些具体算法</h2><ul>
+<li>unique：每个重复的元素之保留一份，返回一个指向unique部分的尾部的迭代器。注意，容器剩余部分不是空的，重复的元素也不是被删除了，而是被塞到了最后。</li>
+<li>stable_sort：不会改变相等元素的原本顺序。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C++</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++面向对象</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/C++%E5%9F%BA%E7%A1%80/">
+                        <span class="hidden-mobile">C++基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

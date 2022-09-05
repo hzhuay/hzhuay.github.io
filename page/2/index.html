@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="关注JackZhu喵~ 关注JackZhu谢谢喵~">
+<meta property="og:type" content="website">
+<meta property="og:title" content="JackZhu&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/2/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="关注JackZhu喵~ 关注JackZhu谢谢喵~">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="JackZhu">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="搬砖中">
+              
+            </span>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/" target="_self">
+          进行复杂的初始化时为什么要用do-while
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/" target="_self">
+          
+          do-while(0)这样的语句为什么存在？ 在初始化线程池这样复杂的对象时，需要大量的内存分配工作以及其成员的初始化。如果是在C语言中，没有C++的析构函数，那么就应该在某一步出错时停止初始化，并进入销毁阶段。 为了避免写goto，我们可以将初始化代码放在do-while(0)中，这样可以使用break在任意出错位置跳出循环，进入销毁程序。 do-while(0)应该在宏定义中还有一种使用技巧，
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-21 11:02" pubdate>
+              2022-02-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+            
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/" target="_self">
+          模板与泛型
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/" target="_self">
+          
+          函数模板模板定义以关键词template开始，后跟一个模板参数列表，由若干个用逗号分隔的模板参数组成。编译器会推断模板参数的类型，为不同的类型实例化出不同的版本。 类型参数前必须使用关键词class或typename。在模板参数列表中这两者等价，typename更加贴切模板参数的含义（并且不暗示类型必须是类），是在class之后引入的。 模板中还可以定义非类型参数，表示一个特定类型的参数，因此模板
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-11 22:01" pubdate>
+              2022-02-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" target="_self">
+          内存管理
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" target="_self">
+          
+          内存管理   静态内存：局部静态变量，类静态成员，全局变量 栈内存：函数内局部变量 堆（自由空间）：动态分配的内存（new和delete）  智能指针newnew会返回一个指针，指向动态分配的内存。 如果new后面只跟了类型，如new int，那么对象是default initialized：内置类型和组合类型的值是未定义的，类类型使用默认构造函数。 如果需要value initialized，需
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-11 22:01" pubdate>
+              2022-02-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/%E5%B9%B6%E8%A1%8C%E5%85%AC%E5%BC%80%E8%AF%BE%E7%AC%94%E8%AE%B0/" target="_self">
+          并行公开课笔记
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/%E5%B9%B6%E8%A1%8C%E5%85%AC%E5%BC%80%E8%AF%BE%E7%AC%94%E8%AE%B0/" target="_self">
+          
+          课程来源：【录播】现代C++中的高性能并行编程与优化（持续更新中）]  3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-22 09:18" pubdate>
+              2022-02-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C-CUDA-%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/">C++, CUDA, 并行计算</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" target="_self">
+          C++面向对象
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" target="_self">
+          
+          面向对象   复制控制一般来说，需要析构函数的场景会比需要拷贝构造或拷贝赋值运算符更容易识别。如果一个类需要析构函数，那么它大概率需要拷贝赋值运算符和拷贝构造函数。 如果一个类需要拷贝构造，那么它大概率需要拷贝赋值运算符。反之亦然。 构造函数默认构造函数只有当类没有声明任何构造函数时，编译器才会自动生成一个默认构造函数，其初始化类成员的规则：  优先使用类内初始值  没有初始值的成员将被默认初始化
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-11 22:00" pubdate>
+              2022-02-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/IO%E5%A4%8D%E7%94%A8/" target="_self">
+          IO复用
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/IO%E5%A4%8D%E7%94%A8/" target="_self">
+          
+          Select1int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);  返回值：就绪（可读、可写、异常）的文件描述符的总数。  nfds是指定被监听的文件描述符的总数，通常被设置为被监听的所有文件描述符中的最大值+1，因文件描述符从0开始计算。也就是说其
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-20 09:34" pubdate>
+              2022-02-20
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/STL/" target="_self">
+          STL
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/STL/" target="_self">
+          
+          C++ STL    模板本身不是类或函数，而是为编译器生成类或函数而编写的说明书。 1. 顺序容器1.1. 共通的知识1.1.1. assign和赋值的区别用等号赋值的时候，左右两边的类型要完全一致（包括容器的类型和元素的类型）。   用assign的时候，允许元素类型隐式转换，是拷贝并替换到被赋值的容器中。 1.1.2. swap的本质swap(con1, con2)可以交换两个容器的内容。注
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-11 22:00" pubdate>
+              2022-02-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Java-Spring/redis-data/" target="_self">
+          Redis设计与实现
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Java-Spring/redis-data/" target="_self">
+          
+          数据结构字符串在redis中，所有的键一定是字符串。redis虽然是用C语言编写的，但是没有直接使用C语言风格字符串（C-style String），而是实现了一种名为简单动态字符串（simple dynamic string, SDS）作为字符串的默认实现。C-style String只会用于字符串字面量。 1234567struct sdshdr&amp;#123;  &#x2F;&#x2F; 记录字符串长度  int
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-07-25 10:03" pubdate>
+              2022-07-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Spring/">Spring</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Linux-C++/C++%E5%9F%BA%E7%A1%80/" target="_self">
+          C++基础
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Linux-C++/C++%E5%9F%BA%E7%A1%80/" target="_self">
+          
+          C&#x2F;C++基础  1. 字面值1.1. 字符串字面值字符串字面值常量（string literal），是用一堆双引号包围的字符串序列。它应该被视作某种常量，某种匿名对象。   因为历史原因和为了与C兼容，C++中的字符串字面值不是string类型，因此对于字符串字面量的操作会产生限制。比如在做字符串相加时，加号两侧至少要有一个运算对象是string。两个字符串字面量无法直接相加。 1.2. 字面值
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-11 20:08" pubdate>
+              2022-02-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C++</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Java-Spring/java-multithread/" target="_self">
+          Java多线程
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Java-Spring/java-multithread/" target="_self">
+          
+          创建多线程的方式：  继承Thread类，重写run()，调用start()启动。 实现Runnable接口（JDK8+），函数式接口可以用lambda来简化。 Callable FutureTask  以上两种方法都是调用run方法，是没有返回值的。用Callable接口和Future类可以解决，也就是异步模型。 Callable接口与Runnable类似，但是是有返回值的，而且支持泛型。 12
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-19 14:01" pubdate>
+              2022-08-19
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Java/">Java</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

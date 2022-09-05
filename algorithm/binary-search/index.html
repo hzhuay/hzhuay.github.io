@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="二分查找的思路其实很好理解，但是细节很坑。到底要给 mid 加一还是减一，while 到底用&lt;&#x3D;还是&lt;，这些都会对二分查找的效果有细微的影响。 二分查找总体上有几个应用：  寻找一个数 寻找一个数第一次出现的位置（左边界） 寻找一个数最后一次出现的位置（右边界）  基础版本：寻找一个数12345678910111213int binarySearch(vector&lt;int&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二分查找的细节问题">
+<meta property="og:url" content="http://example.com/algorithm/binary-search/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="二分查找的思路其实很好理解，但是细节很坑。到底要给 mid 加一还是减一，while 到底用&lt;&#x3D;还是&lt;，这些都会对二分查找的效果有细微的影响。 二分查找总体上有几个应用：  寻找一个数 寻找一个数第一次出现的位置（左边界） 寻找一个数最后一次出现的位置（右边界）  基础版本：寻找一个数12345678910111213int binarySearch(vector&lt;int&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-26T04:50:33.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.195Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>二分查找的细节问题 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="二分查找的细节问题">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-26 12:50" pubdate>
+        2022年2月26日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">二分查找的细节问题</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>二分查找的思路其实很好理解，但是细节很坑。到底要给 <code>mid</code> 加一还是减一，<code>while</code> 到底用<code>&lt;=</code>还是<code>&lt;</code>，这些都会对二分查找的效果有细微的影响。</p>
+<p>二分查找总体上有几个应用：</p>
+<ol>
+<li>寻找一个数</li>
+<li>寻找一个数第一次出现的位置（左边界）</li>
+<li>寻找一个数最后一次出现的位置（右边界）</li>
+</ol>
+<h1 id="基础版本：寻找一个数"><a href="#基础版本：寻找一个数" class="headerlink" title="基础版本：寻找一个数"></a>基础版本：寻找一个数</h1><figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binarySearch</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<span class="hljs-comment">//细节点</span><br>    <span class="hljs-keyword">while</span>(left &lt;= right) &#123;<span class="hljs-comment">//细节点</span><br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target)<br>            <span class="hljs-keyword">return</span> mid; <br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)<br>            left = mid + <span class="hljs-number">1</span>;<span class="hljs-comment">//细节点</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid - <span class="hljs-number">1</span>;<span class="hljs-comment">//细节点</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这是最基础的版本：寻找一个数，如果存在则返回下标；不存在则返回-1。</p>
+<h2 id="while应该是-lt-还是-lt"><a href="#while应该是-lt-还是-lt" class="headerlink" title="while应该是&lt;=还是&lt;"></a>while应该是<code>&lt;=</code>还是<code>&lt;</code></h2><p>将<code>right</code>初始化为<code>nums.size()-1</code>，说明<code>right</code>的含义是数组的最后一个元素的索引，而不是数组长度或者尾后元素。<strong>我们先按照<code>nums.size()-1</code>来讨论</strong>。</p>
+<ul>
+<li>如果使用<code>&lt;=</code>，那么说明每次搜索的区间是<code>[left, right]</code>，注意是左闭右闭区间。</li>
+<li>如果使用<code>&lt;</code>，那么说明每次搜索的区间是<code>[left, right)</code>，注意是左闭右开区间。</li>
+</ul>
+<p>终止搜索的条件为：</p>
+<ul>
+<li>找到目标值：<code>if(nums[mid] == target)</code></li>
+<li>搜索区间为空<ul>
+<li>对于<code>left &lt;= right</code>：终止条件是<code>left == right + 1</code>，用区间表达为<code>[right + 1, right]</code>。这个区间显然是为空的。</li>
+<li>对于<code>left &lt; right</code>：终止条件是<code>left == right</code>，用区间表达为<code>[right, right]</code>。这个区间其实是不为空的<code>left</code>或者<code>right</code>本身是合法。如果退出了循环，相当于该索引<strong>没有被检查</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>那么结论很明显了，如果定义了<code>right = nums.size() - 1</code>，那么应该搭配<code>while(left &lt;= right)</code>。</p>
+<p>如果非要用<code>while(left &lt;= right)</code>，那么就应该把漏掉了<code>left == right</code>情况给<strong>特判</strong>。注意，由于需要访问<code>nums[left]</code>所以还要加入对<code>nums</code>为空的特判。但是额外两处特判多少让人觉得有人不自然。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">if(nums.empty())return -1;<br>while(left &lt; right) &#123;<br>    // ...<br>&#125;<br>return nums[left] == target ? left : -1;<br></code></pre></td></tr></table></figure>
+
+<h2 id="左闭右开的版本"><a href="#左闭右开的版本" class="headerlink" title="左闭右开的版本"></a>左闭右开的版本</h2><p>如果定义<code>right = nums.size()</code>，那么搜索的起始区间是<code>[0, nums.size)</code>，与之搭配的应该是<code>while(left &lt; right)</code>，正如上面所说。</p>
+<p>需要注意的点是<code>if(nums[mid] &gt; target) right = mid;</code>。因为<code>right</code>是闭区间，本身就是无法访问的，如果让<code>right = mid - 1</code>，相当于不仅判断<code>mid</code>不满足，也认为<code>mid - 1</code>不满足，相当于多跳过了一个点。</p>
+<p>代码如下，和最初版差不多简洁。很合理。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>();<span class="hljs-comment">//细节点</span><br><span class="hljs-keyword">while</span>(left &lt; right) &#123;<span class="hljs-comment">//细节点</span><br>    <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">if</span>(nums[mid] == target)<br>        <span class="hljs-keyword">return</span> mid; <br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)<br>        left = mid + <span class="hljs-number">1</span>;<span class="hljs-comment">//细节点</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>		right = mid;<span class="hljs-comment">//细节点</span><br>&#125;<br><span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br></code></pre></td></tr></table></figure>
+
+<h1 id="寻找一个数第一次出现的位置（左边界）"><a href="#寻找一个数第一次出现的位置（左边界）" class="headerlink" title="寻找一个数第一次出现的位置（左边界）"></a>寻找一个数第一次出现的位置（左边界）</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">left_bound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (nums.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>();<span class="hljs-comment">//细节点</span><br>    <span class="hljs-keyword">while</span>(left &lt; right) &#123;<span class="hljs-comment">//细节点</span><br>        <span class="hljs-type">int</span> mid = (left + right) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span> (nums[mid] == target)<br>            right = mid;<span class="hljs-comment">//这样才能用上二分的性质</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid;<span class="hljs-comment">//细节点</span><br>    &#125;<br>    <span class="hljs-comment">// 如果没有找到</span><br>    <span class="hljs-keyword">if</span>(left &gt;= nums.<span class="hljs-built_in">size</span>() || nums[left] != target) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里先展示左闭右开的写法，<code>right = nums.size()</code>，<code> while(left &lt; right)</code>，<code>right = mid;</code></p>
+<p>注意，最后返回<code>left</code>或<code>right</code>是一样的，因为终止条件是<code>left == right</code>。</p>
+<h1 id="寻找一个数最后一次出现的位置（右边界）"><a href="#寻找一个数最后一次出现的位置（右边界）" class="headerlink" title="寻找一个数最后一次出现的位置（右边界）"></a>寻找一个数最后一次出现的位置（右边界）</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">right_bound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (nums.length == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-keyword">while</span> (left &lt; right) &#123;<br>        <span class="hljs-type">int</span> mid = (left + right) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span> (nums[mid] == target)<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(left == <span class="hljs-number">0</span> || nums[left<span class="hljs-number">-1</span>] != target) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">return</span> left - <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>与左边界类似的，寻找右边界时，即使找到target了也要<code>left = mid + 1;</code>。由于<code>mid = left - 1</code>，因此最后返回的是<code>left - 1 </code>，除非寻找的是数组中第一个比target大的数。</p>
+<h1 id="最终记忆版本（板子）"><a href="#最终记忆版本（板子）" class="headerlink" title="最终记忆版本（板子）"></a>最终记忆版本（板子）</h1><p>统一采用左闭右闭的形式，即<code>right = nums.size() - 1</code>，<code> while(left &lt;= right)</code>，<code>right = mid - 1;</code>,<code>left = mid + 1;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binary_search</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; <br>    <span class="hljs-keyword">while</span>(left &lt;= right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span> (nums[mid] &lt; target) &#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid - <span class="hljs-number">1</span>; <br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] == target)<br>            <span class="hljs-keyword">return</span> mid;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">left_bound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span> (nums[mid] &lt; target) &#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] == target)<br>            right = mid - <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (left &gt;= nums.length || nums[left] != target) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">right_bound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span> (nums[mid] &lt; target)<br>            left = mid + <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)<br>            right = mid - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] == target)<br>            left = mid + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-comment">//right == left - 1</span><br>    <span class="hljs-keyword">if</span> (right &lt; <span class="hljs-number">0</span> || nums[right] != target) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/other/interview/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">interview</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/college/blobkchain/">
+                        <span class="hidden-mobile">区块链学习笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

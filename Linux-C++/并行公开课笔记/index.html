@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="课程来源：【录播】现代C++中的高性能并行编程与优化（持续更新中）]  3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并行公开课笔记">
+<meta property="og:url" content="http://example.com/Linux-C++/%E5%B9%B6%E8%A1%8C%E5%85%AC%E5%BC%80%E8%AF%BE%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="课程来源：【录播】现代C++中的高性能并行编程与优化（持续更新中）]  3模板参数123456template &lt;int N&gt;void show_times(string msg)&amp;#123;	for (int i&#x3D;0; i&lt;N; i++)&amp;#123;		cout &lt;&lt; msg &lt;&lt; endl;	&amp;#125;&amp;#125;  N作为模板参数和作为函数参数，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JosH.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/03/02/b8JzQg.png">
+<meta property="article:published_time" content="2022-02-22T01:18:22.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.193Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="C++, CUDA, 并行计算">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/03/02/b8JosH.png">
+  
+  
+  <title>并行公开课笔记 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="并行公开课笔记">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-22 09:18" pubdate>
+        2022年2月22日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      74 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">并行公开课笔记</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>课程来源：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fa411r7zp">【录播】现代C++中的高性能并行编程与优化（持续更新中）</a>]</p>
+</blockquote>
+<h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-type">int</span> N&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show_times</span><span class="hljs-params">(string msg)</span></span>&#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;N; i++)&#123;<br>		cout &lt;&lt; msg &lt;&lt; endl;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>N</code>作为模板参数和作为函数参数，有什么区别呢？</p>
+<p>区别在于模板参数传入的<code>N</code>是一个<strong>编译期常量</strong>，对于每一个不同的N，编译器都会单独生成一份代码，从而可以做单独优化。</p>
+<p>函数参数是<strong>运行期常量</strong>，编译器无法自动优化。</p>
+<h3 id="constexpr"><a href="#constexpr" class="headerlink" title="constexpr"></a>constexpr</h3><p><code>if constexpr (x)</code>可以指定x是编译时常量，但是有诸多限制。</p>
+<ol>
+<li>不能通过<strong>运行时变量</strong>组成的表达式决定，比如<code>if constexpr (x%2)</code>。x只能是编译期能确定的值。</li>
+<li>即使作为模板参数，传入时也必须是字面量。如果要传入变量，则变量也需要<code>constexpr</code>来修饰。如果传入的变量初始化为函数的范围值，如<code>constexpr bool debug = isnegative(-1)</code>，那么这个函数也需要<code>constexpr</code>来修饰。<code>constexpr</code>函数不能调用<code>non-constexpr</code>函数。</li>
+</ol>
+<p><code>constexpr</code>函数必须是<code>inline</code>的，不能分离声明和定义。标准库中很多函数都是<code>constexpr</code>的（如std::min），可以放心使用。</p>
+<h2 id="分离模板的声明和定义"><a href="#分离模板的声明和定义" class="headerlink" title="分离模板的声明和定义"></a>分离模板的声明和定义</h2><p>编译器对模板的编译时<strong>惰性</strong>的，只有当前的.cpp文件用到了模板，该模板才会被定义。</p>
+<p>不建议分离，违背了开闭原则。</p>
+<h2 id="auto和decltype"><a href="#auto和decltype" class="headerlink" title="auto和decltype"></a>auto和decltype</h2><p><code>auto</code>不能用与定义类成员，很奇怪。</p>
+<p>函数返回值也可以用<code>auto</code>来推断，但是注意：</p>
+<ol>
+<li>函数的多个<code>return</code>语句返回类型必须<strong>一致</strong>。</li>
+<li>如果没有<code>return</code>，则auto推断为<code>void</code></li>
+<li>如果声明和实现分离了，则不能声明为<code>auto</code></li>
+</ol>
+<p><code>decltype(变量名)</code>和<code>decltype(表达式)</code>是不同的，可以通过<code>decltype((a))</code>来强制编译器使用表达式，得到一个引用类型。 </p>
+<h3 id="万能推到decltype-auto"><a href="#万能推到decltype-auto" class="headerlink" title="万能推到decltype(auto)"></a>万能推到decltype(auto)</h3><p>如果是一个表达式，那么我们不知道它是可变引用（int &amp;），常引用（int const &amp;），右值引用（int &amp;&amp;），还是一个普通的值。</p>
+<p>如果需要定义一个和表达式返回类型一样的变量， 可以用<code>decltype(auto)</code>来推导类型。</p>
+<p><code>decltype(auto) p = func()</code></p>
+<p>在<strong>代理模式</strong>中，可以用于完美转发函数返回值。</p>
+<h2 id="标准库中判断类型"><a href="#标准库中判断类型" class="headerlink" title="标准库中判断类型"></a>标准库中判断类型</h2><h2 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h2><p>现在的编译器都能自己决定要不要优化<code>inline</code>，程序员现在提供的都是<strong>建议</strong></p>
+<h2 id="一致的函数"><a href="#一致的函数" class="headerlink" title="一致的函数"></a>一致的函数</h2><p><code>std::is_same_v&lt;T1, T2&gt;</code></p>
+<h2 id="C-中的函数指针"><a href="#C-中的函数指针" class="headerlink" title="C++中的函数指针"></a>C++中的函数指针</h2><p>C++中可以不用函数指针，参数中使用<code>void func(int)</code>就可以了，但是这样还有参数类型的限制，可以使用模板。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Func</span>&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">call_twice</span><span class="hljs-params">(Func func)</span></span>&#123;<br>	<span class="hljs-built_in">func</span>(<span class="hljs-number">0</span>); <span class="hljs-built_in">func</span>(<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这种模板可以lambda表达式一起使用，如果有捕获局部变量的话（使用了<strong>闭包</strong>），那么最好模板参数的Func使用常引用，避免不必要的拷贝，不然会把局部变量也拷贝。</p>
+<h3 id="lambda作为返回值"><a href="#lambda作为返回值" class="headerlink" title="lambda作为返回值"></a>lambda作为返回值</h3><p>lambda表达式既可以作为参数，也可以作为返回值。由于lambda永远是<strong>匿名类型</strong>，所以必须将返回值类型声明为<code>auto</code>。</p>
+<h3 id="lambda作为参数，切避免使用模板参数"><a href="#lambda作为参数，切避免使用模板参数" class="headerlink" title="lambda作为参数，切避免使用模板参数"></a>lambda作为参数，切避免使用模板参数</h3><p>lambda作为函数参数必须得使用模板，因为其匿名的特性。但是使用模板就不能分离声明和定义了。</p>
+<p>如果有分离声明和定义的需求，可以使用<code>&lt;functional&gt;</code>中的<code>std::function&lt;ret_type(args)&gt;</code>。这是<strong>类型擦除技术</strong>，使用后把所有通过括号调用的函数变成虚函数。</p>
+<p>性能不如模板，因为调用了虚函数。</p>
+<p>如果是无捕获的lambda，可以传入为函数指针。</p>
+<h3 id="lambda应用"><a href="#lambda应用" class="headerlink" title="lambda应用"></a>lambda应用</h3><p>有时我们要遍历数组查找某个特定值，如果找到了就赋值给变量，然后break。用lambda可以同时实现 break和赋值的功能。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">int</span> index = [&amp;] &#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;arr.<span class="hljs-built_in">size</span>(); i++)<br>		<span class="hljs-keyword">if</span>(arr[i] == tofind)<br>			<span class="hljs-keyword">return</span> i;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;();<br></code></pre></td></tr></table></figure>
+
+<p>类似于上述的局部函数功能，还可以写出匿名递归。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">auto</span> dfs = [&amp;] (<span class="hljs-keyword">auto</span> <span class="hljs-type">const</span> &amp;dfs, <span class="hljs-type">int</span> index) -&gt; <span class="hljs-type">void</span> &#123;<br>	<span class="hljs-built_in">dfs</span>(dfs, next);<br>&#125;;<br><span class="hljs-built_in">dfs</span>(dfs, <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+
+<p>注意，返回值类型必须指定。</p>
+<h1 id="4-从汇编角度看编译器优化"><a href="#4-从汇编角度看编译器优化" class="headerlink" title="4. 从汇编角度看编译器优化"></a>4. 从汇编角度看编译器优化</h1><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/b8JosH"><img src="https://s4.ax1x.com/2022/03/02/b8JosH.png" srcset="/img/loading.gif" lazyload alt="b8JosH.png"></a></p>
+<p>x64架构下的寄存器模型，白色部分是32位系统就有的，灰色部分是x64扩充的。</p>
+<p>32位时代只有8个通用寄存器：eax, ecx, edx, ebx, esi, edi, esp, ebp<br>其中esp是堆栈指针寄存器，和函数的调用与返回有关。<br>其中eax是用于保存返回值的寄存器。</p>
+<p>64位时代的x86架构的通用寄存器有图中最左列的16个。其中r8到r15是新增的寄存器，给了汇编程序员更大的空间。64位相比32位机器，除了突破内存4G的限制，也有一定性能优势。比如更多的局部变量可以存到寄存器里，比存在内存里更快。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/b8JzQg"><img src="https://s4.ax1x.com/2022/03/02/b8JzQg.png" srcset="/img/loading.gif" lazyload alt="b8JzQg.png"></a></p>
+<p>x64和x32的通用寄存器会共用低地址位。</p>
+<p>汇编语言大致分2种；Intel模式和AT&amp;T模式。GCC编译出来的<code>.S</code>汇编代码是AT&amp;T模式。开启<code>-O3</code>优化会让编译器从汇编层面进行优化，比如会发现函数传入的参数并不是都用到，就只复制用到的参数；发现参数直接当做返回值返回，就不复制到一个局部变量，而是直接复制到eax寄存器中。</p>
+<p>编译器可以做的优化：</p>
+<ol>
+<li>代数简化：简化代数计算的过程</li>
+<li>常量折叠：先定义两个常量在相加，会被优化成直接将定义常量的字面量相加。</li>
+<li>写个循环从1累加到100，可以被优化到直接给寄存器写入答案</li>
+<li>如果调用了外部函数（声明和定义分离，调用时该文件找不到定义），本来应该是有一个call指令，会被优化为jump指令。</li>
+<li>如果调用了内部函数（调用时直接可以看到定义），且函数体足够简单的话，可以直接优化为内联函数。</li>
+<li>合并写入。在数组两个相邻的位置写入两个32位的int，可以合并为向一个64位的寄存器写入。</li>
+<li>数组清零：手动写for循环对数组清零，会被优化为标准库函数<code>memset</code></li>
+<li>SIMD加速：假设有一个循环将<code>a[i]=i</code>，那么编译器会将循环的步长设为4，每次对4个int进行赋值。如果数组的长度不是4的倍数，会做边界特判，剩余的部分逐个写入。（所以推荐数组大小都是4的整数倍，或者先将数组长度处理为<code>n=n/4*4</code>）</li>
+</ol>
+<p>编译器的优化能力是有限度的，很难对储存在堆上的变量优化（往往是复杂的容器和对象），容易对存储在栈上的优化（往往是简单的数值）。</p>
+<p><code>volatile</code>会禁止编译器优化某个变量的读写操作，防止优化编译器把变量从内存装入CPU寄存器中这样系统总是重新从它所在的内存读取数据，保证了多线程下一定使用内存中的变量，而不会同时使用寄存器和内存中的变量。</p>
+<h2 id="restrict关键字"><a href="#restrict关键字" class="headerlink" title="__restrict关键字"></a>__restrict关键字</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-type">int</span> *a, <span class="hljs-type">int</span> *b, <span class="hljs-type">int</span> *c)</span> </span>&#123;<br>	*c = *a;<br>	*c = *b;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码看起来很好优化，因为第一条语句时没有用的，但是实际上编译器并不会优化，因为有潜在的风险。加入调用者是这么调用函数的：<code>func(&amp;a, &amp;b, &amp;b)</code>。看起来函数的效果是把第二参数的值赋给第三参数，但是这样调用会导致第一参数赋给了第三参数。，这就是<strong>指针别名现象</strong>。看起来函数的三个参数没有关系，但是实际调用的时候，他们可能指向同一个地址。编译器为了保证正确，不敢去优化这段代码。</p>
+<p>如果我们可以保证这三个参数绝对不会相等，需要加上<code>__restrict</code>关键字，将函数定义为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-type">int</span> *__restrict a, <span class="hljs-type">int</span> *__restrict b, <span class="hljs-type">int</span> *__restrict c)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>这样编译器就可以放心优化。</p>
+<p>实际上，<code>__restrict</code>只需要加在具有写入访问的指针上，就可以优化成功，同样可以用<code>const</code>来禁止写入访问。因此，所有非<code>const</code>的指针都声明为<code>__restrict</code>就行了。</p>
+<p><code>__restrict</code>是C99标准，但不是C++标准。</p>
+<h2 id="循环中的矢量化"><a href="#循环中的矢量化" class="headerlink" title="循环中的矢量化"></a>循环中的矢量化</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-type">float</span> *a, <span class="hljs-type">float</span> *b)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1024</span>; i++) &#123;<br>		a[i] = b[i] + <span class="hljs-number">1</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码我们认为可以进行SIMD优化，但是编译器却会生成两个版本，因为它担心数组a和b有重叠，这样在改变a的时候也会改变b。因此编译器会对指针进行判断，看两个数组是否重叠，来决定调用哪个版本。这样不仅多了判断的消耗，还让代码膨胀。</p>
+<p>这个问题也可以用<code>__restrict</code>来优化。</p>
+<p>循环是热代码，是编译器优化的重点。</p>
+<ul>
+<li>如果编译器发现循环里有if分支，并且在循环外就可以决定，那么可能会根据不同分支分别生成循环代码，这样不用每次循环都判断一次，而是在循环外完成判断，然后调用对应的代码。</li>
+<li>如果发现循环里有变量是循环外就可以确定的，也会将这个变量的计算在循环外完成。 </li>
+<li>如果循环里调用了外部函数，那么编译器无法优化。因此尽量在循环内调用内部函数。</li>
+</ul>
+<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><p>进行结构体计算时，尽量让结构体的大小是2的整数幂，这样有利于SIMD优化。如果不是，那么结构体无法正好塞进寄存器。</p>
+<p>可以给结构体加<code>char padding[n]</code>这样的内存对齐成员。</p>
+<p>C++11有一个新增语法<code>alignas(n)</code>，可以指定结构体对齐到多少字节</p>
+<h3 id="内存布局"><a href="#内存布局" class="headerlink" title="内存布局"></a>内存布局</h3><p>结构体的内存布局有2种：</p>
+<ul>
+<li>AOS（Array of Struct）：单个对象的属性紧挨着存储在连续的内存上，中间可能有padding来补齐内存。</li>
+<li>SOA（Struct of Array）：对于结构体的每个属性，分别保存在多段连续内存，这样比如有一个循环需要遍历该结构体的部分属性，就不需要访问全部的内存，也不需要跳跃地访问。</li>
+</ul>
+<p>AOS必须要对齐到2的幂才高效，SOA不复合直觉，但是通常高效。</p>
+<h2 id="数学计算优化"><a href="#数学计算优化" class="headerlink" title="数学计算优化"></a>数学计算优化</h2><p>将<code>/2</code>优化为<code>*0.5</code>，因为乘法比除法快。</p>
+<p><code>std::sqrt</code>比全局版本的sqrt性能更好，因为对float和double都进行了重载。其他类似的全局数学函数都是C的遗产，应该尽量使用C++的std提供的数学函数。</p>
+<h2 id="优化方法总结"><a href="#优化方法总结" class="headerlink" title="优化方法总结"></a>优化方法总结</h2><ol>
+<li>函数尽量写在同一个文件里</li>
+<li>避免在for循环内调用外部函数</li>
+<li>非<code>const</code>指针加上<code>__restrict</code>修饰</li>
+<li>试着用SOA取代AOS</li>
+<li>对齐到16或64字节</li>
+<li>简单的代码，不要复杂化，否则编译器面对复杂的代码会直接放弃优化</li>
+<li>试试看<code>#pragma omp simd</code></li>
+<li>循环中不变的常量挪到循环外</li>
+<li>对小循环体用<code>#progma unroll</code>，减小跳转和边界判断的开销比例</li>
+<li><code>-ffast-math</code>和<code>-march=native</code></li>
+</ol>
+<h1 id="5-C-11多线程编程"><a href="#5-C-11多线程编程" class="headerlink" title="5. C++11多线程编程"></a>5. C++11多线程编程</h1><h2 id="时间处理"><a href="#时间处理" class="headerlink" title="时间处理"></a>时间处理</h2><p>C语言处理时间依赖<code>&lt;time.h&gt;</code>库，有诸多问题：</p>
+<ol>
+<li>很不灵活。用<code>long</code>时间戳来表示从1970年开始过了多少秒，可以对这个值进行无意义的运算。<code>sleep</code>只能以秒为单位，想要睡眠毫秒级只能用Linux特有的API<code>usleep</code>。</li>
+<li>C语言原始API没有类型区分，导致很容易弄错单位，混淆<strong>时间点</strong>和<strong>时间段</strong>。</li>
+</ol>
+<p>C++11引入时间标准库<code>std::chrono</code>。</p>
+<p>利用C++强类型的特点，明确区分时间点和时间段，区分不同时间单位。<br>比如两个时间点类型相减，得到的就是时间段类型。</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>C语言使用pthread库进行多线程编程，但是pthread的函数式编程不符合面向对象思想，C++11开始提供了<code>std::thread</code>，封装了pthread，从语言级别提供了多线程的支持。</p>
+<p><code>std::thread</code>的构造函数的参数可以是<strong>任意</strong>lambda表达式。构造完成后即开始运行。</p>
+<p>线程作为对象，遵循RAII原则，有自己的析构函数，删除了拷贝构造和拷贝赋值函数，提供了移动构造&#x2F;赋值函数。当thread需要被析构时，对应的pthread线程也会被销毁。</p>
+<p><code>detach</code>函数会分离thread对象与pthread线程，使线程的生命周期不再由<code>std::thread</code>对象管理，而是线程退出后自动销毁自己。</p>
+<h3 id="多个线程都结束后才退出"><a href="#多个线程都结束后才退出" class="headerlink" title="多个线程都结束后才退出"></a>多个线程都结束后才退出</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadPool</span>&#123;<br>	vector&lt;thread&gt; m_pool;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(thread thr)</span> </span>&#123;<br>		m_pool.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">move</span>(thr));<br>	&#125;<br>	~<span class="hljs-built_in">ThreadPool</span>() &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;t: m_pool) t.<span class="hljs-built_in">join</span>();<br>	&#125;<br>&#125;;<br>ThreadPool tpool;<br></code></pre></td></tr></table></figure>
+
+<p>定义一个全局进程池，其声明周期和main函数一致。在main函数结束时，tpool的析构函数会被自动调用，将所有进程都join，这样就可以等待他们全部结束。</p>
+<h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><p><code>std::async</code>接收一个带返回值的lambda，自身返回一个<code>std::future&lt;T&gt;</code>对象。lambda的函数体将在<strong>另一个线程</strong>里执行。</p>
+<p>future的含义是由于这个lambda是异步执行的，所以这个返回值目前还没有，但将来一定会有。调用future的get()方法可以获得返回值。如果还没执行完，则会阻塞在这里。</p>
+<p>wait()函数也有类似的功能，会阻塞等待lambda执行完，但是没有返回值。</p>
+<p><code>wait_for()</code>可以指定一个最长等待时间，返回一个<code>future_status::timeout</code>或<code>future_status::ready</code>表示是否完成。</p>
+<h3 id="推迟执行"><a href="#推迟执行" class="headerlink" title="推迟执行"></a>推迟执行</h3><p><code>std::async</code>的第一个参数可以设为<code>std::launch::deferred</code>，这样lambda就不会另起一个线程来执行，而是<strong>推迟</strong>到get()调用时才在主线程中执行，因此只是函数式编程范式意义上的异步，可以实现<strong>惰性求值</strong>。</p>
+<h3 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h3><p><code>std::async</code>底层实现基于<code>std::promise</code>。如果不想让<code>std::async</code>自动创建线程，想手动创建，可以创建一个<code>std::promise</code>对象。把lambda的返回值处改为调用<code>std::promise</code>的<code>set_value()</code>，然后在主线程里调用<code>get_future()</code>获取其<code>std::future</code>对象，再调用<code>get()</code>。</p>
+<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h2><p><code>std::mutex</code>有lock()和unlock()两种操作。</p>
+<ul>
+<li>lock：获取锁，如果已经上锁则阻塞等待</li>
+<li>try_lock：尝试上锁，返回bool表示成功或失败</li>
+<li><code>std::timed_mutex</code>的try_lock_for：等到一段时间，超时返回false。</li>
+</ul>
+<h3 id="复合RAII的互斥锁"><a href="#复合RAII的互斥锁" class="headerlink" title="复合RAII的互斥锁"></a>复合RAII的互斥锁</h3><p>如果将互斥锁视为资源，上锁和解锁分别视为获取和释放，那么互斥锁也可以通过class来自动管理。</p>
+<p><code>std::lock_guard</code>就是这样一个工具类，会在构造函数里传入一个<code>std::mutex</code>并调用lock，析构函数里调用unlock。</p>
+<p>这样的类可以用空花括号来规定声明周期。把需要上锁的代码都放在一个花括号内。</p>
+<h4 id="自由度更高的锁"><a href="#自由度更高的锁" class="headerlink" title="自由度更高的锁"></a>自由度更高的锁</h4><p><code>std::lock_guard</code>严格按照生命周期来解锁，但是如果我们需要<strong>提前unlock</strong>，可以使用<code>std::unique_lock</code>，它额外储存了一个<code>flag</code>表示是否已经被释放，在<strong>析构</strong>时检测这个<code>flag</code>，如果已经被释放则不调用unlock。</p>
+<p><code>std::unique_lock</code>的构造函数还可以有一个额外的参数<code>std::defer_lock</code>，如果指定了该参数，那么<code>unique_lock</code>就不会在构造函数时上锁，而是需要<strong>手动上锁</strong>。</p>
+<p><code>std::unique_lock</code>也可以用<code>std::try_to_lock</code>作为构造函数，这样就要调用try_lock()上锁和用<code>owns_lock()</code>判断是否上锁成功。</p>
+<p>如果<code>std::unique_lock</code>或者<code>std::lock_guard</code>传入的参数mutex已经上锁，要在构造函数传入<code>std::adopt_lock</code>，那么依然可以自动解锁。</p>
+<h4 id="概念（鸭子类型）"><a href="#概念（鸭子类型）" class="headerlink" title="概念（鸭子类型）"></a>概念（鸭子类型）</h4><p><code>std::unique_lock</code>也有lock和unlock函数，所以也可以作为<code>std::lock_guard</code>的参数。</p>
+<p>只要具有特定名字的成员函数，就判断一个类是否满足某些功能，这种机制在Python中称为<strong>鸭子类型</strong>，在C++中称为<strong>概念</strong>。比起虚函数和动态多态的接口抽象，concept使实现和接口更加解耦，且没有性能损失。</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><ol>
+<li><strong>互斥条件</strong>：进程对所需求的资源具有排他性，若有其他进程请求该资源，请求进程只能等待。</li>
+<li><strong>不剥夺条件</strong>：进程在所获得的资源未释放前，不能被其他进程强行夺走，只能自己释放。</li>
+<li><strong>请求和保持条件</strong>：进程当前所拥有的资源在进程请求其他新资源时，由该进程继续占有。</li>
+<li><strong>循环等待条件</strong>：存在一种进程资源循环等待链，链中每个进程已获得的资源同时被链中下一个进程所请求。</li>
+</ol>
+<p>避免死锁最简单的方法：</p>
+<ol>
+<li>永远不要同时持有两个锁。</li>
+<li>保证不同进程上锁的顺序一致。</li>
+<li>使用<code>std::lock(mtx1, mtx2, ...)</code>，可以对多个mutex上锁且保证不会死锁。解锁则按照任意顺序对mutex调用unlock即可。</li>
+</ol>
+<p>就和mutex有RAII版本的<code>std::lock_guard</code>一样，<code>std::lock</code>的RAII版本是 <code>std::scoped_lock</code></p>
+<h3 id="单线程也可以死锁"><a href="#单线程也可以死锁" class="headerlink" title="单线程也可以死锁"></a>单线程也可以死锁</h3><p>死锁不一定发生在并发环境中，单线程中调用了一个会加锁的函数，如果这个函数又调用了自己，那么就会死锁。</p>
+<p>解决这种情况最好是不要在该函数内上锁，并在文档中说明：</p>
+<blockquote>
+<p>该函数不是线程安全的，调用本函数前请先保证mutex已经上锁。</p>
+</blockquote>
+<p>如果代码已经无法改动，可以改用<code>std::recursive_mutex</code>，它会自动判断是不会是在<strong>同一线程</strong>中多次对同一个mutex上锁，如果是则让计数器加一，解锁则减一，减到0才真正解锁。缺点是相比普通的<code>std::mutex</code>有性能损失。</p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><code>std::shared_mutex</code>是读写锁。</p>
+<p>lock和unlock对应写锁，有修改数据的需求。<code>lock_shared</code>和<code>unlock_shared</code>对应读锁。</p>
+<p><code>std::shared_lock</code>是符合RAII的<code>shared_mutex</code>，不同于<code>unique_lock</code>会调用lock，<code>shared_lock</code>调用的是<code>lock_shared</code>。</p>
+<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MTVector</span> &#123;<br>	std::vector&lt;<span class="hljs-type">int</span>&gt; m_arr;<br>	std::mutex m_mtx;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-keyword">class</span> <span class="hljs-title class_">Accessor</span> &#123;<br>		MTVector &amp;m_that;<br>        std::unique_lock&lt;std::mutex&gt; m_guard;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-built_in">Accessor</span>(MTVector &amp;that): <span class="hljs-built_in">m_that</span>(that), <span class="hljs-built_in">m_guard</span>(that.m_mtx) &#123;&#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">int</span> val)</span> <span class="hljs-type">const</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> m_that.arr.<span class="hljs-built_in">push_back</span>(val);<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>			<span class="hljs-keyword">return</span> m_that.m_arr.<span class="hljs-built_in">size</span>();<br>        &#125;<br>	&#125;<br>    <span class="hljs-function">Accessor <span class="hljs-title">access</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> &#123;*<span class="hljs-keyword">this</span>&#125;;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>访问者模式可以很好地为了多线程上锁服务。如果我们自定义了一个线程安全的vector，在每次操作时都加锁，那么有很大的性能开销。</p>
+<p>使用时只需要<code>auto axr = arr.access();</code>。访问者模式分离了数据的存储和访问，在需要访问时只加一次锁。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>等待特定条件，满足后被唤醒。<code>std::condition_variable</code>就是条件变量，必须和<code>std::unique_lock&lt;std::mutex&gt;</code>一起使用。</p>
+<p><code>wait(lck)</code>会使线程陷入等待。<code>notify_one()</code>会唤醒那个陷入等待的线程。 <code>notify_all()</code>会唤醒所有等待该条件变量的线程。</p>
+<p><code>wait(lck, lambda)</code>可以额外指定一个lambda作为参数，只有当返回值为true时才真正唤醒。这样就可以实现生产者-消费者模式。</p>
+<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>一个<code>counter += i</code>在CPU看来会变成3个指令：</p>
+<ol>
+<li>读取counter变量到rax寄存器</li>
+<li>rax寄存器的值加上1</li>
+<li>把rax写入到counter变量</li>
+</ol>
+<p>即使编译器优化为<code>add [counter], 1</code>也没用，因为现代CPU为了高效，会把一条汇编指令拆分为很多微指令，然后可能会重排、乱序执行、并行执行。</p>
+<p>保证操作原子性的暴力解决方案是用mutex上锁，但是mutex是操作系统提供的，太过<strong>重量级</strong>，它会让线程被挂起，从而需要通过系统调用，进入<strong>内核态</strong>，调度到其他线程执行，有很大开销。</p>
+<p>用<code>atomic</code>是更高效，更轻量的，它会被编译器转换为专门的硬件指令。</p>
+<p>CPU在识别到该指令时，会锁住内存总线，放弃乱序执行等优化策略（将该指令视为一个同步点，强制同步之前所有的内存操作），从而保证该操作是<strong>原子</strong>的。</p>
+<p>对于程序员而言，只需要把<code>int</code>改为<code>atomic&lt;int&gt;</code>即可，不需要mutex那样手动控制锁，也更加直观。</p>
+<h3 id="注意运算符"><a href="#注意运算符" class="headerlink" title="注意运算符"></a>注意运算符</h3><p>注意，不是所有的运算都保证原子性，只有<code>+=</code>，<code>-=</code>，<code>&amp;=</code>，<code>|=</code>，<code>^=</code>，<code>++</code>，<code>--</code>可以。</p>
+<p>用<code>=</code>赋值也不能保证原子，需要调用<code>store(val)</code>。<code>exchange</code>会在赋值的同时返回旧值。</p>
+<p>除了调用重载运算符，还可以调用函数。<code>fatch_add</code>不仅能执行加法，还可以返回<strong>旧值</strong>。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C-CUDA-%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/">C++, CUDA, 并行计算</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/algorithm/nowcoder/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">牛客网TOP101</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/">
+                        <span class="hidden-mobile">进行复杂的初始化时为什么要用do-while</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

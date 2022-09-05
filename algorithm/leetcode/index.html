@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="JackZhu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="临近求职，面试手撕算法避无可避，不得不将搁置很久的算法题重新捡起来练习。这里算开个新坑，将LeetCode前几页的热门题目重新写一遍，最好能记录每次的用时。 1. 两数之和进阶要求是时间复杂度小于 O(n^2^)，那么应该需要借助排序和二分查找，但是直接排序会打乱下标，因此借助map结构（unordered_map基于哈希表则更快）。 坑点：遍历的时候一定要先查找nums[i]对应的搭档在不在，然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode算法复健">
+<meta property="og:url" content="http://example.com/algorithm/leetcode/index.html">
+<meta property="og:site_name" content="JackZhu&#39;s Blog">
+<meta property="og:description" content="临近求职，面试手撕算法避无可避，不得不将搁置很久的算法题重新捡起来练习。这里算开个新坑，将LeetCode前几页的热门题目重新写一遍，最好能记录每次的用时。 1. 两数之和进阶要求是时间复杂度小于 O(n^2^)，那么应该需要借助排序和二分查找，但是直接排序会打乱下标，因此借助map结构（unordered_map基于哈希表则更快）。 坑点：遍历的时候一定要先查找nums[i]对应的搭档在不在，然">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-20T10:36:15.000Z">
+<meta property="article:modified_time" content="2022-09-01T12:41:22.195Z">
+<meta property="article:author" content="JackZhu">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>LeetCode算法复健 - JackZhu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"PWUY6L4sCMxvtPwVBSD0BIvw-MdYXbMMI","app_key":"XY7eP0VTgdPSguOqoldnhp5e","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jack Zhu</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wallhaven-57jlo1_1280x720.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="LeetCode算法复健">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-20 18:36" pubdate>
+        2022年2月20日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">LeetCode算法复健</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年9月1日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>临近求职，面试手撕算法避无可避，不得不将搁置很久的算法题重新捡起来练习。这里算开个新坑，将LeetCode前几页的热门题目重新写一遍，最好能记录每次的用时。</p>
+<h1 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1. 两数之和"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/two-sum/">1. 两数之和</a></h1><p>进阶要求是时间复杂度小于 O(n^2^)，那么应该需要借助排序和二分查找，但是直接排序会打乱下标，因此借助map结构（unordered_map基于哈希表则更快）。</p>
+<p>坑点：遍历的时候一定要先查找<code>nums[i]</code>对应的搭档在不在，然后再将其加入到map中，不然会出现自己和自己相加的情况。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">twoSum</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>    unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;m;<br>    vector&lt;<span class="hljs-type">int</span>&gt; tmp;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        <span class="hljs-keyword">if</span>(m.<span class="hljs-built_in">find</span>(target - nums[i]) != m.<span class="hljs-built_in">end</span>())&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(i);<br>            tmp.<span class="hljs-built_in">push_back</span>(m[target - nums[i]]);<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        m[nums[i]] = i;<br>    &#125;<br>    <span class="hljs-keyword">return</span> tmp;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="2-两数相加"><a href="#2-两数相加" class="headerlink" title="2. 两数相加"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/add-two-numbers/">2. 两数相加</a></h1><p>递推的写法比较直白，分成三段：两个链表合并、合并剩余的较长链表、把最后剩余的进位加上。这三段可以简化到一个while循环中。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">ListNode* <span class="hljs-title">addTwoNumbers</span><span class="hljs-params">(ListNode* l1, ListNode* l2)</span> </span>&#123;<br>    ListNode* head = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>    ListNode* cur = head;<br>    <span class="hljs-type">int</span> tmp = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(l1 || l2 || tmp)&#123;<br>        <span class="hljs-type">int</span> sum = tmp;<br>        sum += l1 ? l1-&gt;val : <span class="hljs-number">0</span>;<br>        sum += l2 ? l2-&gt;val : <span class="hljs-number">0</span>;<br>        tmp = sum / <span class="hljs-number">10</span>;<br>        sum %= <span class="hljs-number">10</span>;<br>        cur-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(sum);<br>        cur = cur-&gt;next;<br>        <span class="hljs-keyword">if</span>(l1)l1 = l1-&gt;next;<br>        <span class="hljs-keyword">if</span>(l2)l2 = l2-&gt;next;<br>    &#125;<br>    <span class="hljs-keyword">return</span> head-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3. 无重复字符的最长子串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></h1><p>用map的数据结构可以很容易地统计词频，用上了之后这就是一道很简单的滑动窗口问题。</p>
+<p>遍历时每次都强制把刚遇到的字符<code>s[i]</code>加入到字串中，然后如果该字符出现了2次，则持续右移<code>l</code>，直到遇到一个和<code>s[i]</code>相同的字符，将<code>s[i]</code>的频率减到1。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLongestSubstring</span><span class="hljs-params">(string s)</span> </span>&#123;<br>    unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; cnt;<br>    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, len = <span class="hljs-number">0</span>, ans = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-built_in">size</span>(); i++)&#123;<br>        cnt[s[i]]++;<br>        len++;<br>        <span class="hljs-keyword">while</span>(cnt[s[i]] &gt; <span class="hljs-number">1</span>)&#123;<br>            cnt[s[l++]]--;<br>            len--;<br>        &#125;<br>        ans = <span class="hljs-built_in">max</span>(ans, len);<br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="4-寻找两个正序数组的中位数"><a href="#4-寻找两个正序数组的中位数" class="headerlink" title="4. 寻找两个正序数组的中位数"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/">4. 寻找两个正序数组的中位数</a></h1><p>比较难的二分查找，边界处理很繁琐。数组元素数量是固定的，可以把两个有序的数组看做一个整体，由一个折现分别将X和Y分为两部分，左半部分和右半部分数量相等（或者左半边多一个，多出的那个即为中位数），规定左半边的所有数小于右半边的所有数。我们定义i分隔了X，j分隔了Y，由于左半边数量等于右半边，则只要i确定那么j也确定，因此对i进行二分查找。</p>
+<p>如代码中注释所画，比较<code>X[i-1]</code>和<code>Y[j]</code>的大小关系即可，并不在乎<code>X[i-1]</code>和<code>Y[j-1]</code>的大小关系，只要i和j数量关系维持住即可，因为<code>Y[j-1]</code>一定比<code>Y[j]</code>小。由于X长度小于Y，所以只移动i是安全的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">findMedianSortedArrays</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; X, vector&lt;<span class="hljs-type">int</span>&gt;&amp; Y)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(X.<span class="hljs-built_in">size</span>() &gt; Y.<span class="hljs-built_in">size</span>())<span class="hljs-built_in">swap</span>(X, Y);  <span class="hljs-comment">//保证X长度小于Y</span><br>    <span class="hljs-type">int</span> sizeX = X.<span class="hljs-built_in">size</span>(), sizeY = Y.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">int</span> leftSize = (sizeX + sizeY + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; <span class="hljs-comment">//中位数一定在左边</span><br>    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = sizeX, i, j;<br>    <span class="hljs-keyword">while</span>(l &lt; r) &#123;<br>        <span class="hljs-comment">/*  X[i-1] | X[i]</span><br><span class="hljs-comment">        *           --</span><br><span class="hljs-comment">        *      Y[j-1] | Y[j]</span><br><span class="hljs-comment">        */</span><br>        i = (l + r + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>, j = leftSize - i;<br>        <span class="hljs-keyword">if</span>(X[i<span class="hljs-number">-1</span>] &gt; Y[j]) r = i - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> l = i;<br>    &#125;<br>    i = l, j = leftSize - i;<br>    <span class="hljs-comment">//如果i和j取到了边界，那么说明这两个数组没有交叉，要用int的极值排除边界的干扰</span><br>    <span class="hljs-type">int</span> XLeftMax = i == <span class="hljs-number">0</span> ? INT_MIN : X[i<span class="hljs-number">-1</span>];<br>    <span class="hljs-type">int</span> XRightMin = i == sizeX ? INT_MAX : X[i];<br>    <span class="hljs-type">int</span> YLeftMax = j == <span class="hljs-number">0</span> ? INT_MIN : Y[j<span class="hljs-number">-1</span>];<br>    <span class="hljs-type">int</span> YRightMin = j == sizeY ? INT_MAX : Y[j];<br>    <span class="hljs-keyword">if</span>((sizeX + sizeY) % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">max</span>(XLeftMax, YLeftMax); <span class="hljs-comment">//如果是奇数个，那么中位数只有一个，一定是这两者中较大的</span><br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-comment">// 如果是偶数个，那么中位数由两个数算出：左区间最大值和右区间最小值</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">double</span>((<span class="hljs-built_in">max</span>(XLeftMax, YLeftMax) + <span class="hljs-built_in">min</span>(XRightMin, YRightMin))) / <span class="hljs-number">2</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="7-整数反转"><a href="#7-整数反转" class="headerlink" title="7. 整数反转"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-integer/">7. 整数反转</a></h1><p><code>n</code>声明为<code>long</code>保证足够的空间，然后正常将其反转。最后判断强转为int后是否还等于自身，如果不是则说明溢出了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">reverse</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>    <span class="hljs-type">long</span> <span class="hljs-type">long</span> n = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(x)&#123;<br>        n = n * <span class="hljs-number">10</span> + x % <span class="hljs-number">10</span>;<br>        x /= <span class="hljs-number">10</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> n == <span class="hljs-built_in">int</span>(n) ? <span class="hljs-built_in">int</span>(n) : <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="8-字符串转换整数-atoi"><a href="#8-字符串转换整数-atoi" class="headerlink" title="8. 字符串转换整数 (atoi)"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/string-to-integer-atoi/">8. 字符串转换整数 (atoi)</a></h1>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">进行复杂的初始化时为什么要用do-while</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Linux-C++/IO%E5%A4%8D%E7%94%A8/">
+                        <span class="hidden-mobile">IO复用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
