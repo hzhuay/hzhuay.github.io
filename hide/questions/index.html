@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg">
 <meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
-<meta property="article:modified_time" content="2022-09-05T15:57:41.163Z">
+<meta property="article:modified_time" content="2022-09-07T17:46:56.757Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
@@ -199,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      19k 字
+      20k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      163 分钟
+      165 分钟
     </span>
   
 
@@ -249,7 +249,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年9月5日 晚上
+                  本文最后更新于：2022年9月8日 凌晨
                 
               </p>
             
@@ -521,29 +521,26 @@
 </li>
 <li><strong>Undo Log</strong>：数据行通过快照记录都通过链表的结构的串联了起来，每个快照都保存了 trx_id 事务ID，如果要找到历史快照，就可以通过遍历回滚指针的方式进行查找。</li>
 </ul>
-<h3 id="缓存击穿、穿透、雪崩"><a href="#缓存击穿、穿透、雪崩" class="headerlink" title="缓存击穿、穿透、雪崩"></a>缓存击穿、穿透、雪崩</h3><p><strong>缓存击穿</strong>：当一份访问量非常大的热点数据缓存失效的瞬间，大量的请求直达存储层，导致服务崩溃。 缓存击穿可以通过热点数据不设置过期时间来解决，这样就不会出现上述的问题，这是“物理”上的永不过期。或者为每个数据设置逻辑过期时间，当发现该数据逻辑过期时，使用单独的线程重建缓存。</p>
-<p><strong>缓存穿透</strong>：缓存穿透说简单点就是大量请求的 key 根本不存在于缓存中，导致请求直接到了数据库上，根本没有经过缓存这一层。举个例子：某个黑客故意制造我们缓存中不存在的 key 发起大量请求，导致大量请求落到数据库。</p>
-<p>解决：</p>
-<ol>
-<li>缓存无效key</li>
-<li>布隆过滤器：<strong>布隆过滤器说某个元素存在，小概率会误判。布隆过滤器说某个元素不在，那么这个元素一定不在。</strong></li>
-</ol>
-<p><strong>缓存雪崩</strong>：实际上，缓存雪崩描述的就是这样一个简单的场景：<strong>缓存在同一时间大面积的失效，后面的请求都直接落到了数据库上，造成数据库短时间内承受大量请求。</strong> 这就好比雪崩一样，摧枯拉朽之势，数据库的压力可想而知，可能直接就被这么多请求弄宕机了。</p>
-<p><strong>针对 Redis 服务不可用的情况：</strong></p>
-<ol>
-<li>采用 Redis 集群，避免单机出现问题整个缓存服务都没办法使用。</li>
-<li>限流，避免同时处理大量的请求。</li>
-</ol>
-<p><strong>针对热点缓存失效的情况：</strong></p>
-<ol>
-<li>设置不同的失效时间比如随机设置缓存的失效时间。</li>
-<li>缓存永不失效。</li>
-</ol>
+<h3 id="缓存击穿、穿透、雪崩"><a href="#缓存击穿、穿透、雪崩" class="headerlink" title="缓存击穿、穿透、雪崩"></a>缓存击穿、穿透、雪崩</h3><p><strong>缓存击穿</strong>：当一份访问量非常大的热点数据缓存失效的瞬间，大量的请求直达存储层，导致服务崩溃。可以通过热点数据不设置过期时间来解决，或者为每个数据设置逻辑过期时间，当发现该数据逻辑过期时，使用单独的线程重建缓存。</p>
+<p><strong>缓存穿透</strong>：大量请求的 key 不存在缓存中，导致请求直接打到数据库上。解决：缓存无效key；布隆过滤器：<strong>布隆过滤器说某个元素存在，小概率会误判。布隆过滤器说某个元素不在，那么这个元素一定不在。</strong></p>
+<p><strong>缓存雪崩</strong>：缓存在同一时间大面积的失效，后面的请求都直接落到了数据库上。 <strong>针对 Redis 服务不可用的情况</strong>：采用 Redis 集群，避免单机出现问题整个缓存服务都没办法使用；限流，避免同时处理大量的请求。<strong>针对热点缓存失效的情况</strong>：设置不同的失效时间比如随机设置缓存的失效时间；缓存永不失效。</p>
 <h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><ul>
-<li>未提交读：脏读问题。</li>
-<li>已提交读：不可重复读问题。加读写锁解决上一个问题。</li>
-<li>可重复读（InnodDB默认级别）：幻读问题。</li>
+<li>未提交读：脏读问题。允许读尚未提交的数据。</li>
+<li>已提交读：不可重复读问题。加读写锁解决上一个问题。允许读取并发事务已经提交的数据。</li>
+<li>可重复读（InnodDB默认级别）：幻读问题，比如B事务在A事务读取的范围内增加数据，A事务会发现数据变多。对同一字段的多次读取结果都是一致的。</li>
 <li>可串行化 ：InnoDB在可重复读的级别下使用Next-Key Lock的锁算法，因此避免了幻读的产生。</li>
+</ul>
+<h3 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h3><ul>
+<li>记录锁：也被称为记录锁，属于单个行记录上的锁。</li>
+<li>间隙锁 ：锁定一个范围，不包括记录本身。</li>
+<li>临键锁 ：Record Lock+Gap Lock，锁定一个范围，包含记录本身。记录锁只能锁住已经存在的记录，为了避免插入新记录，需要依赖间隙锁。</li>
+</ul>
+<h3 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h3><p>除了主键索引，还有辅助索引：</p>
+<ul>
+<li>唯一索引：不重复，可以null</li>
+<li>普通索引：允许重复和null</li>
+<li>前缀索引：只适用于字符串</li>
+<li>全文索引：检索大文本，InnoDB在5.6后加入</li>
 </ul>
 <h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><ol>
 <li>主服务器（master）把数据更改记录到二进制日志（binlog）中。 </li>
@@ -655,6 +652,7 @@
 <li>弱引用：一定会被回收，只能存活到下次垃圾回收发生。<code>WeakReference&lt;T&gt;</code></li>
 <li>虚引用：对象被垃圾回收时能收到一个系统通知。<code>PhantomReference&lt;T&gt;</code></li>
 </ul>
+<h3 id="对象检测"><a href="#对象检测" class="headerlink" title="对象检测"></a>对象检测</h3><p>Java中存在循环引用问题，无法使用引用计数法。JVM采用可达性分析，通过 <strong>GC Roots</strong> 作为起始点进行搜索，JVM 将能够到达到的对象视为<strong>存活</strong>，不可达的对象视为<strong>死亡</strong>。GC root可以是：虚拟机栈中引用的对象；本地方法栈中引用的对象（Native 方法）；方法区中，类静态属性引用的对象；方法区中，常量引用的对象</p>
 <h3 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h3><ul>
 <li>标记-清除：原地清理被标记对象，存活对象较多时比价高效，适用于老年代；缺点是容易产生内存碎片</li>
 <li>标记-整理：将存活对象整理到一起。适用于存活对象少，垃圾对象多。用于老年代。</li>
@@ -732,7 +730,7 @@
 <li>非阻塞同步：乐观并发策略，先操作后检测，Unsafe类的CAS操作（不需要加锁）</li>
 <li>无同步：不涉及共享数据。设计可重入代码，或者使用ThreadLocal。</li>
 </ol>
-<h3 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h3><p>可重入</p>
+<h3 id="锁类型-1"><a href="#锁类型-1" class="headerlink" title="锁类型"></a>锁类型</h3><p>可重入</p>
 <ul>
 <li><code>ReentrantLock</code> 、<code>ReentrantReadWriteLock</code> 是可重入锁。这点，从其命名也不难看出。</li>
 <li><code>synchronized</code> 也是一个可重入锁。</li>
