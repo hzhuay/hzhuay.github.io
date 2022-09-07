@@ -375,6 +375,22 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 ### Redis和数据库如何保证双写一致性
 
 先更新数据库，再删除缓存。首先删除缓存比重写缓存好，因为简单。如果反过来先删缓存的话，这是并发的读请求会从数据库中读到旧数据。先更新数据库，再删除缓存，影响较小。
+
+### Redis数据结构
+
+- 字符串：len, free（buf中未使用字节数）, char buf[]
+- 链表：prev, next, void* value
+- 字典：dictht { dictEntry **table（哈希表数组指针）, size, sizemask（总是size-1）, used} 。dictEntry是键值对。dict { dictType, dictht[2], rehashidx, privdata }。ht[0]用来保存使用，ht[1]用作扩容时的临时空间。
+- 跳跃表
+- 整数集合：intset{ encoding, length, contents[] }
+- 压缩列表
+
+### Redis对象
+
+redisObject{ type, encoding, void* ptr}
+
+<img src="https://s1.ax1x.com/2022/07/26/jzASR1.png" alt="jzASR1.png" style="zoom:50%;" />
+
 ## C++
 
 ### 多态

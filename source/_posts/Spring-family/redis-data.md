@@ -58,7 +58,7 @@ redis的字典基于哈希表实现。
 typedef struct dictht {
   // 哈希表数组的指针
 	dictEntry **table;
-  unsigned long sie;
+  unsigned long size;
   // 哈希表大小掩码，用于计算索引值，总是等于size-1
   unsigned long sizemask;
   unsigned long used;
@@ -77,7 +77,7 @@ typedef struct dictEntry {
 
 typedef struct dict {
   dictType *type;
-  void *privdadta;
+  void *privdata;
   dictht ht[2];
   int rehashidx;
 } dict;
