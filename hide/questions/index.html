@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://s1.ax1x.com/2022/07/26/jzASR1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg">
 <meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
-<meta property="article:modified_time" content="2022-09-07T17:57:31.027Z">
+<meta property="article:modified_time" content="2022-09-12T07:26:41.817Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
@@ -209,7 +209,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      168 分钟
+      166 分钟
     </span>
   
 
@@ -250,7 +250,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年9月8日 凌晨
+                  本文最后更新于：2022年9月12日 下午
                 
               </p>
             
@@ -259,7 +259,7 @@
 <p>本人热爱游戏行业，从孩童时期就解除过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。</p>
 <p>• 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。<br>• 成果描述：<br> – 在 mentor 指点下，学习项目所需的 Spring 技术栈、跨模块调用和服务器部署等技能。<br> – 参与智能视频分析平台解决方案项目，完成管理平台部分模块的开发任务，修复若干错误。<br>• 个人收获：学习 Spring 开发技术栈，熟悉项目开发流程，体验真实开发场景。</p>
 <p>智能视频分析平台</p>
-<p>• 应用技术：SpringMVC，SpringBoot，MySQL，Redis，ZooKeeper，Kafka，SeaweedFS<br>• 项目描述：搭建稳定可靠的基础服务“底座”为核心并提供可视化的系统管理工具用于摄像头管理、服务器管理、服务管理等基础管理子系统，在此基础上搭建以寻人为核心能力的视频智能分析系统。<br>• 主要工作：完成用户管理、日志筛选获取、应用管理等模块开发，撰写技术文档和接口文档，通过查询日志定位并修复错误。</p>
+<p>• 应用技术：SpringMVC，SpringBoot，MySQL，Redis，ZooKeeper，Kafka，SeaweedFS<br>• 项目描述：搭建稳定可靠的基础服务“底座”为核心并提供可视化的系统管理工具用于摄像头管理、服务器管理、服务管理等基础管理子系统，在此基础上搭建以寻人为核心能力的视频智能分析系统。<br>• 主要工作：完成用户管理、协议接入与适配、应用管理等模块开发，撰写技术文档和接口文档，通过查询日志定位并修复错误。</p>
 <p>二手房信息平台</p>
 <p>• 应用技术：Python，Vue，Flask，SQLite，ECharts，XGBoost，Nginx，Docker<br>• 项目描述：毕业设计项目，开发二手房信息平台的前后端分离项目，包含功能有登录注册，用户上传房源，房价预测，房源展示和推荐，数据分析展示。<br>• 主要工作：编写 Python 爬虫程序爬取房源信息，使用 Vue+ElementUI 完成前端开发，使用高德地图API 开发前端地图插件，使用 Flask 完成后端开发，通过 docker 完成云服务器环境搭建和部署。</p>
 <h2 id="开放性问题"><a href="#开放性问题" class="headerlink" title="开放性问题"></a>开放性问题</h2><h3 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h3><p>面试官您好，非常感谢能给我这次面试机会（很感谢您这么晚还抽空面试）。我叫XXX，本科就读于北京工业大学，研究生就读于香港科技大学，目前正在每日互动股份有限公司做Java开发的实习工作。</p>
@@ -574,9 +574,8 @@
 <li>无序关联式容器 unordered_map、unordered_multimap、unordered_set、unordered_multiset </li>
 <li>容器适配器 stack、queue、priority_queue</li>
 </ol>
-<h3 id="new的原理和malloc的区别"><a href="#new的原理和malloc的区别" class="headerlink" title="new的原理和malloc的区别"></a>new的原理和malloc的区别</h3><p>new 的实现原理： 如果是简单类型，则直接调用 operator new()，在 operator new() 函数中会调用 malloc() 函数，如果调用 malloc() 失败会调用 _callnewh()，如果 _callnewh() 返回 0 则抛出 bac_alloc 异常，返回非零则继续分配内存。 如果是复杂类型，先调用 operator new()函数，然后在分配的内存上调用构造函数。</p>
-<p>区别：</p>
-<ul>
+<h3 id="new的原理"><a href="#new的原理" class="headerlink" title="new的原理"></a>new的原理</h3><p>new 的实现原理： 如果是简单类型，则直接调用 operator new()，在 operator new() 函数中会调用 malloc() 函数，如果调用 malloc() 失败会调用 _callnewh()，如果 _callnewh() 返回 0 则抛出 bac_alloc 异常，返回非零则继续分配内存。 如果是复杂类型，先调用 operator new()函数，然后在分配的内存上调用构造函数。</p>
+<h3 id="new和malloc的区别"><a href="#new和malloc的区别" class="headerlink" title="new和malloc的区别"></a>new和malloc的区别</h3><ul>
 <li><p>new 是操作符，而 malloc 是函数； </p>
 </li>
 <li><p>使用 new 操作符申请内存分配时无须指定内存块的大小，编译器会根据类型信息自行计算，而 malloc 则需要显式地指出所需内存的尺寸；</p>
@@ -596,7 +595,7 @@
 <li><p>new 操作符从自由存储区上分配内存空间，而 malloc 从堆上动态分配内存；</p>
 </li>
 </ul>
-<h3 id="指针和引用的区别"><a href="#指针和引用的区别" class="headerlink" title="指针和引用的区别"></a>指针和引用的区别</h3><ol>
+<h3 id="指针和引用"><a href="#指针和引用" class="headerlink" title="指针和引用"></a>指针和引用</h3><ol>
 <li>定义和性质不同。指针是一种数据类型，用于保存地址类型的数据，而引用可以看成是变量的别名。指针定义格式为：数据类型 *；而引用的定义格式为：数据类型 &amp;</li>
 <li>引用不可以为空，当被创建的时候必须初始化，而指针变量可以是空值，在任何时候初始化； </li>
 <li>指针可以有多级，但引用只能是一级； </li>
@@ -612,24 +611,26 @@
 <li>任何相邻的节点都不能同时为红色，也就是说，红色节点是被黑色节点隔开的；</li>
 <li>每个节点，从该节点到达其可达的叶子节点是所有路径，都包含相同数目的黑色节点。</li>
 </ul>
-<h3 id="四种类型转换"><a href="#四种类型转换" class="headerlink" title="四种类型转换"></a>四种类型转换</h3><ol>
-<li>static_cast 静态转换：用于类层次结构中基类（父类）和派生类（子类）之间指针或引用的转换。 进行上行转换（把派生类的指针或引用转换成基类表示）是安全的；进行下行转换（把基类指针或引用转换成派生类表示）时，由于没有动态类型检查，所以是不安全的。用于基本数据类型之间的转换，如把 int 转换成 char，把 char 转换成 int。这种转换的安全性也要开发人员来保证 </li>
-<li>dynamic_cast 动态转换：dynamic_cast 主要用于类层次间的上行转换和下行转换 在类层次间进行上行转换时，dynamic_cast 和 static_cast 的效果是一样的 在进行下行转换时，dynamic_cast 具有类型检查的功能，比 static_cast 更安全</li>
-<li>const_cast 常量转换：该运算符用来修改类型的const属性，常量指针被转化成非常量指针，并且仍然指向原来的对象；常量引用被转换成非常量引用，并且仍然指向原来的对象。注意:不能直接对非指针和非引用的变量使用 const_cast 操作符 </li>
-<li>reinterpret_cast 重新解释转换：是最不安全的一种转换机制，最有可能出问。主要用于将一种数据类型从一种类型转换为另一种类型，它可以将一个指针转换成一个整数，也可以将一个整数转换成一个指针</li>
-</ol>
-<h3 id="C-程序的内存分布"><a href="#C-程序的内存分布" class="headerlink" title="C++程序的内存分布"></a>C++程序的内存分布</h3><p>1、栈区（stack）— 地址向下增长，由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的数据结构中的栈，先进后出。</p>
-<p>2、堆区（heap）— 地址向上增长，一般由程序员分配释放，若程序员不释放，程序结束时可能由OS回收。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表。</p>
-<p>3、全局区（静态区）（static）—全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域，未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。 - 程序结束后有系统释放</p>
-<p>4、文字常量区 —常量字符串就是放在这里的。程序结束后由系统释放</p>
-<p>5、程序代码区(text)—存放函数体的二进制代码。</p>
-<h3 id="C-从代码到可执行程序经历了什么"><a href="#C-从代码到可执行程序经历了什么" class="headerlink" title="C++从代码到可执行程序经历了什么"></a>C++从代码到可执行程序经历了什么</h3><ol>
+<h3 id="四种类型转换"><a href="#四种类型转换" class="headerlink" title="四种类型转换"></a>四种类型转换</h3><ul>
+<li>static_cast：替代编译器执行的隐式转换。比如执行int与float的转换，隐式转换编译器会警告精度损失，静态转换表示有意为之。可以用于基类与派生类的指针或引用的转换，但是不做运行时检查，不如dynamic_cast安全。</li>
+<li>dynamic_cast：主要用于类层次间的上行转换和下行转换向上转型和static_cast是一样的；在下行转换时有<strong>类型检查</strong>的功能，比 static_cast 更安全</li>
+<li>const_cast：该运算符用来修改类型的const属性。注意:不能直接对非指针和非引用的变量使用 const_cast 操作符 </li>
+<li>reinterpret_cast 重新解释转换：是最不安全的一种转换机制。主要用于将一种数据类型从一种类型转换为另一种类型，比如指针和整数的转换，<code>int*</code>和<code>char*</code>的转换。</li>
+</ul>
+<h3 id="C-程序内存分布"><a href="#C-程序内存分布" class="headerlink" title="C++程序内存分布"></a>C++程序内存分布</h3><ul>
+<li>栈区：地址向下增长，由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的数据结构中的栈，先进后出。</li>
+<li>堆区：地址向上增长，一般由程序员分配释放，程序结束时可能由OS回收。分配方式类似于链表。</li>
+<li>全局区（静态区）：全局变量和静态变量。初始化的在一块区域，未初始化在相邻的另一块区域。程序结束后由OS释放</li>
+<li>文字常量区：常量字符串就是放在这里的。程序结束后由系统释放</li>
+<li>程序代码区(text)—存放函数体的二进制代码。</li>
+</ul>
+<h3 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h3><ol>
 <li>预编译</li>
-<li>编译</li>
-<li>汇编</li>
-<li>链接</li>
+<li>编译：进行一系列词法分析、语法分析、语义分析及优化后，生成相应 的汇编代码文件。</li>
+<li>汇编：将汇编代码转变成机器可以执行的指令(机器码文件)。</li>
+<li>链接：静态链接、动态链接</li>
 </ol>
-<h3 id="指针常量和常量指针"><a href="#指针常量和常量指针" class="headerlink" title="指针常量和常量指针"></a>指针常量和常量指针</h3><p><code>int *const p</code>是常量指针，这个指针本身是常量，指向变量后不许改变。</p>
+<h3 id="const指针"><a href="#const指针" class="headerlink" title="const指针"></a>const指针</h3><p><code>int *const p</code>是常量指针，这个指针本身是常量，指向变量后不许改变。</p>
 <p><code>int const *p</code>和<code>const int *p</code>是指针常量，指向一个常量。</p>
 <p>区分就看<code>const</code>在<code>*</code>的左边还是右边。在右边是顶层const，修饰指针；在左边是底层const，修饰底层变量。</p>
 <h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ol>
