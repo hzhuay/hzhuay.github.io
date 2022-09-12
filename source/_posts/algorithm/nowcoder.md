@@ -1920,8 +1920,40 @@ int editDistance(string str1, string str2) {
 ```
 ### ❓BM76 正则表达式匹配
 
-```C++
+`dp[i][j]`表示`str[:i+1]`和`pattern[:j+1]`是否匹配，最终`dp[str.size()][pattern.size()]`就是答案。
 
+注意：`dp[0][0] = true`，两个空字符串是可以匹配的。但是需要设置边界条件的话，`dp[0][i]`在`i>=1`时不能都设置为false，因为形如`a*`这样的pattern也可以匹配空字符串。参考其他人的代码，这里还是不初始化，而是做特判处理。这样对于`i`的循环需要范围`[0, str.size()]`。
+
+`j`的范围是`[1, pattern.size()]`，可以看做`j==0`时不需要比较，肯定是false（已经排除`i==0`的情况）。
+
+由于`str[:i+1]`的`i`也是从小到大的，所以只跟`dp[i-1][j]`或是合理的。`dp[i-1][j]`为真的前提是`dp[i-2][j]`也为真，以此类推，看做星号匹配了多个连续字符。
+
+```C++
+bool match(string str, string pattern) {
+    int n = str.size();
+    int m = pattern.size();
+    vector<vector<bool>> dp(n + 1, vector<bool>(m + 1, false));
+    dp[0][0] = true; //两个空字符串视作可以匹配
+    for(int i = 0; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            if(pattern[j-1] == '*'){
+                dp[i][j] |= dp[i][j-2]; //*前面的字符匹配0次
+                if(isMatch(str, pattern, i, j - 1)){ //*前面的字符匹配至少1次
+                    dp[i][j] |= dp[i-1][j]; // 
+                }
+            }else if(isMatch(str, pattern, i, j)){
+                dp[i][j] |= dp[i-1][j-1];
+            }
+        }
+    }
+    return dp[n][m];
+}
+
+bool isMatch(string& str, string& pattern, int i, int j){
+    if(i == 0) return 0;
+    if(pattern[j-1] == '.') return true;
+    return str[i-1] == pattern[j-1];
+}
 ```
 ### BM77 最长的括号子串
 
@@ -2355,15 +2387,66 @@ long long maxWater(vector<int>& arr) {
     return ans;
 }
 ```
-### 
+## 贪心
+
+### ❓BM95 分糖果问题
+
+分别从2个方向遍历，从左到右和从右到左，通过贪心得到某一个方向的最小糖果数。如果遇到更大的就比前一个多一个，如果不大于则从1开始。最后再遍历一次，求两个方向的数组中的较大值。
 
 ```C++
-
+int candy(vector<int>& arr) {
+    int n = arr.size(), ans = 0;
+    vector<int> left(n, 1);
+    vector<int> right(n, 1);
+    for(int i = 1; i < n; i++)
+        if(arr[i] > arr[i-1]) right[i] = right[i-1] + 1;
+    for(int i = n - 1; i > 0; i--)
+        if(arr[i-1] > arr[i]) left[i-1] = left[i] + 1;
+    for(int i = 0; i < n; i++)
+        ans += max(left[i], right[i]);
+    return ans;
+}
 ```
-### 
+### BM96 主持人调度（二）
+
+我们利用贪心思想，什么时候需要的主持人最少？那肯定是所有的区间没有重叠，每个区间首和上一个的区间尾都没有相交的情况，我们就可以让同一位主持人不辞辛劳，一直主持了。但是题目肯定不是这种理想的情况，那我们需要对交叉部分，判断需要增加多少位主持人。	
+
+- step 1: 利用辅助数组获取单独各个活动开始的时间和结束时间，然后分别开始时间和结束时间进行排序，方便后面判断是否相交。
+- step 2: 遍历nn*n*个活动，如果某个活动开始的时间大于之前活动结束的时候，当前主持人就够了，活动结束时间往后一个。
+- step 3: 若是出现之前活动结束时间晚于当前活动开始时间的，则需要增加主持人。
 
 ```C++
+int minmumNumberOfHost(int n, vector<vector<int> >& startEnd) {
+    vector<int> start(n);
+    vector<int> end(n);
+    for(int i = 0; i < n; i++){
+        start[i] = startEnd[i][0];
+        end[i] = startEnd[i][1];
+    }
+    sort(start.begin(), start.end());
+    sort(end.begin(), end.end());
+    int ans = 0, j = 0;
+    for(int i = 0; i < n; i++){
+        if(start[i] >= end[j]) j++;//不需要新主持人
+        else ans++;
+    }
+    return ans;
+}        
+```
+### ❓BM97 旋转数组
 
+```C++
+vector<int> solve(int n, int m, vector<int>& a) {
+    //取余，因为每次长度为n的旋转数组相当于没有变化
+    m = m % n;
+    //第一次逆转全部数组元素
+    reverse(a.begin(), a.begin() + n);
+    //第二次只逆转开头m个
+    reverse(a.begin(), a.begin() + m);
+    //第三次只逆转结尾m个
+    reverse(a.begin() + m, a.begin() + n);
+    return a;
+}
 ```
 ### BM98 螺旋矩阵
 
@@ -2414,3 +2497,116 @@ vector<vector<int> > rotateMatrix(vector<vector<int> > mat, int n) {
     return mat;
 }
 ```
+
+### BM100 设计LRU缓存结构
+
+```C++
+typedef list<pair<int, int>>::iterator Node;
+list<pair<int, int>> lst;
+unordered_map<int, Node> mp;
+int cap;
+Solution(int capacity){
+    cap = capacity;
+}
+
+int get(int key) {
+    int res = -1;
+    if(mp.find(key) != mp.end()){
+        res = mp[key]->second;
+        move(mp[key]);
+    }
+    return res;
+}
+
+void set(int key, int value){
+    auto it = mp.find(key);
+    if(it == mp.end()){
+        if(lst.size() == cap){
+            mp.erase(lst.back().first);
+            lst.pop_back();
+        }
+        lst.push_front(pair<int, int>(key, value));
+        mp[key] = lst.begin();
+    }else{
+        mp[key]->second = value;
+        move(mp[key]);
+    }
+}
+
+void move(Node& n){
+    Node tmp = n;
+    lst.erase(n);
+    lst.push_front(*tmp);
+}
+```
+
+### BM101 设计LFU缓存结构
+
+```C++
+struct Node{
+    int key, val, freq;
+    Node(int k, int v,int f): key(k), val(v), freq(f){}
+};
+typedef list<Node>::iterator Listnode;
+class Solution {
+public:
+    /**
+     * lfu design
+     * @param operators int整型vector<vector<>> ops
+     * @param k int整型 the k
+     * @return int整型vector
+     */
+    map<int, list<Node>> freq;
+    unordered_map<int, Listnode> cache;
+    vector<int> LFU(vector<vector<int> >& operators, int k) {
+        freq.clear();
+        cache.clear();
+        vector<int> ans;
+        for(vector<int>& op : operators){
+            if(op[0] == 1) set(op[1], op[2], k);
+            else if(op[0] == 2) ans.push_back(get(op[1], k));
+        }
+        return ans;
+    }
+    int get(int key, int k){
+        int res = -1;
+        if(cache.find(key) != cache.end()){
+            res = cache[key]->val;
+            update(cache[key], key, res);
+        }
+        return res;
+    }
+    void set(int key, int val, int k){
+        if(cache.find(key) != cache.end()){
+            update(cache[key], key, val);
+        }else{
+
+            if(cache.size() == k){
+                int min_freq = freq.begin()->first;
+                int expireKey = freq[min_freq].back().key;
+                freq[min_freq].pop_back(); // 删除频率最低且最早的
+                if(freq[min_freq].empty()){
+                   freq.erase(min_freq); 
+                }
+                cache.erase(expireKey);
+            }
+            freq[1].emplace_front(key, val, 1);
+            cache[key] = freq[1].begin();
+        }
+    }
+    
+    void update(Listnode& node, int key, int val){
+        int f = node->freq;
+        freq[f].erase(node);
+        if(freq[f].empty()){
+            freq.erase(f); // 如果列表为空则删除
+        }
+        if(freq.find(f + 1) == freq.end()){
+            freq[f+1] = list<Node>();
+        }
+        freq[f+1].emplace_front(key, val, f + 1);
+        cache[node->key] = freq[f+1].begin();
+    }
+};
+```
+
