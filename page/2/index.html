@@ -193,46 +193,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/" target="_self">
-          进行复杂的初始化时为什么要用do-while
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/" target="_self">
-          
-          do-while(0)这样的语句为什么存在？ 在初始化线程池这样复杂的对象时，需要大量的内存分配工作以及其成员的初始化。如果是在C语言中，没有C++的析构函数，那么就应该在某一步出错时停止初始化，并进入销毁阶段。 为了避免写goto，我们可以将初始化代码放在do-while(0)中，这样可以使用break在任意出错位置跳出循环，进入销毁程序。 do-while(0)应该在宏定义中还有一种使用技巧，
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-21 11:02" pubdate>
-              2022-02-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/" target="_self">
           模板与泛型
         </a>
@@ -638,6 +598,46 @@
               <a href="/tags/Java/">Java</a>
             
           </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Java-Spring/mybatis-plus/" target="_self">
+          mybatis-plus
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Java-Spring/mybatis-plus/" target="_self">
+          
+          Mybatis-plus自带一个实体父类Model 该类的作用是能通过实体直接进行CRUD操作，不需要调用DAO，前提是必须存在对应的原始Mapper并继承BaseMapper并且可以使用的前提下。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-02 11:22" pubdate>
+              2022-08-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Spring/">Spring</a>
+            
+          </div>
+        
         
       </div>
     </article>
