@@ -1,5 +1,5 @@
 ---
-title: questions
+ktitle: questions
 date: 2022-08-09 00:23:38
 tags: 
 hide: true
@@ -72,6 +72,12 @@ My past experience can be divided into two parts. The first part is my school ex
 ### TCP和UDP区别
 
 ### 三次握手四次挥手
+
+![img](https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F)
+
+![img](https://pics6.baidu.com/feed/908fa0ec08fa513d3380aa7a393970f3b3fbd9cc.jpeg?token=6dfd67a4a0927fca26d5e7a1abae7f4a&s=7AAE3462315B41CE48D554CA0000E0B1)
+
+![img](https://pics7.baidu.com/feed/8435e5dde71190ef08c7447eca4fb81efdfa602b.jpeg?token=74e81457ce3c2f49b48814839e548194&s=5EA83C6229C6E0CA5A7454CA0000E0B1)
 
 ### TCP实现可靠传输
 
@@ -372,11 +378,13 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 
 复制的工作原理并不复杂，其实就是一个完全备份加上二进制日志备份的还原。不同的是这个二进制日志的还原操作基本上实时在进行中。这里特别需要注意的是，复制不是完全实时地进行同步，而是异步实时。这中间存在主从服务器之间的执行延时，如果主服务器的压力很大，则可能导致主从服务器延时较大。复制的工作原理如下图所示，其中从服务器有2个线程，一个是I/O线程，负责读取主服务器的二进制日志，并将其保存为中继日志；另一个是SQL线程，复制执行中继日志。
 
-### Redis和数据库如何保证双写一致性
+## Redis
+
+### 双写一致性
 
 先更新数据库，再删除缓存。首先删除缓存比重写缓存好，因为简单。如果反过来先删缓存的话，这是并发的读请求会从数据库中读到旧数据。先更新数据库，再删除缓存，影响较小。
 
-### Redis数据结构
+### 数据结构
 
 - 字符串：len, free（buf中未使用字节数）, char buf[]
 - 链表：prev, next, void* value
@@ -385,11 +393,35 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 - 整数集合：intset{ encoding, length, contents[] }
 - 压缩列表
 
-### Redis对象
+### 对象
 
 redisObject{ type, encoding, void* ptr}
 
 <img src="https://s1.ax1x.com/2022/07/26/jzASR1.png" alt="jzASR1.png" style="zoom:50%;" />
+
+### 过期淘汰
+
+运行内存达到阈值（maxmemory）就会触发。64位默认0（无限制），32位默认3GB。
+
+1. **noeviction**：不淘汰任何数据，当内存不足时，新增操作会报错，Redis 默认内存淘汰策略；
+2. **allkeys-lru**：淘汰整个键值中最久未使用的键值；
+3. **allkeys-random**：随机淘汰任意键值;
+4. **volatile-lru**：淘汰所有设置了过期时间的键值中最久未使用的键值；
+5. **volatile-random**：随机淘汰设置了过期时间的任意键值；
+6. **volatile-ttl**：优先淘汰更早过期的键值。
+
+在 Redis 4.0 版本中又新增了 2 种淘汰策略：
+
+1. **volatile-lfu**：淘汰所有设置了过期时间的键值中，最少使用的键值；
+2. **allkeys-lfu**：淘汰整个键值中最少使用的键值。
+
+### 过期策略
+
+- 立刻删除：内存可以尽快释放，但是影响性能
+- 惰性删除：访问时才判断过期，资源占用少，但是不及时
+- 定期删除：定期检查库，随机删除过期键
+
+Redis 使用的是惰性删除加定期删除的过期策略。
 
 ## C++
 
