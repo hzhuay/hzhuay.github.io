@@ -29,8 +29,9 @@
 <meta property="og:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/07/26/jzASR1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/dunwu/images/dev/snap/20211201102734.png">
 <meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
-<meta property="article:modified_time" content="2022-09-20T13:09:56.016Z">
+<meta property="article:modified_time" content="2022-09-22T16:48:49.396Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F">
@@ -203,7 +204,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      21k 字
+      22k 字
     </span>
   
 
@@ -212,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      173 分钟
+      186 分钟
     </span>
   
 
@@ -253,7 +254,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年9月20日 晚上
+                  本文最后更新于：2022年9月23日 凌晨
                 
               </p>
             
@@ -697,44 +698,12 @@
 <li>其他：Semaphore，信号量；CountDownLatch，允许一个或多个线程等待其他线程操作完毕；CyclicBarrier，让一组线程在一个地方同步；ThreadLocal本地存储，不使用共享变量。</li>
 </ol>
 <h3 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h3><h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>JDK8之前是数组+链表，之后是数组+链表+红黑树。相同哈希值的元素组成链表，长度超过8会转为红黑树。负载因子达到0.75时扩容。</p>
-<h3 id="JVM内存"><a href="#JVM内存" class="headerlink" title="JVM内存"></a>JVM内存</h3><p>线程私有：程序计数器，Java虚拟机栈（保存局部变量表、操作数栈、常量池引用等，为Java方法服务），本地方法栈（为Native方法服务）</p>
-<p>共享：堆，方法区（永久代，保存已被加载的类信息、常量、静态变量），运行时常量池（方法区的一部分，把保存字面量和符号引用）</p>
-<h3 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h3><p>魔法数字，4字节，确定该文件能否被JVM接受；版本号，4字节，次版本和主版本；常量池，包括计数器和数据区；访问标志，2字节，描述是类还是接口，和访问级别；类名，2字节；父类名称，2字节；接口信息，2字节的计数器；n字节的接口名称索引；字段表；方发表；附加属性表</p>
 <h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><ul>
 <li>强引用：不会被垃圾收集器回收。用 new创建</li>
 <li>软引用：只有内存不够时会被回收。用<code>SoftReference&lt;T&gt;(obj)</code>创建</li>
 <li>弱引用：一定会被回收，只能存活到下次垃圾回收发生。<code>WeakReference&lt;T&gt;</code></li>
 <li>虚引用：对象被垃圾回收时能收到一个系统通知。<code>PhantomReference&lt;T&gt;</code></li>
 </ul>
-<h3 id="对象检测"><a href="#对象检测" class="headerlink" title="对象检测"></a>对象检测</h3><p>Java中存在循环引用问题，无法使用引用计数法。JVM采用可达性分析，通过 <strong>GC Roots</strong> 作为起始点进行搜索，JVM 将能够到达到的对象视为<strong>存活</strong>，不可达的对象视为<strong>死亡</strong>。GC root可以是：虚拟机栈中引用的对象；本地方法栈中引用的对象（Native 方法）；方法区中，类静态属性引用的对象；方法区中，常量引用的对象</p>
-<h3 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h3><ul>
-<li>标记-清除：原地清理被标记对象，存活对象较多时比价高效，适用于老年代；缺点是容易产生内存碎片</li>
-<li>标记-整理：将存活对象整理到一起。适用于存活对象少，垃圾对象多。用于老年代。</li>
-<li>复制：内存分成2块，每次将存活对象复制到一边，回收另一边。适用于存活对象少。用于新生代。</li>
-<li>分代回收：堆内存分为年轻代和老年代。年轻代使用复制，老年代使用标记清除或标记整理。年轻代中有较大的Eden区和2个Survivor区。每次把Eden和一个Survivor区中的存活对象复制到另一个Survivor，在Survivor中复制次数达到阈值可以升级到老年代。</li>
-</ul>
-<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><img src="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg" srcset="/img/loading.gif" lazyload alt="img" style="zoom:75%;" />
-
-<ul>
-<li><p>串行收集器：Serial；Serial Old（老年代版本）。单线程stop-the-world收集，所有线程进入安全点时，应用线程暂停，串行GC以单线程回收内存。适用于堆内存小，CPU核少的环境，client模式默认收集器。</p>
-</li>
-<li><p>并行收集器：Parallel Scavenge；Parallel Old（老年代版本）。server模式默认收集器，以吞吐量为目标。stop-the-world时<strong>并行</strong>收集，<strong>年轻代采用复制算法，老年代采用标记-整理</strong>。</p>
-</li>
-<li><p>并发标记清除收集器：</p>
-<ul>
-<li><p>CMS（Concurrent Mark Sweep并行<strong>标记清除</strong>）：目标是最短停顿时间。</p>
-<p>  初始标记，仅标记GC Root能关联到的对象，速度快，要停顿；并发标记，GC root tracing，耗时最长，不用停顿；重新标记，停顿，修正并发标记期间改变的标记；并发清除，不停顿。</p>
-</li>
-<li><p>ParNew：Serial 收集器的多线程版本，Server 模式下的虚拟机首选年轻代收集器。</p>
-</li>
-</ul>
-</li>
-<li><p>G1收集器：兼顾吞吐量和停顿时间。Oracle JDK9 以后的默认 GC 收集器。<strong>引入分区概念，弱化分代</strong>。</p>
-<p>  G1 取消了永久代，并把年轻代和老年代划分成多个大小相等的独立区域（Region），年轻代和老年代不再物理隔离。G1 可以直接对年轻代和老年代一起回收。整体是标记整理，局部看region是复制。</p>
-<p>  初始标记，停顿，单线程；并发标记，不停顿，与应用线程并发；最终标记，停顿，并发；筛选回收，根据region的回收价值和成本排序，回收一部分，停顿，并发。</p>
-</li>
-</ul>
-<h3 id="Minor-GC和Full-GC"><a href="#Minor-GC和Full-GC" class="headerlink" title="Minor GC和Full GC"></a>Minor GC和Full GC</h3><p>minor gc发生在年轻代，因为年轻代对象存活时间短，因此频繁执行。Full GC对整个堆内存回收。</p>
 <h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>创建方法：继承Thread、实现Runnable、实现Callable（有返回值）</p>
 <p>线程通信：wait&#x2F;notify&#x2F;notifyAll、join、管道</p>
 <h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>1.7采用分段锁。1.8对每一条数据加锁，CAS + <code>sychronized</code> 操作。</p>
@@ -814,7 +783,9 @@
 <li>AQS 使用一个整型的 <code>volatile</code> 变量来 <strong>维护同步状态</strong>。状态的意义由子类赋予。</li>
 <li>AQS 维护了一个 FIFO 的双链表，用来存储获取锁失败的线程。</li>
 </ul>
-<h3 id="JVM内存-1"><a href="#JVM内存-1" class="headerlink" title="JVM内存"></a>JVM内存</h3><table>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="JVM内存"><a href="#JVM内存" class="headerlink" title="JVM内存"></a>JVM内存</h3><p>线程私有：程序计数器，Java虚拟机栈（保存局部变量表、操作数栈、常量池引用等，为Java方法服务），本地方法栈（为Native方法服务）</p>
+<p>共享：堆，方法区（永久代，保存已被加载的类信息、常量、静态变量），运行时常量池（方法区的一部分，把保存字面量和符号引用）</p>
+<table>
 <thead>
 <tr>
 <th>内存区域</th>
@@ -858,6 +829,79 @@
 <td>使用 Native 函数库直接分配堆外内存，然后通过一个存储在 Java 堆里的 <code>DirectByteBuffer</code> 对象作为这块内存的引用进行操作。</td>
 </tr>
 </tbody></table>
+<h3 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h3><p>魔法数字，4字节，确定该文件能否被JVM接受；版本号，4字节，次版本和主版本；常量池，包括计数器和数据区；访问标志，2字节，描述是类还是接口，和访问级别；类名，2字节；父类名称，2字节；接口信息，2字节的计数器；n字节的接口名称索引；字段表；方发表；附加属性表</p>
+<h3 id="对象检测"><a href="#对象检测" class="headerlink" title="对象检测"></a>对象检测</h3><p>Java中存在循环引用问题，无法使用引用计数法。JVM采用可达性分析，通过 <strong>GC Roots</strong> 作为起始点进行搜索，JVM 将能够到达到的对象视为<strong>存活</strong>，不可达的对象视为<strong>死亡</strong>。GC root可以是：虚拟机栈中引用的对象；本地方法栈中引用的对象（Native 方法）；方法区中，类静态属性引用的对象；方法区中，常量引用的对象</p>
+<h3 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h3><ul>
+<li>标记-清除：原地清理被标记对象，存活对象较多时比价高效，适用于老年代；缺点是容易产生内存碎片</li>
+<li>标记-整理：将存活对象整理到一起。适用于存活对象少，垃圾对象多。用于老年代。</li>
+<li>复制：内存分成2块，每次将存活对象复制到一边，回收另一边。适用于存活对象少。用于新生代。</li>
+<li>分代回收：堆内存分为年轻代和老年代。年轻代使用复制，老年代使用标记清除或标记整理。年轻代中有较大的Eden区和2个Survivor区。每次把Eden和一个Survivor区中的存活对象复制到另一个Survivor，在Survivor中复制次数达到阈值可以升级到老年代。</li>
+</ul>
+<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><img src="https://raw.githubusercontent.com/dunwu/images/dev/cs/java/javacore/jvm/jvm-gc-overview.jpg" srcset="/img/loading.gif" lazyload alt="img" style="zoom:75%;" />
+
+<ul>
+<li><p>串行收集器：Serial；Serial Old（老年代版本）。单线程stop-the-world收集，所有线程进入安全点时，应用线程暂停，串行GC以单线程回收内存。适用于堆内存小，CPU核少的环境，client模式默认收集器。</p>
+</li>
+<li><p>并行收集器：Parallel Scavenge；Parallel Old（老年代版本）。server模式默认收集器，以吞吐量为目标。stop-the-world时<strong>并行</strong>收集，<strong>年轻代采用复制算法，老年代采用标记-整理</strong>。</p>
+</li>
+<li><p>并发标记清除收集器：</p>
+<ul>
+<li><p>CMS（Concurrent Mark Sweep并行<strong>标记清除</strong>）：目标是最短停顿时间。</p>
+<p>初始标记，仅标记GC Root能关联到的对象，速度快，要停顿；并发标记，GC root tracing，耗时最长，不用停顿；重新标记，停顿，修正并发标记期间改变的标记；并发清除，不停顿。</p>
+</li>
+<li><p>ParNew：Serial 收集器的多线程版本，Server 模式下的虚拟机首选年轻代收集器。</p>
+</li>
+</ul>
+</li>
+<li><p>G1收集器：兼顾吞吐量和停顿时间。Oracle JDK9 以后的默认 GC 收集器。<strong>引入分区概念，弱化分代</strong>。</p>
+<p>G1 取消了永久代，并把年轻代和老年代划分成多个大小相等的独立区域（Region），年轻代和老年代不再物理隔离。G1 可以直接对年轻代和老年代一起回收。整体是标记整理，局部看region是复制。</p>
+<p>初始标记，停顿，单线程；并发标记，不停顿，与应用线程并发；最终标记，停顿，并发；筛选回收，根据region的回收价值和成本排序，回收一部分，停顿，并发。</p>
+</li>
+</ul>
+<h3 id="Minor-GC和Full-GC"><a href="#Minor-GC和Full-GC" class="headerlink" title="Minor GC和Full GC"></a>Minor GC和Full GC</h3><p>minor gc发生在年轻代，因为年轻代对象存活时间短，因此频繁执行。Full GC对整个堆内存回收。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="软件设计原则"><a href="#软件设计原则" class="headerlink" title="软件设计原则"></a>软件设计原则</h3><ul>
+<li>单一职责原则（SRP）：一个类应该有且仅有一个引起它变化的原因，否则类应该被拆分。</li>
+<li>开闭原则（OCP）：软件实体应当对扩展开放，对修改关闭。</li>
+<li>里氏替换原则（LSP）：子类在继承父类时，不要改变父类原有的功能，可以替换父类</li>
+<li>接口隔离原则（ISP）：客户端不应该被迫依赖于它不使用的方法。</li>
+<li>依赖倒置原则（DIP）：高层模块不应该依赖低层模块，两者都应该依赖其抽象；抽象不应该依赖细节，细节应该依赖抽象。</li>
+<li>迪米特法则（LoD）：如果两个软件实体无须直接通信，那么就不应当发生直接的相互调用，可以通过第三方转发该调用。</li>
+<li>合成复用原则（CRP）：在软件复用时，要尽量先使用组合或者聚合等关联关系来实现，其次才考虑使用继承关系来实现。</li>
+</ul>
+<h3 id="线程安全的单例模式"><a href="#线程安全的单例模式" class="headerlink" title="线程安全的单例模式"></a>线程安全的单例模式</h3><p>饿汉模式没有线程安全问题，因为在程序运行之初就已经初始化。懒汉模式在并发环境下存在重复初始化的问题。解决方法：</p>
+<ol>
+<li>给整个<code>getInstance()</code>方法加<code>synchronized </code></li>
+<li>加同步代码块，但是<code>getInstance()</code>中除了<code>return</code>之外的语句都需要加入同步区，性能和上一种差不多烂</li>
+<li>先判断是否为<code>null</code>，仅给<code>new</code>的语句加锁，但是仍然线程不安全，因为可能多个线程同时通过了判断。需要检查两次，<strong>双检查锁机制</strong>。在同步块内的<code>new</code>之前在判断一次是否为空。</li>
+<li>用static代码块可以让代码在使用类的时候就已经执行了</li>
+</ol>
+<h3 id="多级目录"><a href="#多级目录" class="headerlink" title="多级目录"></a>多级目录</h3><p>当前目录ID：catalogueId；目录名称：name；目录级别ID：gradeId；父级目录ID：piarentId </p>
+<h3 id="Bean生命周期"><a href="#Bean生命周期" class="headerlink" title="Bean生命周期"></a>Bean生命周期</h3><img src="https://raw.githubusercontent.com/dunwu/images/dev/snap/20211201102734.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:67%;" />
+
+<ol>
+<li>Spring 对 Bean 进行实例化（相当于 new XXX()）</li>
+<li>Spring 将值和引用注入进 Bean 对应的属性中</li>
+<li>如果 Bean 实现了 <code>BeanNameAware</code> 接口，Spring 将 Bean 的 ID 传递给 <code>setBeanName</code> 方法</li>
+<li>如果 Bean 实现了 <code>BeanFactoryAware</code> 接口，Spring 将调用 <code>setBeanDactory</code> 方法，并把 <code>BeanFactory</code> 容器实例作为参数传入。<ul>
+<li>作用是获取 Spring 容器，如 Bean 通过 Spring 容器发布事件等</li>
+</ul>
+</li>
+<li>如果 Bean 实现了 <code>ApplicationContextAware</code> 接口，Spring 容器将调用 <code>setApplicationContext</code> 方法，把应用上下文作为参数传入<ul>
+<li>作用与 <code>BeanFactory</code> 类似都是为了获取 Spring 容器，不同的是 Spring 容器在调用 <code>setApplicationContext</code> 方法时会把它自己作为 <code>setApplicationContext</code> 的参数传入，而 Spring 容器在调用 <code>setBeanFactory</code> 前需要使用者自己指定（注入）<code>setBeanFactory</code> 里的参数 <code>BeanFactory</code></li>
+</ul>
+</li>
+<li>如果 Bean 实现了 <code>BeanPostProcess</code> 接口，Spring 将调用 <code>postProcessBeforeInitialization</code> 方法<ul>
+<li>作用是在 Bean 实例创建成功后对其进行增强处理，如对 Bean 进行修改，增加某个功能</li>
+</ul>
+</li>
+<li>如果 Bean 实现了 <code>InitializingBean</code> 接口，Spring 将调用 <code>afterPropertiesSet</code> 方法，作用与在配置文件中对 Bean 使用 <code>init-method</code> 声明初始化的作用一样，都是在 Bean 的全部属性设置成功后执行的初始化方法。</li>
+<li>如果 Bean 实现了 <code>BeanPostProcess</code> 接口，Spring 将调用 <code>postProcessAfterInitialization</code> 方法<ul>
+<li><code>postProcessBeforeInitialization</code> 是在 Bean 初始化前执行的，而 <code>postProcessAfterInitialization</code> 是在 Bean 初始化后执行的</li>
+</ul>
+</li>
+<li>经过以上的工作后，Bean 将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁</li>
+<li>如果 Bean 实现了 <code>DispostbleBean</code> 接口，Spring 将调用它的 <code>destory</code> 方法，作用与在配置文件中对 Bean 使用 <code>destory-method</code> 属性的作用一样，都是在 Bean 实例销毁前执行的方法。</li>
+</ol>
 <h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP状态码-1"><a href="#HTTP状态码-1" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h3><table>
 <thead>
 <tr>
