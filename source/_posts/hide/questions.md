@@ -45,7 +45,9 @@ My past experience can be divided into two parts. The first part is my school ex
 
 新需求，过期删除，看英文文档，写demo；手写定时任务；不能直接删除；delete limit，但是末尾怎么办；提前获取要删除的数量，count顺序扫描很快，后台任务不加索引
 
-狼性文化：嗅觉敏锐；团队作战；不屈不挠
+- 过期删除
+- SDK适配
+- DBSCAN
 
 ### 最大的优点
 
@@ -327,6 +329,20 @@ TCP基于字节流，无法判断发送方报文段边界。
 | fd拷贝     | 每次调用select拷贝 | 每次调用poll拷贝 | fd首次调用epoll_ctl拷贝，每次调用epoll_wait不拷贝 |
 | 工作效率   | 轮询：O(n)         | 轮询：O(n)       | 回调：O(1)                                        |
 
+```C++
+int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+
+int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+struct pollfd {
+    int  fd;     /* file descriptor */
+    short events;   /* requested events */
+    short revents;  /* returned events */
+};
+
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+```
+
 ## MySQL
 
 ### MVCC如何实现的
@@ -432,6 +448,10 @@ redisObject{ type, encoding, void* ptr}
 
 Redis 使用的是惰性删除加定期删除的过期策略。
 
+### 分布式锁
+
+`SETNX`命令，如果key已存在就什么都不做，通过返回值判断是否修改及成功，要加过期时间。
+
 ## C++
 
 ### 多态
@@ -527,6 +547,12 @@ new 的实现原理： 如果是简单类型，则直接调用 operator new()，
 `int const *p`和`const int *p`是指针常量，指向一个常量。
 
 区分就看`const`在`*`的左边还是右边。在右边是顶层const，修饰指针；在左边是底层const，修饰底层变量。
+
+### 智能指针
+
+`auto_ptr`在C98加入，C11被`unique_ptr`取代，C17移除。只要诟病在于拷贝会造成所有权转移，不符合常识，也不能作为函数参数，不能作为类成员被拷贝等。在`unique_ptr`中需要使用move才能转移所有权。
+
+避免：裸指针和智能指针混用；智能指针混用；不要管理同一个裸指针；避免使用get()获取原生指针；不要管理this指针；只管理堆上的对象；使用make_shared初始化
 
 ## Java
 
@@ -755,9 +781,19 @@ minor gc发生在年轻代，因为年轻代对象存活时间短，因此频繁
 
 当前目录ID：catalogueId；目录名称：name；目录级别ID：gradeId；父级目录ID：piarentId 
 
+### ZAB原子广播
+
+- Leader：维护与Follower和Observer的心跳，执行写操作并广播
+- Follower：处理读请求，转发写请求，投票
+- Observer：没有投票权的Follower
+
+写操作时，Leader将写操作以Proposal形式发给所有Follower，得到超过半数ACK则向全体发送Commit。
+
+logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早的。票数相同时把自己的票归给vote_zxid或者vote_myid更大的。
+
 ### Bean生命周期
 
-<img src="https://raw.githubusercontent.com/dunwu/images/dev/snap/20211201102734.png" alt="img" style="zoom:67%;" />
+[![xEAIdx.png](https://s1.ax1x.com/2022/09/25/xEAIdx.png)](https://imgse.com/i/xEAIdx)
 
 1. Spring 对 Bean 进行实例化（相当于 new XXX()）
 2. Spring 将值和引用注入进 Bean 对应的属性中
