@@ -81,8 +81,6 @@ My past experience can be divided into two parts. The first part is my school ex
 - 数据链路层：两个节点传输数据时，链路层将网络层交下来的数据报组装成帧，在链路上传送帧。每一帧都包括数据和控制信息（同步信息、地址信息、差错控制等）。 
 - 物理层
 
-### TCP和UDP区别
-
 ### 三次握手四次挥手
 
 ![img](https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F)
@@ -99,7 +97,7 @@ TCP是通过序列号、检验和、确认应答信号、重发机制、连接�
 -  检验和：TCP将保持它首部和数据的检验和。这是一个端到端的检验和，目的是检测数据在传输过程中的任何变化。 
 - 确认应答：如果收到的数据报报文段的检验和没有差错，就确认收到，如果有差错，TCP就丢弃这个报文段和不确认收到此报文段。 
 - 流量控制：TCP 连接的每一方都有固定大小的缓冲空间，TCP的接收端只允许发送端发送接收端缓冲区能接纳的数据。当接收方来不及处理发送方的数据，能提示发送方降低发送的速率，防止包丢失。TCP 使用的流量控制协议是可变大小的滑动窗口协议。
--  拥塞控制：当网络拥塞时，减少数据的发送。 
+-  **拥塞控制**：当网络拥塞时，减少数据的发送。 慢开始、拥塞避免、快重传、快恢复。
 - 停止等待协议：它的基本原理就是每发完一个分组就停止发送，等待对方确认。在收到确认后再发下一个分组。 
 - 超时重传： 当 TCP 发出一个段后，它启动一个定时器，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段。
 
@@ -114,10 +112,6 @@ TCP是通过序列号、检验和、确认应答信号、重发机制、连接�
 ### TIME_WAIT
 
 四次挥手时，主动断连的一方发送最后一个ACK后会进入TIME_WAIT，会等待2MSL（最大报文生存期）才会回到CLOSED。这么做是确保另一方收到这个消息。万一这条消息丢失了，需要花1个MSL的时间，被关闭方会重发FIN，又要1个MSL来接收。
-
-### 拥塞控制机制
-
-慢开始、拥塞避免、快重传、快恢复。
 
 ### GET和POST区别
 
@@ -141,33 +135,26 @@ TCP基于字节流，无法判断发送方报文段边界。
 4. 数据包头部加上数据包的长度。数据包头部定长4字节，可以存储数据包的整体长度 
 5. 应用层自定义规则
 
-### 滑动窗口
-
-
-
 ### URL到内容显示过程
 
-1、查浏览器缓存，看看有没有已经缓存好的，如果没有
+- 查浏览器缓存，看看有没有已经缓存好的，如果没有检查本机host文件，再没有就调用API，Linux下Socket函数 gethostbyname
 
-2 、检查本机host文件，
+- 向DNS服务器发送DNS请求，查询本地DNS服务器，这其中用的是UDP的协议
 
-3、调用API，Linux下Socket函数 gethostbyname
+- 如果在一个子网内采用ARP地址解析协议进行ARP查询。如果不在一个子网那就需要对默认网关进行DNS查询，如果还找不到会一直向上找根DNS服务器，直到最终拿到IP地址
 
-4、向DNS服务器发送DNS请求，查询本地DNS服务器，这其中用的是UDP的协议
+- 这时已有服务器IP，http默认是80 https是 443 端口号，会首先尝试http然后调用Socket建立TCP连接。
 
-5、如果在一个子网内采用ARP地址解析协议进行ARP查询。如果不在一个子网那就需要对默认网关进行DNS查询，如果还找不到会一直向上找根DNS服务器，直到最终拿到IP地址
+- 经过三次握手成功建立连接后，开始传送数据，如果正是http协议的话，就返回就完事了，
 
-6、这时已有服务器IP，http默认是80 https是 443 端口号，会首先尝试http然后调用Socket建立TCP连接。
+- 如果不是http协议，服务器会返回一个5开头的的重定向消息，告知使用https，也就是IP没变，只是端口变成443了，四次挥手断连
 
-7、经过三次握手成功建立连接后，开始传送数据，如果正是http协议的话，就返回就完事了，
+- 重新对443端口三次握手，还会采用SSL的加密技术来保证传输数据的安全性，保证数据传输过程中不被修改或者替换之类的，
 
-8、如果不是http协议，服务器会返回一个5开头的的重定向消息，告知使用https，也就是IP没变，只是端口变成443了，四次挥手断连
+- 这次依然是三次握手，沟通好双方使用的认证算法，加密和检验算法，在此过程中也会检验对方的CA安全证书。
 
-9、重新对443端口三次握手，还会采用SSL的加密技术来保证传输数据的安全性，保证数据传输过程中不被修改或者替换之类的，
+- 确认无误后，开始通信，然后服务器就会返回你所要访问的网址的一些数据，在此过程中会将界面进行渲染
 
-10、这次依然是三次握手，沟通好双方使用的认证算法，加密和检验算法，在此过程中也会检验对方的CA安全证书。
-
-11、确认无误后，开始通信，然后服务器就会返回你所要访问的网址的一些数据，在此过程中会将界面进行渲染。
 
 ### HTTP状态码
 
@@ -370,8 +357,8 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 
 - 未提交读：脏读问题。允许读尚未提交的数据。
 - 已提交读：不可重复读问题。**加读写锁**解决上一个问题。允许读取并发事务已经提交的数据。
-- 可重复读（InnodDB默认级别）：幻读问题，比如B事务在A事务读取的范围内增加数据，A事务会发现数据变多。对同一字段的多次读取结果都是一致的。**解决方法：快照的思路。**一个事务只在第一次 SELECT 的时候会获取一次 Read view，而后面所有的 SELECT都会复用这个 Read view
-- 可串行化 ：InnoDB在可重复读的级别下使用Next-Key Lock的锁算法，锁定一个范围，包含记录本身。因此避免了幻读的产生。
+- 可重复读（InnodDB默认级别）：幻读问题，比如B事务在A事务读取的范围内增加数据，A事务会发现数据变多。对同一字段的多次读取结果都是一致的。**解决方法：MVCC（快照读）。**数据更新时会在数据行的隐藏字段记录当前事务版本号，事务只能读取到小于等于当前版本号的数据。
+- 可串行化 ：InnoDB在可重复读的级别下使用**Next-Key Lock（行锁+间隙锁）**，锁定一个范围，包含记录本身。因此避免了幻读的产生。
 
 ### 行锁类型
 
@@ -385,6 +372,10 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 
 - 如果索引列是唯一索引，那么只会锁住这条记录(只加行锁)，而不会锁住间隙。
 - 对于联合索引且是唯一索引，如果 where 条件只包括联合索引的一部分，那么依然会加间隙锁。
+
+**意向锁**：意向读锁和意向写锁都是表级锁，不会和行级锁冲突，只会和表级锁冲突。当一个事务要加表锁时，需要判断该表是否有互斥的表锁和行锁，如果没有意向锁的话，需要遍历每一行才能知道有无行锁。
+
+当给某一行增加共享锁、排他锁时，数据库会自动给这一行所处的表添加意向共享锁（IS Lock）、意向排他锁（IX Lock），等于说用意向锁来概括整张表的行锁情况，让加表锁时不需要遍历即可判断。
 
 ### 索引类型
 
@@ -657,7 +648,33 @@ JDK8之前是数组+链表，之后是数组+链表+红黑树。相同哈希值�
 
 线程通信：wait/notify/notifyAll、join、管道
 
-### ConcurrentHashMap
+### 并发容器
+
+同步容器主要包括2类：
+
+- vector，stack，hashtable
+    - Vector：实现List接口，本质上是数组，所有方法都是synchronized
+    - stack：继承vector，所有方法synchronized
+    - Hashtable：实现Map接口，有同步处理
+- Collections类中提供的静态工厂方法创建的类（由Collections.synchronizedXXX等方法）
+
+在jdk1.6对synchronized优化前，这类容器性能不好。而且虽然保证同时只有一个线程能访问，但也不是绝对安全。比如一个线程先把vector中remove了一个元素，另一个线程就会发现size变了。
+
+并发容器有3个系列：
+
+- Concurrent：基于跳表实现的map和set（有序set和map），哈希表，链表实现的队列和双向队列。
+
+    锁竞争比CopyOnWrite高，但是写操作代价小。提供较低的遍历一致性，在迭代容器时修改容器，会导致获取size不精确，这是为了**保证吞吐量**设计的。
+
+- CopyOnWrite：基于数组的List和set。
+
+    一个线程写，多个线程读。读操作不加锁，写操作时通过在副本上加锁来保证并发安全，空间开销大。
+
+- Blocking：链表实现的队列和双向队列，数组实现的队列。基于锁提供阻塞队列的能力。
+
+强一致性要求用Hashtable，弱一致性用ConcurrentHashMap。读多写少用CopyOnWriteArrayList，写多读少用ConcurrentListedQueue。
+
+### 并发哈希表
 
 1.7采用分段锁。1.8对每一条数据加锁，CAS + `sychronized` 操作。
 
@@ -747,7 +764,9 @@ CGLIB 动态代理特点：
 - **轻量级锁** - 是指当锁是偏向锁的时候，被另一个线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，提高性能。
 - **重量级锁** - 是指当锁为轻量级锁的时候，另一个线程虽然是自旋，但自旋不会一直持续下去，当自旋一定次数的时候，还没有获取到锁，就会进入阻塞，该锁膨胀为重量级锁。重量级锁会让其他申请的线程进入阻塞，性能降低。
 
-### ASQ 原理
+### AQS 原理
+
+locks包中的锁（常用的有 `ReentrantLock`、 `ReadWriteLock`），都是基于AQS实现的。提供对独享锁和共享锁的支持，各有一套API。
 
 - AQS 使用一个整型的 `volatile` 变量来 **维护同步状态**。状态的意义由子类赋予。
 - AQS 维护了一个 FIFO 的双链表，用来存储获取锁失败的线程。
@@ -852,22 +871,39 @@ logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早�
 
 ### Bean生命周期
 
+基于XML配置；注解配置；JAVA API配置（专门的Config类+@Configuration注解）
+
+5种scope：
+
+- Singleton：单例，每个IOC容器仅有一个实例
+- Prototype：每次请求都产生新实例
+- Request：每个HTTP请求产生新实例，且仅在该HTTP请求内有效
+- Session：每个HTTP请求产生新实例，且仅在该session内有效
+- Global session：仅在基于 portlet 的 web 应用中才有用
+
 [![xEAIdx.png](https://s1.ax1x.com/2022/09/25/xEAIdx.png)](https://imgse.com/i/xEAIdx)
 
 1. Spring 对 Bean 进行实例化（相当于 new XXX()）
 2. Spring 将值和引用注入进 Bean 对应的属性中
-3. 如果 Bean 实现了 `BeanNameAware` 接口，Spring 将 Bean 的 ID 传递给 `setBeanName` 方法
-4. 如果 Bean 实现了 `BeanFactoryAware` 接口，Spring 将调用 `setBeanDactory` 方法，并把 `BeanFactory` 容器实例作为参数传入。
-   - 作用是获取 Spring 容器，如 Bean 通过 Spring 容器发布事件等
+3. 如果 Bean 实现了 `BeanNameAware` 接口，将 Bean 的 ID 传递给 `setBeanName` 方法
+4. 如果 Bean 实现了 `BeanFactoryAware` 接口，把 `BeanFactory` 容器实例作为参数调用 `setBeanDactory` 方法。作用是获取 Spring 容器，如 Bean 通过 Spring 容器发布事件等
 5. 如果 Bean 实现了 `ApplicationContextAware` 接口，Spring 容器将调用 `setApplicationContext` 方法，把应用上下文作为参数传入
    - 作用与 `BeanFactory` 类似都是为了获取 Spring 容器，不同的是 Spring 容器在调用 `setApplicationContext` 方法时会把它自己作为 `setApplicationContext` 的参数传入，而 Spring 容器在调用 `setBeanFactory` 前需要使用者自己指定（注入）`setBeanFactory` 里的参数 `BeanFactory`
 6. 如果 Bean 实现了 `BeanPostProcess` 接口，Spring 将调用 `postProcessBeforeInitialization` 方法
    - 作用是在 Bean 实例创建成功后对其进行增强处理，如对 Bean 进行修改，增加某个功能
 7. 如果 Bean 实现了 `InitializingBean` 接口，Spring 将调用 `afterPropertiesSet` 方法，作用与在配置文件中对 Bean 使用 `init-method` 声明初始化的作用一样，都是在 Bean 的全部属性设置成功后执行的初始化方法。
 8. 如果 Bean 实现了 `BeanPostProcess` 接口，Spring 将调用 `postProcessAfterInitialization` 方法
-   - `postProcessBeforeInitialization` 是在 Bean 初始化前执行的，而 `postProcessAfterInitialization` 是在 Bean 初始化后执行的
 9. 经过以上的工作后，Bean 将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁
 10. 如果 Bean 实现了 `DispostbleBean` 接口，Spring 将调用它的 `destory` 方法，作用与在配置文件中对 Bean 使用 `destory-method` 属性的作用一样，都是在 Bean 实例销毁前执行的方法。
+
+### Spring的IOC容器
+
+- BeanFactory，懒加载，使用语法显式提供资源，不支持国际化，不支持基于依赖的注解
+- ApplicationContext：BeanFactory的扩展，即时加载，自己创建和管理资源，支持国际化，基于依赖的注解
+
+好处：减少代码量；减少侵入，促进解耦；自持即时实例化和懒加载；易于测试
+
+实现原理：工厂模式+反射机制
 
 ## 附录
 
