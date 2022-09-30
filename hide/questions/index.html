@@ -28,10 +28,11 @@
 <meta property="og:image" content="https://pics7.baidu.com/feed/8435e5dde71190ef08c7447eca4fb81efdfa602b.jpeg?token=74e81457ce3c2f49b48814839e548194&s=5EA83C6229C6E0CA5A7454CA0000E0B1">
 <meta property="og:image" content="https://s2.loli.net/2022/08/10/KY3twdbBEefoqUg.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/07/26/jzASR1.png">
+<meta property="og:image" content="https://img.php.cn/upload/article/000/000/024/6fa1cdd8fbec0fd0560d6d648f8a8d47-2.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/09/27/xZfN9g.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/09/25/xEAIdx.png">
 <meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
-<meta property="article:modified_time" content="2022-09-29T16:38:46.241Z">
+<meta property="article:modified_time" content="2022-09-30T07:07:22.509Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F">
@@ -213,7 +214,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      214 分钟
+      216 分钟
     </span>
   
 
@@ -254,7 +255,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年9月30日 凌晨
+                  本文最后更新于：2022年9月30日 下午
                 
               </p>
             
@@ -555,7 +556,7 @@
 <ul>
 <li>记录锁：也被称为记录锁，属于单个行记录上的锁。</li>
 <li>间隙锁 ：锁定一个范围，不包括记录本身。锁加在不存在的空闲空间，可以是两个索引记录之间（比如区间查询），也可能是第一个索引记录之前或最后一个索引之后的空间（小于或大于）。也有比如有三个索引（2,4,8） ，如果对4加锁，那么也会同时对(2,4)和(4,8)这两个间隙加锁。</li>
-<li>Next-Key Lock ：Record Lock+Gap Lock，锁定一个范围，包含记录本身。记录锁只能锁住已经存在的记录，为了避免插入新记录，需要依赖间隙锁。</li>
+<li>Next-Ke y Lock ：Record Lock+Gap Lock，锁定一个范围，包含记录本身。记录锁只能锁住已经存在的记录，为了避免插入新记录，需要依赖间隙锁。</li>
 </ul>
 <p>间隙锁的两个例外：</p>
 <ul>
@@ -727,7 +728,12 @@
 <p>区分就看<code>const</code>在<code>*</code>的左边还是右边。在右边是顶层const，修饰指针；在左边是底层const，修饰底层变量。</p>
 <h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p><code>auto_ptr</code>在C98加入，C11被<code>unique_ptr</code>取代，C17移除。只要诟病在于拷贝会造成所有权转移，不符合常识，也不能作为函数参数，不能作为类成员被拷贝等。在<code>unique_ptr</code>中需要使用move才能转移所有权。</p>
 <p>避免：裸指针和智能指针混用；智能指针混用；不要管理同一个裸指针；避免使用get()获取原生指针；不要管理this指针；只管理堆上的对象；使用make_shared初始化</p>
-<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ol>
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="StringBuffer、StringBuilder的区别"><a href="#StringBuffer、StringBuilder的区别" class="headerlink" title="StringBuffer、StringBuilder的区别"></a>StringBuffer、StringBuilder的区别</h3><p>StringBuffer：线程安全，可变字符串</p>
+<p>StringBuilder：线程不安全，可变字符数组</p>
+<p>StringBuffer 每次获取 toString 都会直接使用缓存区的 toStringCache 值来构造一个字符串。</p>
+<p>StringBuilder 则每次都需要复制一次字符数组，再构造一个字符串。</p>
+<p>StringBuilder 的性能要远大于 StringBuffer，因为StringBuffer线程安全。</p>
+<h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><ol>
 <li>抽象类不能被实例化，编译不通过。</li>
 <li>抽象类中不一定包含抽象方法，但是有抽象方法的类必定是抽象类。</li>
 <li>抽象类中的抽象方法只是声明，不包含具体实现。但是接口可以。</li>
@@ -758,6 +764,7 @@
 </ul>
 <h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>创建方法：继承Thread、实现Runnable、实现Callable（有返回值）</p>
 <p>线程通信：wait&#x2F;notify&#x2F;notifyAll、join、管道</p>
+<h3 id="synchronized和lock的区别"><a href="#synchronized和lock的区别" class="headerlink" title="synchronized和lock的区别"></a>synchronized和lock的区别</h3><p><img src="https://img.php.cn/upload/article/000/000/024/6fa1cdd8fbec0fd0560d6d648f8a8d47-2.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h3><p>同步容器主要包括2类：</p>
 <ul>
 <li>vector，stack，hashtable<ul>
