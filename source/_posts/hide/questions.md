@@ -371,7 +371,7 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 
 - 记录锁：也被称为记录锁，属于单个行记录上的锁。
 - 间隙锁 ：锁定一个范围，不包括记录本身。锁加在不存在的空闲空间，可以是两个索引记录之间（比如区间查询），也可能是第一个索引记录之前或最后一个索引之后的空间（小于或大于）。也有比如有三个索引（2,4,8） ，如果对4加锁，那么也会同时对(2,4)和(4,8)这两个间隙加锁。
-- Next-Key Lock ：Record Lock+Gap Lock，锁定一个范围，包含记录本身。记录锁只能锁住已经存在的记录，为了避免插入新记录，需要依赖间隙锁。
+- Next-Ke y Lock ：Record Lock+Gap Lock，锁定一个范围，包含记录本身。记录锁只能锁住已经存在的记录，为了避免插入新记录，需要依赖间隙锁。
 
 间隙锁的两个例外：
 
@@ -607,6 +607,18 @@ new 的实现原理： 如果是简单类型，则直接调用 operator new()，
 
 ## Java
 
+### StringBuffer、StringBuilder的区别
+
+StringBuffer：线程安全，可变字符串
+
+StringBuilder：线程不安全，可变字符数组
+
+StringBuffer 每次获取 toString 都会直接使用缓存区的 toStringCache 值来构造一个字符串。
+
+StringBuilder 则每次都需要复制一次字符数组，再构造一个字符串。
+
+StringBuilder 的性能要远大于 StringBuffer，因为StringBuffer线程安全。
+
 ### 抽象类
 
 1. 抽象类不能被实例化，编译不通过。
@@ -652,6 +664,10 @@ JDK8之前是数组+链表，之后是数组+链表+红黑树。相同哈希值�
 创建方法：继承Thread、实现Runnable、实现Callable（有返回值）
 
 线程通信：wait/notify/notifyAll、join、管道
+
+### synchronized和lock的区别
+
+![](https://img.php.cn/upload/article/000/000/024/6fa1cdd8fbec0fd0560d6d648f8a8d47-2.png)
 
 ### 并发容器
 
