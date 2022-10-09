@@ -50,13 +50,16 @@ My past experience can be divided into two parts. The first part is my school ex
 - 过期删除
 - SDK适配
 - DBSCAN
+- nginx+lua, openresty
 
-### 学到最多东西的案例
+### 学到最多东西的案例/最有成就感
 
 初期目标设定：
 中期遇到困难：
 后期如何解决：
 结束如何反思：
+
+难者不会，会着不难，解决一个个问题的过程，和从中形成的方法论。
 
 
 ### 最大的优点
@@ -64,6 +67,8 @@ My past experience can be divided into two parts. The first part is my school ex
 ### 最大的缺点
 
 团队管理能力
+
+
 
 ### 职业发展规划
 
