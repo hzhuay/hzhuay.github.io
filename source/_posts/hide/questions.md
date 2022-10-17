@@ -10,7 +10,6 @@ hide: true
 
 本人热爱游戏行业，从孩童时期就接触过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。
 
-
 • 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。 
 • 成果描述：学习项目所需的 Spring 技术栈、跨模块调用和服务器部署等技能；参与智能视频分析平 台解决方案项目，完成管理平台部分模块的开发任务，修复若干错误。
 • 个人收获：学习 Spring 开发技术栈，熟悉项目开发流程，积累真实开发经验。
@@ -87,6 +86,8 @@ My past experience can be divided into two parts. The first part is my school ex
 - 物理层
 
 ### 三次握手四次挥手
+
+`netstat`可以查看TCP链接状态
 
 ![img](https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F)
 
@@ -264,10 +265,10 @@ TCP基于字节流，无法判断发送方报文段边界。
 - 管道（匿名管道）：UNIX系统IPC最古老形式，本质上是内核中维护的一块内存缓冲区，Linux中通过`pipe()`创建，会产生两个fd，fd[0]是读端，fd[1]是写端，只能用于**具有亲缘关系**的进程。注意调用一次pipe产生一个管道，只能支持一个进程向另一个进程发送数据，如果需要双向通信需要定义2个管道。
 - 有名管道（FIFO，命名管道，FIFO文件）：管道由于没有名字因此只能用于亲缘进程，因此提出有名管道，提供一个路径名与管道关联，以FIFO的文件形式存在于文件系统中，打开方式与普通文件一致。
 - 信号（软件中断）：事件发生时对进程的通知机制，是软件层面对中断机制的一种模拟，是异步通信。
-- 消息队列：一个消息链表，消息有特定格式和优先级。
-- 共享内存：多个进程共享同一块物理内存，这一段物理内存会进入进程用户空间，因此这种IPC无需内核介入，数据不需要像管道那样经过内核区，所以更快。`shm()`
+- 消息队列：一个消息链表，消息有特定格式和优先级。`int msgget(key_t key, int msgflg)`
+- 共享内存：多个进程共享同一块物理内存，这一段物理内存会进入进程用户空间，因此这种IPC无需内核介入，数据不需要像管道那样经过内核区，所以更快。`int shmget(key_t key, size_t size, int shmlfg);`
 - 内存映射：将磁盘文件的数据映射到内存，用户通过修改内存就能修改磁盘。`mmap()`
-- 信号量：主要解决进程和线程同步问题。
+- 信号量：主要解决进程和线程同步问题。`int semget(key_t key, int num_sems, int sem_flags);`
 - 套接字
 
 ### 线程间通信
@@ -344,6 +345,26 @@ struct pollfd {
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
 ```
+
+### 高级IO
+
+零拷贝：OS为了提高读写效率和保护磁盘，使用了页缓存机制。当用户需要读写文件时，内核首先会申请一个内存页（称为页缓存）与文件中的数据块进行缓存。数据先被拷贝到页缓存，再拷贝给用户，这样经历2次拷贝。使用mmap建立虚拟内存与文件的映射，可以只拷贝一次。
+
+内存映射，简而言之就是将内核空间的一段内存区域映射到用户空间。
+
+```C++ 
+int pipe(int fd[2]); //2个fd分别为管道的2端，单向，0读1写
+int dup(int fd); //标准输出重定向，创建新的fd，和原fd指向同样的文件
+// ivovec结构表示内存块。比如HTTP应答，状态行和header可能被server放在一块内存，body内容从存储读取到另一块内存，不需要将两者拼接后发送，可以用writev同时写入fd
+ssize_t readv(int fd, const struct iovec* vector, int count); //从fd中读取到分散的内存块中
+ssize_t writev(int fd, const struct iovec* vector, int count); //把分散的内存块的数据写入fd
+ssize_t sendfile(int out_fd, int in_fd, off_t* offset, size_t count); //在2个fd之间直接传递数据，完全在内核中进行，避免内核缓冲区与用户缓冲区之间的拷贝，被称为零拷贝。
+void* mmap(void* start, size_t length, int prot, int flags, int fd, off_t offset); //申请一段内存，作为进程间的共享内存，或者将文件映射到内存中。可以指定起始地址或者系统分配
+ssize_t splice(int fd_in, loff_t* off_in, int fd_out, loff_t* off_out, size_t len, unsigned int flags); //在2个fd之间移动数据，也是零拷贝。2个fd至少有一个是管道。
+ssize_t tee(int fd_in, int fd_out, size_t len, unsigned int flags); //零拷贝在2个fd之间复制数据，不消耗数据
+```
+
+
 
 ## MySQL
 
