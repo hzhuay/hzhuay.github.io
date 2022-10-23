@@ -10,7 +10,6 @@ hide: true
 
 本人热爱游戏行业，从孩童时期就接触过游戏，并对游戏行业产生浓厚兴趣。进入大学后，学习计算机方面的知识，希望能在游戏的服务端方向有所作为。
 
-
 • 工作描述：参与部门项目的开发工作，撰写技术文档，掌握问题排查、bug 修复、开发环境部署流程。 
 • 成果描述：学习项目所需的 Spring 技术栈、跨模块调用和服务器部署等技能；参与智能视频分析平 台解决方案项目，完成管理平台部分模块的开发任务，修复若干错误。
 • 个人收获：学习 Spring 开发技术栈，熟悉项目开发流程，积累真实开发经验。
@@ -50,13 +49,16 @@ My past experience can be divided into two parts. The first part is my school ex
 - 过期删除
 - SDK适配
 - DBSCAN
+- nginx+lua, openresty
 
-### 学到最多东西的案例
+### 学到最多东西的案例/最有成就感
 
 初期目标设定：
 中期遇到困难：
 后期如何解决：
 结束如何反思：
+
+难者不会，会着不难，解决一个个问题的过程，和从中形成的方法论。
 
 
 ### 最大的优点
@@ -64,6 +66,8 @@ My past experience can be divided into two parts. The first part is my school ex
 ### 最大的缺点
 
 团队管理能力
+
+
 
 ### 职业发展规划
 
@@ -82,6 +86,8 @@ My past experience can be divided into two parts. The first part is my school ex
 - 物理层
 
 ### 三次握手四次挥手
+
+`netstat`可以查看TCP链接状态
 
 ![img](https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F)
 
@@ -259,10 +265,10 @@ TCP基于字节流，无法判断发送方报文段边界。
 - 管道（匿名管道）：UNIX系统IPC最古老形式，本质上是内核中维护的一块内存缓冲区，Linux中通过`pipe()`创建，会产生两个fd，fd[0]是读端，fd[1]是写端，只能用于**具有亲缘关系**的进程。注意调用一次pipe产生一个管道，只能支持一个进程向另一个进程发送数据，如果需要双向通信需要定义2个管道。
 - 有名管道（FIFO，命名管道，FIFO文件）：管道由于没有名字因此只能用于亲缘进程，因此提出有名管道，提供一个路径名与管道关联，以FIFO的文件形式存在于文件系统中，打开方式与普通文件一致。
 - 信号（软件中断）：事件发生时对进程的通知机制，是软件层面对中断机制的一种模拟，是异步通信。
-- 消息队列：一个消息链表，消息有特定格式和优先级。
-- 共享内存：多个进程共享同一块物理内存，这一段物理内存会进入进程用户空间，因此这种IPC无需内核介入，数据不需要像管道那样经过内核区，所以更快。`shm()`
+- 消息队列：一个消息链表，消息有特定格式和优先级。`int msgget(key_t key, int msgflg)`
+- 共享内存：多个进程共享同一块物理内存，这一段物理内存会进入进程用户空间，因此这种IPC无需内核介入，数据不需要像管道那样经过内核区，所以更快。`int shmget(key_t key, size_t size, int shmlfg);`
 - 内存映射：将磁盘文件的数据映射到内存，用户通过修改内存就能修改磁盘。`mmap()`
-- 信号量：主要解决进程和线程同步问题。
+- 信号量：主要解决进程和线程同步问题。`int semget(key_t key, int num_sems, int sem_flags);`
 - 套接字
 
 ### 线程间通信
@@ -339,6 +345,26 @@ struct pollfd {
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
 ```
+
+### 高级IO
+
+零拷贝：OS为了提高读写效率和保护磁盘，使用了页缓存机制。当用户需要读写文件时，内核首先会申请一个内存页（称为页缓存）与文件中的数据块进行缓存。数据先被拷贝到页缓存，再拷贝给用户，这样经历2次拷贝。使用mmap建立虚拟内存与文件的映射，可以只拷贝一次。
+
+内存映射，简而言之就是将内核空间的一段内存区域映射到用户空间。
+
+```C++ 
+int pipe(int fd[2]); //2个fd分别为管道的2端，单向，0读1写
+int dup(int fd); //标准输出重定向，创建新的fd，和原fd指向同样的文件
+// ivovec结构表示内存块。比如HTTP应答，状态行和header可能被server放在一块内存，body内容从存储读取到另一块内存，不需要将两者拼接后发送，可以用writev同时写入fd
+ssize_t readv(int fd, const struct iovec* vector, int count); //从fd中读取到分散的内存块中
+ssize_t writev(int fd, const struct iovec* vector, int count); //把分散的内存块的数据写入fd
+ssize_t sendfile(int out_fd, int in_fd, off_t* offset, size_t count); //在2个fd之间直接传递数据，完全在内核中进行，避免内核缓冲区与用户缓冲区之间的拷贝，被称为零拷贝。
+void* mmap(void* start, size_t length, int prot, int flags, int fd, off_t offset); //申请一段内存，作为进程间的共享内存，或者将文件映射到内存中。可以指定起始地址或者系统分配
+ssize_t splice(int fd_in, loff_t* off_in, int fd_out, loff_t* off_out, size_t len, unsigned int flags); //在2个fd之间移动数据，也是零拷贝。2个fd至少有一个是管道。
+ssize_t tee(int fd_in, int fd_out, size_t len, unsigned int flags); //零拷贝在2个fd之间复制数据，不消耗数据
+```
+
+
 
 ## MySQL
 
@@ -453,7 +479,7 @@ InnoDB用事务版本号，行记录中的隐藏列和Undo Log实现。
 
 **缓存穿透**：大量请求的 key 不存在缓存中，导致请求直接打到数据库上。解决：缓存无效key；布隆过滤器：**布隆过滤器说某个元素存在，小概率会误判。布隆过滤器说某个元素不在，那么这个元素一定不在。**
 
-**缓存雪崩**：缓存在同一时间大面积的失效，后面的请求都直接落到了数据库上。 **针对 Redis 服务不可用的情况**：采用 Redis 集群，避免单机出现问题整个缓存服务都没办法使用；限流，避免同时处理大量的请求。**针对热点缓存失效的情况**：设置不同的失效时间比如随机设置缓存的失效时间；缓存永不失效。
+**缓存雪崩**：缓存在**同一时间大面积**的失效，后面的请求都直接落到了数据库上。 **针对 Redis 服务不可用的情况**：采用 Redis 集群，避免单机出现问题整个缓存服务都没办法使用；限流，避免同时处理大量的请求。**针对热点缓存失效的情况**：设置不同的失效时间比如随机设置缓存的失效时间；缓存永不失效。事后使用redis持久化尽快恢复缓存。
 
 ### 数据结构
 
@@ -605,7 +631,6 @@ new 的实现原理： 如果是简单类型，则直接调用 operator new()，
 ### StringBuffer、StringBuilder的区别
 
 StringBuffer：线程安全，可变字符串
-
 StringBuilder：线程不安全，可变字符数组
 
 StringBuffer 每次获取 toString 都会直接使用缓存区的 toStringCache 值来构造一个字符串。
@@ -613,6 +638,8 @@ StringBuffer 每次获取 toString 都会直接使用缓存区的 toStringCache 
 StringBuilder 则每次都需要复制一次字符数组，再构造一个字符串。
 
 StringBuilder 的性能要远大于 StringBuffer，因为StringBuffer线程安全。
+
+String类中使用了final来修饰字符数组，因此String不可变。AbstractStringBuilder中的字符数组是可变的，也是以上两者的公共父类。
 
 ### 抽象类
 
@@ -920,6 +947,16 @@ logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早�
 好处：减少代码量；减少侵入，促进解耦；自持即时实例化和懒加载；易于测试
 
 实现原理：工厂模式+反射机制
+
+### Python垃圾回收
+
+采用引用计数，但是循环引用对于引用计数是无解的，因此需要补充。
+Python采用标记清除法+分代收集来解决循环引用。只有容器对象才可能循环引用。标记清除是周期性策略，工作时需要暂停程序。
+
+- 标记阶段：从Root Object（全局变量、调用栈、寄存器，不可能被删除的对象）出发遍历所有可达的对象，标记为可达。
+- 清除阶段，再次遍历对象，如果发现某个对象没有标记为可达，则就将其回收
+
+Python将内存分为3代：年轻代，中年代，老年代。在gc包中可以获取和设置回收策略的阈值。默认对象个数达到700时进行一次0代回收，进行10次0代回收以后出发一次1代回收，10次1代回后出发一次2代回收。
 
 ## 附录
 
