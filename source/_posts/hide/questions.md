@@ -531,7 +531,7 @@ static_assert 编译时断言；新增加类型 long long ，unsigned long long�
 
 ### new的原理
 
-new 的实现原理： 如果是简单类型，则直接调用 operator new()，在 operator new() 函数中会调用 malloc() 函数，如果调用 malloc() 失败会调用 _callnewh()，如果 _callnewh() 返回 0 则抛出 bac_alloc 异常，返回非零则继续分配内存。 如果是复杂类型，先调用 operator new()函数，然后在分配的内存上调用构造函数。
+new 的实现原理： 如果是简单类型，则直接调用 operator new()，在 operator new() 函数中会调用 malloc() 函数，如果调用 malloc() 失败会调用 _callnewh()，如果 _callnewh() 返回 0 则抛出 bac_alloc 异常，返回非零则继续分配内存。 如果是复杂类型，先调用 operator new()函数，然后在分配的内存上调用构造函数。 
 
 ### new和malloc的区别
 
