@@ -939,6 +939,25 @@ logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早�
 9. 经过以上的工作后，Bean 将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁
 10. 如果 Bean 实现了 `DispostbleBean` 接口，Spring 将调用它的 `destory` 方法，作用与在配置文件中对 Bean 使用 `destory-method` 属性的作用一样，都是在 Bean 实例销毁前执行的方法。
 
+### Spring Boot启动
+
+`SpringApplication.run(Application.class, args);`
+
+@SpringBootApplication注解包含了3个注解：
+
+- @SpringBootConfiguration：注册当前类为spring ioc容器的配置类。
+- @EnableAutoConfiguration：借助@Import的帮助，将所有符合自动配置条件的bean定义加载到IoC容器，会根据类路径中的jar依赖为项目进行自动配置
+- @ComponentScan：自动扫描并加载符合条件的组件（比如@Component和@Repository等）或者bean定义，最终将这些bean定义加载到IoC容器中。
+
+然后是SpringApplication的构造函数
+
+- 判断当前程序类型
+- 使用SpringFactoriesLoader 实例化所有可用的初始器
+- 使用SpringFactoriesLoader 实例化所有可用的监听器  
+- 配置应用主方法所在类
+
+然后运行run方法：准备Environment；发布事件；创建上下文、bean；刷新上下文
+
 ### Spring的IOC容器
 
 - BeanFactory，懒加载，使用语法显式提供资源，不支持国际化，不支持基于依赖的注解
