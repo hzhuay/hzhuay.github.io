@@ -2389,6 +2389,32 @@ long long maxWater(vector<int>& arr) {
     return ans;
 }
 ```
+以上思路是一列列加面积。还有一种思路是遍历每一列，把这一列到左边所有可以接的雨水结算。
+
+```C++
+int trap(vector<int>& height) {
+  stack<int> s;
+  int ans=0;
+  for(int i=0;i<height.size();i++){
+    while(!s.empty() && height[s.top()] < height[i]){// 4,2,1,0,1
+      int bottom = s.top(); s.pop();
+      // while (!s.empty() && height[s.top()] == height[bottom]) {
+      //     s.pop();
+      // }
+      if(!s.empty()){
+        int left = s.top();
+        ans += (min(height[left], height[i]) - height[bottom]) * (i - left - 1);
+      }
+
+    }
+    s.push(i);
+  }
+  return ans;
+}
+```
+
+
+
 ## 贪心
 
 ### ❓BM95 分糖果问题
@@ -2435,6 +2461,8 @@ int minmumNumberOfHost(int n, vector<vector<int> >& startEnd) {
     return ans;
 }        
 ```
+## 模拟
+
 ### ❓BM97 旋转数组
 
 ```C++
