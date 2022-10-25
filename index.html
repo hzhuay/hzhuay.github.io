@@ -193,15 +193,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/Java-Spring/java-jvm/" target="_self">
-          JVM
+        <a href="/os/csapp/" target="_self">
+          csapp
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/Java-Spring/java-jvm/" target="_self">
+        <a href="/os/csapp/" target="_self">
           
-          JVM内存管理 JVM 向操作系统申请内存，JVM 第一步就是通过配置参数或者默认配置参数向操作系统申请内存空间，根据内存大小找到具体的内存分配表，然后把内存段的起始地址和终止地址分配给 JVM，接下来 JVM 就进行内部分配。  JVM 获得内存空间后，会根据配置参数分配堆、栈以及方法区的内存大小。  class 文件加载、验证、准备以及解析，其中准备阶段会为类的静态变量分配内存，初始化为系统的
+          一个C程序从源代码main.c到可执行文件需要经历以下步骤  预编译：由C preprocesser编译得到main.i文件 编译：由cc1编译得到汇编程序main.s 汇编：由assembler编译为mian.o可重定向文件 链接：将main.o中引用的其他程序和必要的系统文件链接在一起，得到可执行文件main.out。  链接器的主要任务：  简单解析（符号解析）：获取代码中的符号，一般是变量
         </a>
       </p>
 
@@ -209,19 +209,19 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-08-24 16:41" pubdate>
-              2022-08-24
+            <time datetime="2022-10-24 09:48" pubdate>
+              2022-10-24
             </time>
           </div>
         
         
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-              <a href="/tags/Java/">Java</a>
+              <a href="/categories/OS/">OS</a>
             
           </div>
+        
         
       </div>
     </article>
@@ -267,6 +267,93 @@
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Java-Spring/redis-data/" target="_self">
+          Redis设计与实现
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Java-Spring/redis-data/" target="_self">
+          
+          数据结构字符串在redis中，所有的键一定是字符串。redis虽然是用C语言编写的，但是没有直接使用C语言风格字符串（C-style String），而是实现了一种名为简单动态字符串（simple dynamic string, SDS）作为字符串的默认实现。C-style String只会用于字符串字面量。 1234567struct sdshdr&amp;#123;  &#x2F;&#x2F; 记录字符串长度  int
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-07-25 10:03" pubdate>
+              2022-07-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Spring/">Spring</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Java-Spring/java-jvm/" target="_self">
+          JVM
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Java-Spring/java-jvm/" target="_self">
+          
+          JVM内存管理 JVM 向操作系统申请内存，JVM 第一步就是通过配置参数或者默认配置参数向操作系统申请内存空间，根据内存大小找到具体的内存分配表，然后把内存段的起始地址和终止地址分配给 JVM，接下来 JVM 就进行内部分配。  JVM 获得内存空间后，会根据配置参数分配堆、栈以及方法区的内存大小。  class 文件加载、验证、准备以及解析，其中准备阶段会为类的静态变量分配内存，初始化为系统的
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-24 16:41" pubdate>
+              2022-08-24
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Java/">Java</a>
             
           </div>
         
@@ -544,93 +631,6 @@
               <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/algorithm/leetcode/" target="_self">
-          LeetCode算法复健
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/algorithm/leetcode/" target="_self">
-          
-          临近求职，面试手撕算法避无可避，不得不将搁置很久的算法题重新捡起来练习。这里算开个新坑，将LeetCode前几页的热门题目重新写一遍，最好能记录每次的用时。 1. 两数之和进阶要求是时间复杂度小于 O(n^2^)，那么应该需要借助排序和二分查找，但是直接排序会打乱下标，因此借助map结构（unordered_map基于哈希表则更快）。 坑点：遍历的时候一定要先查找nums[i]对应的搭档在不在，然
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-20 18:36" pubdate>
-              2022-02-20
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/Spring-family/mybatis-plus/" target="_self">
-          mybatis-plus
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/Spring-family/mybatis-plus/" target="_self">
-          
-          Mybatis-plus自带一个实体父类Model 该类的作用是能通过实体直接进行CRUD操作，不需要调用DAO，前提是必须存在对应的原始Mapper并继承BaseMapper并且可以使用的前提下。
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-08-02 11:22" pubdate>
-              2022-08-02
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Spring/">Spring</a>
-            
-          </div>
-        
         
       </div>
     </article>

@@ -16,21 +16,38 @@
   <meta name="author" content="JackZhu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="关注JackZhu喵~ 关注JackZhu谢谢喵~">
-<meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+    <meta name="description" content="一个C程序从源代码main.c到可执行文件需要经历以下步骤  预编译：由C preprocesser编译得到main.i文件 编译：由cc1编译得到汇编程序main.s 汇编：由assembler编译为mian.o可重定向文件 链接：将main.o中引用的其他程序和必要的系统文件链接在一起，得到可执行文件main.out。  链接器的主要任务：  简单解析（符号解析）：获取代码中的符号，一般是变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp">
+<meta property="og:url" content="http://example.com/os/csapp/index.html">
 <meta property="og:site_name" content="JackZhu&#39;s Blog">
-<meta property="og:description" content="关注JackZhu喵~ 关注JackZhu谢谢喵~">
+<meta property="og:description" content="一个C程序从源代码main.c到可执行文件需要经历以下步骤  预编译：由C preprocesser编译得到main.i文件 编译：由cc1编译得到汇编程序main.s 汇编：由assembler编译为mian.o可重定向文件 链接：将main.o中引用的其他程序和必要的系统文件链接在一起，得到可执行文件main.out。  链接器的主要任务：  简单解析（符号解析）：获取代码中的符号，一般是变量">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-24T01:48:05.000Z">
+<meta property="article:modified_time" content="2022-10-25T16:11:35.795Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>归档 - JackZhu&#39;s Blog</title>
+  <title>csapp - JackZhu&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -57,7 +74,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -158,9 +175,51 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="归档">
+            <span class="h2" id="subtitle" title="csapp">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-10-24 09:48" pubdate>
+        2022年10月24日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      799 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      7 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
 
             
           </div>
@@ -173,100 +232,121 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 22 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2022</p>
-    
-    <a href="/college/blobkchain/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">区块链学习笔记</span>
-      <time style="float: right;">02-26</time>
-    </a>
-  
-    
-    <a href="/algorithm/nowcoder/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">牛客网TOP101</span>
-      <time style="float: right;">02-23</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/%E5%B9%B6%E8%A1%8C%E5%85%AC%E5%BC%80%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">并行公开课笔记</span>
-      <time style="float: right;">02-22</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/%E8%BF%9B%E8%A1%8C%E5%A4%8D%E6%9D%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8do-while/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">进行复杂的初始化时为什么要用do-while</span>
-      <time style="float: right;">02-21</time>
-    </a>
-  
-    
-    <a href="/algorithm/leetcode/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">LeetCode算法复健</span>
-      <time style="float: right;">02-20</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/IO%E5%A4%8D%E7%94%A8/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">IO复用</span>
-      <time style="float: right;">02-20</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">模板与泛型</span>
-      <time style="float: right;">02-11</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">内存管理</span>
-      <time style="float: right;">02-11</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/C++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">C++面向对象</span>
-      <time style="float: right;">02-11</time>
-    </a>
-  
-    
-    <a href="/Linux-C++/STL/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">STL</span>
-      <time style="float: right;">02-11</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">csapp</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年10月26日 凌晨
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>一个C程序从源代码<code>main.c</code>到可执行文件需要经历以下步骤</p>
+<ol>
+<li>预编译：由C preprocesser编译得到<code>main.i</code>文件</li>
+<li>编译：由cc1编译得到汇编程序<code>main.s</code></li>
+<li>汇编：由assembler编译为<code>mian.o</code>可重定向文件</li>
+<li>链接：将<code>main.o</code>中引用的其他程序和必要的系统文件链接在一起，得到可执行文件<code>main.out</code>。</li>
+</ol>
+<p>链接器的主要任务：</p>
+<ul>
+<li>简单解析（符号解析）：获取代码中的符号，一般是变量和函数。</li>
+<li>重定位：在合并不同的源码时，将不同文件中的符号的相对地址转换为内存中的物理地址。</li>
+</ul>
+<p>共享目标文件<code>.so</code>，可重定位目标文件<code>.o</code>，可执行目标文件<code>.out</code>，都遵循Executable and Linkable Format (ELF) 格式。从上至下定义了以下数据：</p>
+<ul>
+<li>ELF header：word大小，byte ordering，文件类型，机器类型等</li>
+<li>Segment header table：页大小，虚拟地址段，段大小</li>
+<li>.text区：源代码</li>
+<li>.rodata区：只读数据，比如跳表等</li>
+<li>.data区：初始化过的全局变量。包括局部静态变量</li>
+<li>.bss区：未初始化的全局变量，由于未初始化所以只用记录符号，不占用内存</li>
+<li>.symtab区：符号表</li>
+<li>.rel .text：记录代码区需要重定位的指令</li>
+<li>.rel .data：记录.data区中需要重定位的数据</li>
+<li>.debug区：用<code>-g</code>编译时生成debug信息</li>
+<li>section header table：以上所有section的起始位置</li>
+</ul>
+<p>三种链接器符号：</p>
+<ul>
+<li>全局符号：在一个模块中定义，并且可以被其他模块使用。比如非静态的函数和全局变量。</li>
+<li>外部符号：在某模块中被引用，但是定义在其他模块的符号。</li>
+<li>局部符号：定义和使用都在模块内部的符号。比如静态的全局变量和函数。所以<strong>局部符号不等于局部变量</strong>。</li>
+</ul>
+<p>强符号：有初始化的全部变量或者函数。</p>
+<p>链接器不允许有同名的强符号。如果同时存在强符号和弱符号，链接器总选择强符号。如果只存在多个弱符号，链接器会随机选择一个。</p>
 
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/archives/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/#board">3</a><a class="extend next" rel="next" href="/archives/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
-    </span>
-  </nav>
-
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/OS/">OS</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Java-Spring/java-jvm/">
+                        <span class="hidden-mobile">JVM</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -374,6 +454,19 @@
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 

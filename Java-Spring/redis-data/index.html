@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://s2.loli.net/2022/08/01/OlL1nE9qBHiP8sv.png">
 <meta property="og:image" content="https://s2.loli.net/2022/08/05/LFdKc2TmiGNUseg.png">
 <meta property="article:published_time" content="2022-07-25T02:03:41.000Z">
-<meta property="article:modified_time" content="2022-09-01T12:41:22.191Z">
+<meta property="article:modified_time" content="2022-10-23T16:53:49.207Z">
 <meta property="article:author" content="JackZhu">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
@@ -252,7 +252,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年9月1日 晚上
+                  本文最后更新于：2022年10月24日 凌晨
                 
               </p>
             
@@ -466,7 +466,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>与RDB记录数据库状态不同，AOF记录的是写命令。AOF保存的命令都是以Redis的命令请求协议格式保存，而Redis的命令请求协议是纯文本格式，所哟AOF是人类可读的。</p>
+<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>与RDB记录数据库状态不同，AOF记录的是写命令。AOF保存的命令都是以Redis的命令请求协议格式保存，而Redis的命令请求协议是纯文本格式，所以AOF是人类可读的。</p>
 <p>AOF持久化的实现分为命令追加、文件写入、文件同步三个步骤。</p>
 <p>当AOF功能开启时，服务器每执行完一个写命令，会以协议格式将命令追加到服务器状态的<code>aof_buf</code>缓冲区末尾。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisServer</span> &#123;</span><br>	<span class="hljs-comment">// ...</span><br>	sds aof_buf;<br>&#125;;<br></code></pre></td></tr></table></figure>
