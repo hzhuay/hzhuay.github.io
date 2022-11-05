@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://s1.ax1x.com/2022/09/27/xZfN9g.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/09/25/xEAIdx.png">
 <meta property="article:published_time" content="2022-08-08T16:23:38.000Z">
-<meta property="article:modified_time" content="2022-10-24T14:54:59.068Z">
+<meta property="article:modified_time" content="2022-11-05T13:01:17.439Z">
 <meta property="article:author" content="JackZhu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pics5.baidu.com/feed/838ba61ea8d3fd1fe5bf7195341a001794ca5f43.jpeg?token=a1ba6bb03045f8d2263c817d71219b2f&s=3B96ED0683E8450B16F27E790200D07F">
@@ -216,7 +216,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      241 分钟
+      243 分钟
     </span>
   
 
@@ -257,7 +257,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年10月24日 晚上
+                  本文最后更新于：2022年11月5日 晚上
                 
               </p>
             
@@ -393,6 +393,7 @@
 <li><p>二进制格式（Binary Format）：HTTP1.x的解析是基于文本，存在天然缺陷。HTTP2.0的协议解析采用二进制格式，实现方便且健壮。</p>
 </li>
 <li><p>多路复用（MultiPlexing）：连接共享，每一个请求都是是用作连接共享机制的。一个请求对应一个id，这样一个连接上可以有多个请求，每个连接的请求可以随机的混杂在一起，接收方可以根据请求的 id将请求再归属到各自不同的服务端请求里面。</p>
+<p>  每个请求都要发起TCP连接-》Keep alive，1.0默认关闭，一次连接多个请求-》管线化，1.1，发送多个请求，等待服务端按顺序响应-》多路复用，2.0，不会阻塞，服务端可以乱序响应。帧是最小数据单位，每个帧回标识出属于哪个流。</p>
 </li>
 <li><p>头部压缩：HTTP1.x的头部带有大量信息，而且每次都要重复发送，HTTP2.0使用encoder来减少需要传输的头部大小，通讯双方各自缓存一份头部表，既避免了重复头部的传输，又减小了需要传输的大小。</p>
 </li>
@@ -847,6 +848,7 @@
 <li><code>threadFactory</code> - 线程工厂。</li>
 <li><code>handler</code> - 饱和策略。AbortPolicy丢弃，抛出异常，默认；DiscardPolicy丢弃，不抛异常；DiscardOldest，丢弃队头任务，重复尝试执行；CallerRuns直接调用run并阻塞执行；实现RejectedExecutionHandler自定义。</li>
 </ul>
+<p>提交任务后先判断核心线程池是否已满，不满则创建线程。满就检查等待队列是否已满，不满则加入。满则检查线程池是否已满，不满则创建非核心线程，满则按照策略处理。</p>
 <h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>在运行状态中，需要代理的地方，根据 Subject 和 RealSubject，动态地创建一个 Proxy，用完之后，就会销毁。</p>
 <p><strong>JDK动态代理</strong>：基于<strong>实现接口</strong>的方式</p>
 <ol>
@@ -1005,13 +1007,14 @@
 <li>用static代码块可以让代码在使用类的时候就已经执行了</li>
 </ol>
 <h3 id="多级目录"><a href="#多级目录" class="headerlink" title="多级目录"></a>多级目录</h3><p>当前目录ID：catalogueId；目录名称：name；目录级别ID：gradeId；父级目录ID：piarentId </p>
-<h3 id="ZAB原子广播"><a href="#ZAB原子广播" class="headerlink" title="ZAB原子广播"></a>ZAB原子广播</h3><ul>
+<h3 id="ZAB原子广播"><a href="#ZAB原子广播" class="headerlink" title="ZAB原子广播"></a>ZAB原子广播</h3><p>ZAB协议。</p>
+<ul>
 <li>Leader：维护与Follower和Observer的心跳，执行写操作并广播</li>
 <li>Follower：处理读请求，转发写请求，投票</li>
 <li>Observer：没有投票权的Follower</li>
 </ul>
 <p>写操作时，Leader将写操作以Proposal形式发给所有Follower，得到超过半数ACK则向全体发送Commit。</p>
-<p>logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早的。票数相同时把自己的票归给vote_zxid或者vote_myid更大的。</p>
+<p>logicClock记录头票轮次，以最后一次为准，忽略比自己轮次早的。投票需要给出自身id和事务id，票数相同时把自己的票归给vote_zxid或者vote_myid更大的。</p>
 <h3 id="Bean生命周期"><a href="#Bean生命周期" class="headerlink" title="Bean生命周期"></a>Bean生命周期</h3><p>基于XML配置；注解配置；JAVA API配置（专门的Config类+@Configuration注解）</p>
 <p>5种scope：</p>
 <ul>
